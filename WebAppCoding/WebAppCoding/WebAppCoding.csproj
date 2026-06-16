@@ -99,6 +99,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="10_TextBox\TextBox.aspx" />
     <Content Include="22_Cascading\CascadingDropdown.aspx" />
     <Content Include="30_FileUpload\FileUpload.aspx" />
     <Content Include="About.aspx" />
@@ -123,6 +124,14 @@
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\FINISH_BTN.png" />
+    <Content Include="Images\NEXT.png" />
+    <Content Include="Images\NEXT_BTN.png" />
+    <Content Include="Images\OK_BTN.png" />
+    <Content Include="Images\PREVIOUS.png" />
+    <Content Include="Images\PREVIOUS_BTN.png" />
+    <Content Include="Images\START_BTN.png" />
+    <Content Include="Images\SUBMIT_BTN.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -185,8 +194,18 @@
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
     <Content Include="Site.Mobile.Master" />
+    <Content Include="Uploads\DOTNET Coding.docx" />
+    <Content Include="Uploads\How to Upload Image in SQL DB.docx" />
+    <Content Include="Uploads\S0018885635.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="10_TextBox\TextBox.aspx.cs">
+      <DependentUpon>TextBox.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="10_TextBox\TextBox.aspx.designer.cs">
+      <DependentUpon>TextBox.aspx</DependentUpon>
+    </Compile>
     <Compile Include="22_Cascading\CascadingDropdown.aspx.cs">
       <DependentUpon>CascadingDropdown.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -251,8 +270,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="10_TextBox - Copy\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
