@@ -8,16 +8,16 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3D3EFB36-A69E-43FE-8DFF-6D7D857C5656}</ProjectGuid>
+    <ProjectGuid>{3812E9D6-1165-472C-AEFF-B7EC4DDF04E6}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WebAppCoding</RootNamespace>
-    <AssemblyName>WebAppCoding</AssemblyName>
+    <RootNamespace>DataLinkWithSql</RootNamespace>
+    <AssemblyName>DataLinkWithSql</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort>44374</IISExpressSSLPort>
+    <IISExpressSSLPort>44304</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -99,20 +99,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="10_TextBox\TextBox.aspx" />
-    <Content Include="11_RadioButton\RadioButton.aspx" />
-    <Content Include="12_CheckBox\CheckBox.aspx" />
-    <Content Include="13_Hyperlink\hyperlink.aspx" />
-    <Content Include="14_BtnControl\ButtonControl.aspx" />
-    <Content Include="15_CmdEventBtn\CmdEvent2.aspx" />
-    <Content Include="15_CmdEventBtn\CommandEvent.aspx" />
-    <Content Include="16_DropDown\DropDown.aspx" />
-    <Content Include="16_DropDown\DropDownUsingProgCode.aspx" />
-    <Content Include="17_DataBindDropDown\databinddropdown.aspx" />
-    <Content Include="18_BindDropDownXml\DataBindDDXml.aspx" />
-    <Content Include="18_BindDropDownXml\DropDownXmlFile.xml" />
-    <Content Include="22_Cascading\CascadingDropdown.aspx" />
-    <Content Include="30_FileUpload\FileUpload.aspx" />
     <Content Include="About.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -135,22 +121,7 @@
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Images\FINISH_BTN.png" />
-    <Content Include="Images\FINISH_BTN_SMALL.jpg" />
-    <Content Include="Images\KhatuShyam.jpg" />
-    <Content Include="Images\NEXT.png" />
-    <Content Include="Images\NEXT_BTN.png" />
-    <Content Include="Images\NEXT_BTN_SMALL.jpg" />
-    <Content Include="Images\OK_BTN.png" />
-    <Content Include="Images\OK_BTN_SMALL.jpg" />
-    <Content Include="Images\PREVIOUS.png" />
-    <Content Include="Images\PREVIOUS_BTN.png" />
-    <Content Include="Images\PREVIOUS_BTN_SMALL.jpg" />
-    <Content Include="Images\PREVIOUS_BTN__SMALL.jpg" />
-    <Content Include="Images\START_BTN.png" />
-    <Content Include="Images\START_BTN__SMALL.jpg" />
-    <Content Include="Images\SUBMIT_BTN.png" />
-    <Content Include="Images\SUBMIT_BTN__SMALL.jpg" />
+    <Content Include="ItemMaster.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -179,9 +150,6 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
-    <Content Include="22_Cascading\Cascading Dropdown.docx" />
-    <Content Include="30_FileUpload\File upload.docx" />
-    <Content Include="C_Sharp_Chapter.xlsx" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -214,102 +182,8 @@
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
     <Content Include="Site.Mobile.Master" />
-    <Content Include="Uploads\DOTNET Coding.docx" />
-    <Content Include="Uploads\How to Upload Image in SQL DB.docx" />
-    <Content Include="Uploads\S0018885635.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="10_TextBox\TextBox.aspx.cs">
-      <DependentUpon>TextBox.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="10_TextBox\TextBox.aspx.designer.cs">
-      <DependentUpon>TextBox.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="11_RadioButton\RadioButton.aspx.cs">
-      <DependentUpon>RadioButton.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="11_RadioButton\RadioButton.aspx.designer.cs">
-      <DependentUpon>RadioButton.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="12_CheckBox\CheckBox.aspx.cs">
-      <DependentUpon>CheckBox.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="12_CheckBox\CheckBox.aspx.designer.cs">
-      <DependentUpon>CheckBox.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="13_Hyperlink\hyperlink.aspx.cs">
-      <DependentUpon>hyperlink.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="13_Hyperlink\hyperlink.aspx.designer.cs">
-      <DependentUpon>hyperlink.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="14_BtnControl\ButtonControl.aspx.cs">
-      <DependentUpon>ButtonControl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="14_BtnControl\ButtonControl.aspx.designer.cs">
-      <DependentUpon>ButtonControl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="15_CmdEventBtn\CmdEvent2.aspx.cs">
-      <DependentUpon>CmdEvent2.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="15_CmdEventBtn\CmdEvent2.aspx.designer.cs">
-      <DependentUpon>CmdEvent2.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="15_CmdEventBtn\CommandEvent.aspx.cs">
-      <DependentUpon>CommandEvent.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="15_CmdEventBtn\CommandEvent.aspx.designer.cs">
-      <DependentUpon>CommandEvent.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="16_DropDown\DropDown.aspx.cs">
-      <DependentUpon>DropDown.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="16_DropDown\DropDown.aspx.designer.cs">
-      <DependentUpon>DropDown.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="16_DropDown\DropDownUsingProgCode.aspx.cs">
-      <DependentUpon>DropDownUsingProgCode.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="16_DropDown\DropDownUsingProgCode.aspx.designer.cs">
-      <DependentUpon>DropDownUsingProgCode.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="17_DataBindDropDown\databinddropdown.aspx.cs">
-      <DependentUpon>databinddropdown.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="17_DataBindDropDown\databinddropdown.aspx.designer.cs">
-      <DependentUpon>databinddropdown.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="18_BindDropDownXml\DataBindDDXml.aspx.cs">
-      <DependentUpon>DataBindDDXml.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="18_BindDropDownXml\DataBindDDXml.aspx.designer.cs">
-      <DependentUpon>DataBindDDXml.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="22_Cascading\CascadingDropdown.aspx.cs">
-      <DependentUpon>CascadingDropdown.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="22_Cascading\CascadingDropdown.aspx.designer.cs">
-      <DependentUpon>CascadingDropdown.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="30_FileUpload\FileUpload.aspx.cs">
-      <DependentUpon>FileUpload.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="30_FileUpload\FileUpload.aspx.designer.cs">
-      <DependentUpon>FileUpload.aspx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
@@ -335,6 +209,13 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="ItemMaster.aspx.cs">
+      <DependentUpon>ItemMaster.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ItemMaster.aspx.designer.cs">
+      <DependentUpon>ItemMaster.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">
@@ -377,14 +258,6 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <PlatformTarget>x64</PlatformTarget>
-    <OutputPath>bin\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <PlatformTarget>x64</PlatformTarget>
-    <OutputPath>bin\</OutputPath>
-  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
@@ -401,9 +274,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52197</DevelopmentServerPort>
+          <DevelopmentServerPort>56058</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44374/</IISUrl>
+          <IISUrl>https://localhost:44304/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
