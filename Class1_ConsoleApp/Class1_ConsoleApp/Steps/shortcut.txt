@@ -1,0 +1,38 @@
+# Shorcut
+
+Format Documnet --> Ctrl + K + D
+
+Comment Selected Code --> Ctrl + K + C
+Uncomment Selected Code --> Ctrl + K + U
+
+Show IntelliSense --> Ctrl + Space
+
+Go to Definition --> F12
+
+Toggle Full Screen -->  Alt + Shift + Enter
+
+Build Project --> Shift + F6
+Build Solution --> Ctrl + Shift + B/F6
+
+Attached Debugger to Process --> Ctrl + Alt + P
+
+Expend All --> Ctrl + M +  M
+Collapse All --> Ctrl + M + O
+
+Toggle all Outline --> Ctr + M + L 
+
+# Command Windows 
+
+View --> Other Windows --> Command Window
+Open Command Window --> Ctrl + Alt + A
+
+Open File > File.OpenFile
+          OR 
+          >of   
+          > cls (for clear)
+          > cls (for clear)
+
+>File.OpenFile E:\SDK_Revision\b1_SQL_Query\SQL_Tips_Tricks.sql
+or 
+            of E:\SDK_Revision\b1_SQL_Query\SQL_Tips_Tricks.sql
+

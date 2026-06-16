@@ -1,0 +1,41 @@
+﻿Go to View > Terminal > Link Repogitary with GitHub then add gitignore 
+
+Type  notepad .gitignore
+
+When Notepad will open paste the command 
+
+# Visual Studio
+.vs/
+
+# Build results
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+
+# User-specific files
+*.user
+*.suo
+*.rsuser
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# NuGet
+packages/
+*.nupkg
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+
+>>> Save and Close
+
