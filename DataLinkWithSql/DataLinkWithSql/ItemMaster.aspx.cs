@@ -8,10 +8,10 @@ using System.Web.UI.WebControls;
 
 namespace DataLinkWithSql
 {
-    public partial class ItemMaster : System.Web.UI.Page
-    {
-        protected void Page_Load(object sender, EventArgs e)
-        {
+	public partial class ItemMaster : System.Web.UI.Page
+	{
+		protected void Page_Load(object sender, EventArgs e)
+		{
             SqlConnection con = new SqlConnection("Data Source=.;database=SBODemoIN;Integrated Security= SSPI");
             SqlCommand cmd = new SqlCommand("SELECT TOP 5 ItemCode, ItemName, ItmsGrpCod, OnHand FROM OITM", con);
             con.Open();
