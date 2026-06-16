@@ -3,7 +3,7 @@
     <Platform Name="Any CPU" />
     <Platform Name="x64" />
   </Configurations>
-  <Project Path="WebAppCoding/WebAppCoding.csproj">
+  <Project Path="WebAppCoding/WebAppCoding.csproj" Id="3d3efb36-a69e-43fe-8dff-6d7d857c5656">
     <Platform Solution="*|x64" Project="x64" />
   </Project>
 </Solution>

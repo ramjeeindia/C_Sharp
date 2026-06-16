@@ -17,7 +17,7 @@ namespace WebAppCoding._10_TextBox
         }
         protected void Button1_Click(object sender, EventArgs e)
         {
-            Response.Write("You Have Entered: " + .Text);
+            Response.Write("You Have Entered: " );
         }
     }
 
