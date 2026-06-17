@@ -13,5 +13,10 @@ namespace WebAppCoding._37_WizardControl
         {
 
         }
+        
+        protected void Wizard1_ActiveStepChanged(object sender, EventArgs e)
+        {
+            Response.Write("The Activate Index Start with 0 and Clicked Event is :" + Wizard1.ActiveStepIndex.ToString());
+        }
     }
 }

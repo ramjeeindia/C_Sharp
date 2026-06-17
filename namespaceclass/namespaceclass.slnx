@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="namespaceclass.csproj" />
+  <Project Path="ProjectA.TeamA/ProjectA.TeamA.csproj" />
+  <Project Path="ProjectA.TeamB/ProjectA.TeamB.csproj" />
+</Solution>

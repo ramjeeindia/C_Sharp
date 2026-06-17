@@ -13,9 +13,8 @@
                 ActiveStepIndex="-1" 
                 DisplayCancelButton="True" 
                 HeaderText="Wizard Control as Form of Button Event" 
-                Height="20px">
-                <HeaderStyle BackColor="Black" BorderColor="#3333CC" BorderStyle="Double" ForeColor="White"/>
-                
+                Height="20px" ClientIDMode="AutoID" OnActiveStepChanged="Wizard1_ActiveStepChanged">
+                <HeaderStyle BackColor="Black" BorderColor="#3333CC" BorderStyle="Double" ForeColor="White"/>                
                 <WizardSteps>                  
                     <asp:WizardStep runat="server" title="Step 1">
                     </asp:WizardStep>
@@ -23,8 +22,7 @@
                     </asp:WizardStep>
                     <asp:WizardStep runat="server" title="Step 3">
                     </asp:WizardStep>
-                </WizardSteps>
-                    
+                </WizardSteps>                    
             </asp:Wizard>
         </div>
     </form>
