@@ -5,9 +5,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace WebAppCoding._170_ImageUpload
+namespace WebFormPath.XMLFile.XML1
 {
-    public partial class ImageUpload : System.Web.UI.Page
+    public partial class LinkwithXml : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

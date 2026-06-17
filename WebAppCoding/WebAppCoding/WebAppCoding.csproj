@@ -108,11 +108,14 @@
     <Content Include="15_CmdEventBtn\CommandEvent.aspx" />
     <Content Include="16_DropDown\DropDown.aspx" />
     <Content Include="16_DropDown\DropDownUsingProgCode.aspx" />
+    <Content Include="170_ImageUpload\ImageUpload_Sql.aspx" />
     <Content Include="17_DataBindDropDown\databinddropdown.aspx" />
     <Content Include="18_BindDropDownXml\DataBindDDXml.aspx" />
     <Content Include="18_BindDropDownXml\DropDownXmlFile.xml" />
     <Content Include="22_Cascading\CascadingDropdown.aspx" />
     <Content Include="30_FileUpload\FileUpload.aspx" />
+    <Content Include="37_WizardControl\Wizard.aspx" />
+    <Content Include="37_WizardControl\Wizardbtn.aspx" />
     <Content Include="About.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -135,6 +138,8 @@
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\CANCEL_BTN _SMALL.png" />
+    <Content Include="Images\CANCEL_BTN.png" />
     <Content Include="Images\FINISH_BTN.png" />
     <Content Include="Images\FINISH_BTN_SMALL.jpg" />
     <Content Include="Images\KhatuShyam.jpg" />
@@ -282,6 +287,13 @@
     <Compile Include="16_DropDown\DropDownUsingProgCode.aspx.designer.cs">
       <DependentUpon>DropDownUsingProgCode.aspx</DependentUpon>
     </Compile>
+    <Compile Include="170_ImageUpload\ImageUpload_Sql.aspx.cs">
+      <DependentUpon>ImageUpload_Sql.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="170_ImageUpload\ImageUpload_Sql.aspx.designer.cs">
+      <DependentUpon>ImageUpload_Sql.aspx</DependentUpon>
+    </Compile>
     <Compile Include="17_DataBindDropDown\databinddropdown.aspx.cs">
       <DependentUpon>databinddropdown.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -309,6 +321,20 @@
     </Compile>
     <Compile Include="30_FileUpload\FileUpload.aspx.designer.cs">
       <DependentUpon>FileUpload.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="37_WizardControl\Wizard.aspx.cs">
+      <DependentUpon>Wizard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="37_WizardControl\Wizard.aspx.designer.cs">
+      <DependentUpon>Wizard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="37_WizardControl\Wizardbtn.aspx.cs">
+      <DependentUpon>Wizardbtn.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="37_WizardControl\Wizardbtn.aspx.designer.cs">
+      <DependentUpon>Wizardbtn.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Countries>
+	<Country>
+		<CountryId>US</CountryId>
+		<CountryName>United States</CountryName>
+	</Country>
+	<Country>
+		<CountryId>IN</CountryId>
+		<CountryName>India</CountryName>
+	</Country>
+	<Country>
+		<CountryId>UK</CountryId>
+		<CountryName>United Kingdom</CountryName>
+	</Country>
+	<Country>
+		<CountryId>BZ</CountryId>
+		<CountryName>Brazil</CountryName>
+	</Country>
+</Countries>
