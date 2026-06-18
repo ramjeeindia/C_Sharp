@@ -104,7 +104,10 @@
     <Content Include="1_Connection\usingconfig.aspx" />
     <Content Include="3_StoreConFile\TestConnSaving.aspx" />
     <Content Include="4_SqlCommand\exenonquery.aspx" />
+    <Content Include="4_SqlCommand\insertnonquery.aspx" />
     <Content Include="4_SqlCommand\SqlCmd.aspx" />
+    <Content Include="5_SqlInjection\InjPrevention.aspx" />
+    <Content Include="5_SqlInjection\SqlInjection.aspx" />
     <Content Include="About.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -226,12 +229,33 @@
     <Compile Include="4_SqlCommand\exenonquery.aspx.designer.cs">
       <DependentUpon>exenonquery.aspx</DependentUpon>
     </Compile>
+    <Compile Include="4_SqlCommand\insertnonquery.aspx.cs">
+      <DependentUpon>insertnonquery.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="4_SqlCommand\insertnonquery.aspx.designer.cs">
+      <DependentUpon>insertnonquery.aspx</DependentUpon>
+    </Compile>
     <Compile Include="4_SqlCommand\SqlCmd.aspx.cs">
       <DependentUpon>SqlCmd.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="4_SqlCommand\SqlCmd.aspx.designer.cs">
       <DependentUpon>SqlCmd.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="5_SqlInjection\InjPrevention.aspx.cs">
+      <DependentUpon>InjPrevention.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="5_SqlInjection\InjPrevention.aspx.designer.cs">
+      <DependentUpon>InjPrevention.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="5_SqlInjection\SqlInjection.aspx.cs">
+      <DependentUpon>SqlInjection.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="5_SqlInjection\SqlInjection.aspx.designer.cs">
+      <DependentUpon>SqlInjection.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
@@ -290,7 +314,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="5_SqlInjection\" />
     <Folder Include="7_CallStrProc\" />
     <Folder Include="8_SqlDataRdr\" />
     <Folder Include="App_Data\" />
