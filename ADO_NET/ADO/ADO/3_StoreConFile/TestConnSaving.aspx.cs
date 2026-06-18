@@ -14,9 +14,9 @@ namespace ADO._3_StoreConFile
         protected void Page_Load(object sender, EventArgs e)
         {
             //string CS = "data source =.; database=SBODemoIN; integrated Security =SSPI";
-            //string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
+            string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
             //string CS = ConfigurationManager.ConnectionStrings[1].ConnectionString;
-            string CS = ConfigurationManager.ConnectionStrings["REMOTEDEMODB"].ConnectionString;
+            //string CS = ConfigurationManager.ConnectionStrings["REMOTEDEMODB"].ConnectionString;
             using (SqlConnection con = new SqlConnection(CS))
             {
                 SqlCommand cmd = new SqlCommand("SELECT TOP 5 ItemCode, ItemName, ItmsGrpCod , OnHand FROM OITM", con);

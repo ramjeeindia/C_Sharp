@@ -103,6 +103,7 @@
     <Content Include="1_Connection\remoteconn.aspx" />
     <Content Include="1_Connection\usingconfig.aspx" />
     <Content Include="3_StoreConFile\TestConnSaving.aspx" />
+    <Content Include="4_SqlCommand\SqlCmd.aspx" />
     <Content Include="About.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -216,6 +217,13 @@
     <Compile Include="3_StoreConFile\TestConnSaving.aspx.designer.cs">
       <DependentUpon>TestConnSaving.aspx</DependentUpon>
     </Compile>
+    <Compile Include="4_SqlCommand\SqlCmd.aspx.cs">
+      <DependentUpon>SqlCmd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="4_SqlCommand\SqlCmd.aspx.designer.cs">
+      <DependentUpon>SqlCmd.aspx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
@@ -266,6 +274,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="5_SqlInjection\" />
+    <Folder Include="7_CallStrProc\" />
+    <Folder Include="8_SqlDataRdr\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
