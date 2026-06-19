@@ -108,6 +108,8 @@
     <Content Include="4_SqlCommand\SqlCmd.aspx" />
     <Content Include="5_SqlInjection\InjPrevention.aspx" />
     <Content Include="5_SqlInjection\SqlInjection.aspx" />
+    <Content Include="7_CallStrProc\CallSqlProc.aspx" />
+    <Content Include="7_CallStrProc\ProductionSheet.aspx" />
     <Content Include="About.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -257,6 +259,20 @@
     <Compile Include="5_SqlInjection\SqlInjection.aspx.designer.cs">
       <DependentUpon>SqlInjection.aspx</DependentUpon>
     </Compile>
+    <Compile Include="7_CallStrProc\CallSqlProc.aspx.cs">
+      <DependentUpon>CallSqlProc.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="7_CallStrProc\CallSqlProc.aspx.designer.cs">
+      <DependentUpon>CallSqlProc.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="7_CallStrProc\ProductionSheet.aspx.cs">
+      <DependentUpon>ProductionSheet.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="7_CallStrProc\ProductionSheet.aspx.designer.cs">
+      <DependentUpon>ProductionSheet.aspx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
@@ -314,7 +330,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="7_CallStrProc\" />
     <Folder Include="8_SqlDataRdr\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
