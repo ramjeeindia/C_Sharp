@@ -19,10 +19,13 @@ namespace ADO._8_SqlDataRdr
                 con.Open(); // need to open before reader
                 SqlCommand cmd = new SqlCommand ("SELECT ITEMCODE, ITEMNAME, ONHAND FROM OITM", con);
 
-               // SqlDataReader rdr = new SqlDataReader(); WE CAN NOT USE 
-                SqlDataReader rdr = cmd.ExecuteReader();
-                GridView1.DataSource =	rdr;
-                GridView1.DataBind ();
+                // SqlDataReader rdr = new SqlDataReader(); WE CAN NOT USE 
+                using (SqlDataReader rdr = cmd.ExecuteReader())  // this method guranted close the connection
+                {
+                    GridView1.DataSource = rdr;
+                    GridView1.DataBind();
+                }
+                
 
             }
 

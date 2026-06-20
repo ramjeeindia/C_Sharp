@@ -111,6 +111,7 @@
     <Content Include="7_CallStrProc\CallSqlProc.aspx" />
     <Content Include="7_CallStrProc\InsertItemCode.aspx" />
     <Content Include="7_CallStrProc\ProductionSheet.aspx" />
+    <Content Include="8_SqlDataRdr\rdreachrow.aspx" />
     <Content Include="8_SqlDataRdr\SqlDataRdr.aspx" />
     <Content Include="About.aspx" />
     <Content Include="Contact.aspx" />
@@ -281,6 +282,13 @@
     </Compile>
     <Compile Include="7_CallStrProc\ProductionSheet.aspx.designer.cs">
       <DependentUpon>ProductionSheet.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="8_SqlDataRdr\rdreachrow.aspx.cs">
+      <DependentUpon>rdreachrow.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="8_SqlDataRdr\rdreachrow.aspx.designer.cs">
+      <DependentUpon>rdreachrow.aspx</DependentUpon>
     </Compile>
     <Compile Include="8_SqlDataRdr\SqlDataRdr.aspx.cs">
       <DependentUpon>SqlDataRdr.aspx</DependentUpon>
