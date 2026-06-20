@@ -109,7 +109,9 @@
     <Content Include="5_SqlInjection\InjPrevention.aspx" />
     <Content Include="5_SqlInjection\SqlInjection.aspx" />
     <Content Include="7_CallStrProc\CallSqlProc.aspx" />
+    <Content Include="7_CallStrProc\InsertItemCode.aspx" />
     <Content Include="7_CallStrProc\ProductionSheet.aspx" />
+    <Content Include="8_SqlDataRdr\SqlDataRdr.aspx" />
     <Content Include="About.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -266,12 +268,26 @@
     <Compile Include="7_CallStrProc\CallSqlProc.aspx.designer.cs">
       <DependentUpon>CallSqlProc.aspx</DependentUpon>
     </Compile>
+    <Compile Include="7_CallStrProc\InsertItemCode.aspx.cs">
+      <DependentUpon>InsertItemCode.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="7_CallStrProc\InsertItemCode.aspx.designer.cs">
+      <DependentUpon>InsertItemCode.aspx</DependentUpon>
+    </Compile>
     <Compile Include="7_CallStrProc\ProductionSheet.aspx.cs">
       <DependentUpon>ProductionSheet.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="7_CallStrProc\ProductionSheet.aspx.designer.cs">
       <DependentUpon>ProductionSheet.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="8_SqlDataRdr\SqlDataRdr.aspx.cs">
+      <DependentUpon>SqlDataRdr.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="8_SqlDataRdr\SqlDataRdr.aspx.designer.cs">
+      <DependentUpon>SqlDataRdr.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
@@ -330,7 +346,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="8_SqlDataRdr\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
