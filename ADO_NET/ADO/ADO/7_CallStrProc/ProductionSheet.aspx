@@ -108,8 +108,10 @@
                 <td>Cycle Time</td>
                 <td> <asp:TextBox ID="txtCycleTime" runat="server"></asp:TextBox></td>
 
-                <td>Total Run</td>
-                <td><asp:TextBox ID="txtTotalRun" runat="server"></asp:TextBox></td>
+                <td>Click Button to Save</td>
+                <td>
+                <asp:Button ID="Button1" runat="server" Text="Save" />
+                  </td>
             </tr>
         </table>
             <table>
@@ -120,7 +122,7 @@
                     <th class="auto-style2">Actual</th>
                     <th class="auto-style2">Reject</th>
                     <th class="auto-style2">Rework</th>
-                    <th>Submit</th>
+                    
                 </tr>
             </thead>
 
