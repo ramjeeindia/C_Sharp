@@ -19,6 +19,7 @@ namespace HourlyProd
                 LoadOperators();
                 LoadProcess();
                 LoadMachine();
+                BindRemarks();
                 txtProdDate.Text = DateTime.Now.ToString("dd-MM-yyyy");
             }
         }
@@ -45,6 +46,49 @@ namespace HourlyProd
             ddlOperator.Items.Insert(0, new ListItem("--Select Operator--", "0"));
         }
 
+        private void BindRemarks()
+        {
+            List<string> remarks = new List<string>()
+            {
+                "--Select--",
+                "Tea Break",
+                "Lunch Break",
+                "Model Change",
+                "Operator Change",
+                "Admin Activity",
+                "Machine Breakdown",                
+                "Under Maintenance",
+                "Material Shortage",       
+                "Trial Runs"
+            };
+
+
+            BindDropDown(ddlRemark1, remarks);
+            BindDropDown(ddlRemark2, remarks);
+            BindDropDown(ddlRemark3, remarks);
+            BindDropDown(ddlRemark4, remarks);
+            BindDropDown(ddlRemark5, remarks);
+            BindDropDown(ddlRemark6, remarks);
+            BindDropDown(ddlRemark7, remarks);
+            BindDropDown(ddlRemark8, remarks);
+            BindDropDown(ddlRemark9, remarks);
+            BindDropDown(ddlRemark10, remarks);
+            BindDropDown(ddlRemark11, remarks);
+            BindDropDown(ddlRemark12, remarks);
+            BindDropDown(ddlRemark13, remarks);
+            BindDropDown(ddlRemark14, remarks);
+            BindDropDown(ddlRemark15, remarks);
+            BindDropDown(ddlRemark16, remarks);
+            BindDropDown(ddlRemark17, remarks);
+
+        }
+
+        private void BindDropDown(DropDownList ddl, List<string> data)
+        {
+            ddl.DataSource = data;
+            ddl.DataBind();
+        }
+
         private void LoadProcess()
         {
             string conStr = "Data Source=SAPSERV;Initial Catalog=SHAPLLIVE;User ID=sa;Password=sa@2017;";
@@ -65,6 +109,25 @@ namespace HourlyProd
             }
         }
 
+        private void LoadReason()
+        {
+            string conStr = "Data Source=SAPSERV;Initial Catalog=SHAPLLIVE;User ID=sa;Password=sa@2017;";
+
+            using (SqlConnection con = new SqlConnection(conStr))
+            {
+                using (SqlCommand cmd = new SqlCommand("SELECT ResonValue, ReasonText  FROM ReasonList ORDER BY ReasonText", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    ddlprocess.DataSource = dr;
+                    ddlprocess.DataTextField = "ItemName";   // Display
+                    ddlprocess.DataValueField = "ItemCode";  // Value
+                    ddlprocess.DataBind();
+                    ddlprocess.Items.Insert(0, "-- Select Reason --");
+                }
+            }
+        }
         private void LoadMachine()
         {
             string conStr = "Data Source=SAPSERV;Initial Catalog=SHAPLLIVE;User ID=sa;Password=sa@2017;";
@@ -80,7 +143,7 @@ namespace HourlyProd
                     ddlMachine.DataTextField = "ItemName";   // Display
                     ddlMachine.DataValueField = "ItemCode";  // Value
                     ddlMachine.DataBind();
-                    ddlMachine.Items.Insert(0, "-- Select Process --");
+                    ddlMachine.Items.Insert(0, "-- Select Machine --");
                 }
             }
         }
@@ -211,6 +274,11 @@ namespace HourlyProd
         }
 
         protected void txtCycleTime_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
