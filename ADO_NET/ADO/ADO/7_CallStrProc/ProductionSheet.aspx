@@ -68,7 +68,40 @@
             width: 184px;
     }
     
+        .auto-style3 {
+            height: 40px;
+        }
+    
+    
     </style>
+    <script>
+        function setTarget() {
+            var cycle = document.getElementById('<%= txtCycleTime.ClientID %>').value;
+
+            // if empty stop
+            if (cycle === "") return;
+
+            // get all target textboxes
+            var targets = [
+        '<%= txt1.ClientID %>',
+        '<%= txt5.ClientID %>',
+        '<%= txt9.ClientID %>',
+        '<%= txt13.ClientID %>',
+        '<%= txt17.ClientID %>',
+        '<%= txt21.ClientID %>',
+        '<%= txt25.ClientID %>',
+        '<%= txt29.ClientID %>',
+        '<%= txt33.ClientID %>',
+        '<%= txt37.ClientID %>',
+                '<%= TextBox41.ClientID %>'
+            ];
+
+            // fill all targets
+            targets.forEach(function (id) {
+                document.getElementById(id).value = cycle;
+            });
+        }
+    </script>
 
 </head>
 <body style="background-color: rgb(130, 176, 194)">
@@ -77,15 +110,15 @@
          <table class="header-table">
             <caption>Hourly Production Sheet</caption>
             <tr>
-                <td>Production Date</td>
-                <td><asp:TextBox ID="txtProdDate" runat="server"></asp:TextBox></td>
+                <td class="auto-style3">Production Date</td>
+                <td class="auto-style3"><asp:TextBox ID="txtProdDate" runat="server" TextMode="Date"
+                    OnTextChanged="txtProdDate_TextChanged"></asp:TextBox></td>
 
-                <td>Operator Name</td>
-                <td>
-                    <asp:DropDownList ID="ddlOperator" runat="server">
-                        <asp:ListItem Value="OP1">Operator1</asp:ListItem>
-                        <asp:ListItem Value="OP2">Operator2</asp:ListItem>
-                        <asp:ListItem Value="OP3">Operator3</asp:ListItem>
+                <td class="auto-style3">Operator Name</td>
+                <td class="auto-style3">
+                    <asp:DropDownList ID="ddlOperator" runat="server" AutoPostBack="true"
+                        OnSelectedIndexChanged="ddlOperator_SelectedIndexChanged">
+                        
                     </asp:DropDownList>
                 </td>
             </tr>
@@ -106,11 +139,11 @@
 
             <tr>
                 <td>Cycle Time</td>
-                <td> <asp:TextBox ID="txtCycleTime" runat="server"></asp:TextBox></td>
+                <td> <asp:TextBox ID="txtCycleTime" onkeyup="setTarget()" runat="server"></asp:TextBox></td>
 
                 <td>Click Button to Save</td>
                 <td>
-                <asp:Button ID="Button1" runat="server" Text="Save" />
+                <asp:Button ID="Button1" runat="server" Text="Save" BackColor="#00CC00" BorderColor="Blue" BorderStyle="Dotted" OnClick="Button1_Click" />
                   </td>
             </tr>
         </table>

@@ -1,29 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 
-
-
-namespace ADO._7_CallStrProc
+namespace HourlyProd
 {
-    public partial class ProductionSheet : System.Web.UI.Page
+    public partial class HProdSheet : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //if (!IsPostBack)
-            //{
-            //    txtProdDate.Text = DateTime.Now.ToString("dd-MM-yyyy");
-            //}
-
             if (!IsPostBack)
             {
                 LoadOperators();
+                LoadProcess();
+                LoadMachine();
+                txtProdDate.Text = DateTime.Now.ToString("dd-MM-yyyy");
             }
         }
 
@@ -39,7 +35,6 @@ namespace ADO._7_CallStrProc
 
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
-
                 ddlOperator.DataSource = rdr;
                 ddlOperator.DataTextField = "Operator_Name"; // Display
                 ddlOperator.DataValueField = "Operator_Id";  // Value
@@ -50,10 +45,75 @@ namespace ADO._7_CallStrProc
             ddlOperator.Items.Insert(0, new ListItem("--Select Operator--", "0"));
         }
 
-        protected void txtProdDate_TextChanged(object sender, EventArgs e)
+        private void LoadProcess()
         {
-            
+            string conStr = "Data Source=SAPSERV;Initial Catalog=SHAPLLIVE;User ID=sa;Password=sa@2017;";
 
+            using (SqlConnection con = new SqlConnection(conStr))
+            {
+                using (SqlCommand cmd = new SqlCommand("spProcessName", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    ddlprocess.DataSource = dr;
+                    ddlprocess.DataTextField = "ItemName";   // Display
+                    ddlprocess.DataValueField = "ItemCode";  // Value
+                    ddlprocess.DataBind();
+                    ddlprocess.Items.Insert(0, "-- Select Process --");
+                }
+            }
+        }
+
+        private void LoadMachine()
+        {
+            string conStr = "Data Source=SAPSERV;Initial Catalog=SHAPLLIVE;User ID=sa;Password=sa@2017;";
+
+            using (SqlConnection con = new SqlConnection(conStr))
+            {
+                using (SqlCommand cmd = new SqlCommand("spMachineMaster", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    ddlMachine.DataSource = dr;
+                    ddlMachine.DataTextField = "ItemName";   // Display
+                    ddlMachine.DataValueField = "ItemCode";  // Value
+                    ddlMachine.DataBind();
+                    ddlMachine.Items.Insert(0, "-- Select Process --");
+                }
+            }
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            string cs = "Data Source=SAPSERV;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
+
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+
+                // Function to insert row
+                SaveOrUpdateRow("06-07", TextBox1.Text, TextBox2.Text, TextBox3.Text, TextBox4.Text, con);
+                SaveOrUpdateRow("07-08", TextBox5.Text, TextBox6.Text, TextBox7.Text, TextBox8.Text, con);
+                SaveOrUpdateRow("08-09", TextBox9.Text, TextBox10.Text, TextBox11.Text, TextBox12.Text, con);
+                SaveOrUpdateRow("09-10", TextBox13.Text, TextBox14.Text, TextBox15.Text, TextBox16.Text, con);
+                SaveOrUpdateRow("10-11", TextBox17.Text, TextBox18.Text, TextBox19.Text, TextBox20.Text, con);
+                SaveOrUpdateRow("11-12", TextBox21.Text, TextBox22.Text, TextBox23.Text, TextBox24.Text, con);
+                SaveOrUpdateRow("12-13", TextBox25.Text, TextBox26.Text, TextBox27.Text, TextBox28.Text, con);
+                SaveOrUpdateRow("13-14", TextBox29.Text, TextBox30.Text, TextBox31.Text, TextBox32.Text, con);
+                SaveOrUpdateRow("14-15", TextBox33.Text, TextBox34.Text, TextBox35.Text, TextBox36.Text, con);
+                SaveOrUpdateRow("15-16", TextBox37.Text, TextBox38.Text, TextBox39.Text, TextBox40.Text, con);
+                SaveOrUpdateRow("16-17", TextBox41.Text, TextBox42.Text, TextBox43.Text, TextBox44.Text, con);
+                SaveOrUpdateRow("17-18", TextBox45.Text, TextBox46.Text, TextBox47.Text, TextBox48.Text, con);
+                SaveOrUpdateRow("18-19", TextBox49.Text, TextBox50.Text, TextBox51.Text, TextBox52.Text, con);
+                SaveOrUpdateRow("19-20", TextBox53.Text, TextBox54.Text, TextBox55.Text, TextBox56.Text, con);
+                SaveOrUpdateRow("20-21", TextBox57.Text, TextBox58.Text, TextBox59.Text, TextBox60.Text, con);
+                SaveOrUpdateRow("21-22", TextBox61.Text, TextBox62.Text, TextBox63.Text, TextBox64.Text, con);
+                SaveOrUpdateRow("22-23", TextBox65.Text, TextBox66.Text, TextBox67.Text, TextBox68.Text, con);
+            }
+
+            Response.Write("<script>alert('Data Saved Successfully');</script>");
         }
 
         protected void ddlOperator_SelectedIndexChanged(object sender, EventArgs e)
@@ -63,11 +123,7 @@ namespace ADO._7_CallStrProc
 
             // Example usage
             //Response.Write("Selected: " + name);
-
-
-        
         }
-
 
         void SaveOrUpdateRow(string time, string t, string a, string r, string rw, SqlConnection con)
         {
@@ -83,7 +139,7 @@ namespace ADO._7_CallStrProc
             checkCmd.Parameters.AddWithValue("@date", txtProdDate.Text);
             checkCmd.Parameters.AddWithValue("@op", ddlOperator.SelectedValue);
             checkCmd.Parameters.AddWithValue("@mc", ddlMachine.SelectedValue);
-            checkCmd.Parameters.AddWithValue("@process", txtProcess.Text);
+            checkCmd.Parameters.AddWithValue("@process", ddlprocess.Text);
             checkCmd.Parameters.AddWithValue("@time", time);
 
             int count = (int)checkCmd.ExecuteScalar();
@@ -114,7 +170,7 @@ namespace ADO._7_CallStrProc
                 updateCmd.Parameters.AddWithValue("@date", txtProdDate.Text);
                 updateCmd.Parameters.AddWithValue("@op", ddlOperator.SelectedValue);
                 updateCmd.Parameters.AddWithValue("@mc", ddlMachine.SelectedValue);
-                updateCmd.Parameters.AddWithValue("@process", txtProcess.Text);
+                updateCmd.Parameters.AddWithValue("@process", ddlprocess.Text);
                 updateCmd.Parameters.AddWithValue("@time", time);
 
                 updateCmd.ExecuteNonQuery();
@@ -125,12 +181,12 @@ namespace ADO._7_CallStrProc
                 SqlCommand insertCmd = new SqlCommand(@"
         INSERT INTO ProductionSheet
         (ProdDate, OperatorID, MachineID, ProcessName, CycleTime, TimeSlot, TargetQty, ActualQty, RejectQty, ReworkQty)
-        VALUES (@date,@op,@mc,@process,@cycle,@time,@target,@actual,@reject,@rework)", con);
+        VALUES (@date,@op,@mc,@process,@cycle,@time,@target,@actual,@reject,@rework,@remarks)", con);
 
                 insertCmd.Parameters.AddWithValue("@date", txtProdDate.Text);
                 insertCmd.Parameters.AddWithValue("@op", ddlOperator.SelectedValue);
                 insertCmd.Parameters.AddWithValue("@mc", ddlMachine.SelectedValue);
-                insertCmd.Parameters.AddWithValue("@process", txtProcess.Text);
+                insertCmd.Parameters.AddWithValue("@process", ddlprocess.Text);
                 insertCmd.Parameters.AddWithValue("@cycle", txtCycleTime.Text);
 
                 insertCmd.Parameters.AddWithValue("@time", time);
@@ -143,29 +199,20 @@ namespace ADO._7_CallStrProc
             }
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
+
+        protected void txtProdDate_TextChanged(object sender, EventArgs e)
         {
-            string cs = "Data Source=SAPSERV;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
 
-            using (SqlConnection con = new SqlConnection(cs))
-            {
-                con.Open();
+        }
 
-                // Function to insert row
-                SaveOrUpdateRow("07-08", txt1.Text, txt2.Text, txt3.Text, txt4.Text, con);
-                SaveOrUpdateRow("08-09", txt5.Text, txt6.Text, txt7.Text, txt8.Text, con);
-                SaveOrUpdateRow("09-10", txt9.Text, txt10.Text, txt11.Text, txt12.Text, con);
-                SaveOrUpdateRow("10-11", txt13.Text, txt14.Text, txt15.Text, txt16.Text, con);
-                SaveOrUpdateRow("11-12", txt17.Text, txt18.Text, txt19.Text, txt20.Text, con);
-                SaveOrUpdateRow("12-01", txt21.Text, txt22.Text, txt23.Text, txt24.Text, con);
-                SaveOrUpdateRow("01-02", txt25.Text, txt26.Text, txt27.Text, txt28.Text, con);
-                SaveOrUpdateRow("02-03", txt29.Text, txt30.Text, txt31.Text, txt32.Text, con);
-                SaveOrUpdateRow("03-04", txt33.Text, txt34.Text, txt35.Text, txt36.Text, con);
-                SaveOrUpdateRow("04-05", txt37.Text, txt38.Text, txt39.Text, txt40.Text, con);
-                SaveOrUpdateRow("05-06", TextBox41.Text, TextBox42.Text, TextBox43.Text, TextBox44.Text, con);
-            }
+        protected void ddlMachine_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
-            Response.Write("<script>alert('Data Saved Successfully');</script>");
+        }
+
+        protected void txtCycleTime_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
