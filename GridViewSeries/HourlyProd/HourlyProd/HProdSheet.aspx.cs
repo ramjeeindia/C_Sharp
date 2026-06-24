@@ -20,7 +20,101 @@ namespace HourlyProd
                 LoadProcess();
                 LoadMachine();
                 BindRemarks();
-                txtProdDate.Text = DateTime.Now.ToString("dd-MM-yyyy");
+                HideRowsBasedOnShift();
+            }
+                        
+        }
+
+        private void HideRowsBasedOnShift()
+        {
+            if (ddlshift.SelectedValue == "G") // General Shift
+            {
+                row1.Visible = false;
+                row2.Visible = false;
+                row13.Visible = false;
+                row14.Visible = false;
+                row15.Visible = false;
+                row16.Visible = false;
+                row17.Visible = false;
+
+            }
+            else
+            {
+                row3.Visible = true;
+                row4.Visible = true;
+                row5.Visible = true;
+                row6.Visible = true;
+                row7.Visible = true;
+                row8.Visible = true;
+                row9.Visible = true;
+                row10.Visible = true;
+                row11.Visible = true;
+                row12.Visible = true;
+
+            }
+        }
+        protected void ddlshift_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddlshift.SelectedValue == "G") // General Shift
+            {
+                row1.Visible = false;
+                row2.Visible = false;
+                row13.Visible = false;
+                row14.Visible = false;
+                row15.Visible = false;
+                row16.Visible = false;
+                row17.Visible = false;
+                row3.Visible = true;
+                row4.Visible = true;
+                row5.Visible = true;
+                row6.Visible = true;
+                row7.Visible = true;
+                row8.Visible = true;
+                row9.Visible = true;
+                row10.Visible = true;
+                row11.Visible = true;
+                row12.Visible = true;
+
+            }
+            else if (ddlshift.SelectedValue == "A")
+            {
+                row1.Visible = true;
+                row2.Visible = true;
+                row3.Visible = true;
+                row4.Visible = true;
+                row5.Visible = true;
+                row6.Visible = true;
+                row7.Visible = true;
+                row8.Visible = true;
+                row9.Visible = true;
+                row10.Visible = true;
+                row11.Visible = false;
+                row12.Visible = false;
+                row13.Visible = false; 
+                row14.Visible = false;
+                row15.Visible = false;
+                row16.Visible = false;
+                row17.Visible = false;
+            }
+            else 
+            {
+                row7.Visible = true;
+                row8.Visible = true;
+                row9.Visible = true;
+                row10.Visible = true;
+                row11.Visible = true;
+                row12.Visible = true;
+                row13.Visible = true;
+                row14.Visible = true;
+                row15.Visible = true;
+                row16.Visible = true;
+                row17.Visible = true;
+                row1.Visible = false;
+                row2.Visible = false;
+                row3.Visible = false;
+                row4.Visible = false;
+                row5.Visible = false;
+                row6.Visible = false;
             }
         }
 
@@ -109,25 +203,6 @@ namespace HourlyProd
             }
         }
 
-        //private void LoadReason()
-        //{
-        //    string conStr = "Data Source=SAPSERV;Initial Catalog=SHAPLLIVE;User ID=sa;Password=sa@2017;";
-
-        //    using (SqlConnection con = new SqlConnection(conStr))
-        //    {
-        //        using (SqlCommand cmd = new SqlCommand("SELECT ResonValue, ReasonText  FROM ReasonList ORDER BY ReasonText", con))
-        //        {
-        //            cmd.CommandType = CommandType.StoredProcedure;
-        //            con.Open();
-        //            SqlDataReader dr = cmd.ExecuteReader();
-        //            ddlprocess.DataSource = dr;
-        //            ddlprocess.DataTextField = "ItemName";   // Display
-        //            ddlprocess.DataValueField = "ItemCode";  // Value
-        //            ddlprocess.DataBind();
-        //            ddlprocess.Items.Insert(0, "-- Select Reason --");
-        //        }
-        //    }
-        //}
         private void LoadMachine()
         {
             string conStr = "Data Source=SAPSERV;Initial Catalog=SHAPLLIVE;User ID=sa;Password=sa@2017;";
@@ -287,6 +362,7 @@ namespace HourlyProd
         {
 
         }
-                
+
+        
     }
 }

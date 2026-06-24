@@ -6,25 +6,128 @@
 <head runat="server">
     <title>Hourly Production Sheet</title>
     <style>
+        .header-title {
+    background: linear-gradient(135deg, #2b59c3, #4e73df);
+    color: white;
+    padding: 15px;
+    font-size: 24px;
+    text-align: center;
+    font-weight: 600;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+        /* FORM GRID */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px 20px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+}
       body {
-     background-color: red;
+     
      font-family: Arial;
  
  }
 
  .container {
-     width: 100%;
-     margin: auto;
-     background: #fff;
-     padding: 20px;
-     border-radius: 10px;
+    width: 95%;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
  }
 
- table {
-     width: 100%;
-     border-collapse: collapse;
-     margin-bottom: 10px;
- }
+ /* INPUTS */
+input, select {
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    transition: 0.2s;
+    font-size: 14px;
+}
+
+input:focus, select:focus {
+    border-color: #4e73df;
+    outline: none;
+    box-shadow: 0 0 4px rgba(78,115,223,0.4);
+}
+.btn {
+    padding: 8px 18px;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.btn-save {
+    background: #28a745;
+    color: white;
+}
+
+.btn-save:hover {
+    background: #218838;
+}
+
+.btn-reset {
+    background: #007bff;
+    color: white;
+}
+
+.btn-clear {
+    background: #6c757d;
+    color: white;
+}
+
+
+ /* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* TABLE HEADER */
+th {
+    background: linear-gradient(135deg, #2b59c3, #4e73df);
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+}
+
+/* TABLE BODY */
+td {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+/* ROW STRIPES */
+tbody tr:nth-child(even) {
+    background: #f8f9fc;
+}
+
+/* TIME COLUMN */
+.time-col {
+    font-weight: 600;
+    text-align: left;
+    white-space: nowrap;
+}
 
  caption {
      font-size: 22px;
@@ -34,56 +137,7 @@
      margin-bottom: 10px;
  }
 
- td, th {
-     padding: 5px;
-     border: 1px solid #ccc;
-     text-align: center;
- }
-
- th {
-     background-color: #007acc;
-     color: white;
- }
-
- input, select {
-     padding: 5px;
- }
-
- .header-table td {
-     border: none;
-     text-align: left;
-     width:100px;
- }
-
- .time-col {
-     white-space: nowrap;
-     font-weight: bold;
- }
-
- .auto-style1 {
-     width: 190px;
-     white-space: nowrap;
-     font-weight: bold;
- }
-
- .auto-style2 {
-     width: 20px;
- }
-
- .auto-style3 {
-     height: 40px;
- }
-
-
- #form1 {
- }
- .auto-style4 {
-     height: 40px;
-     width: 74px;
- }
- .auto-style5 {
-     width: 74px;
- }
+ 
 
     </style>
     <script>
@@ -105,7 +159,6 @@
                 '<%= TextBox29.ClientID %>',
                 '<%= TextBox33.ClientID %>',
                 '<%= TextBox37.ClientID %>',
-                '<%= TextBox41.ClientID %>',
                 '<%= TextBox41.ClientID %>',
                 '<%= TextBox45.ClientID %>',
                 '<%= TextBox49.ClientID %>',
@@ -134,7 +187,8 @@
                          OnTextChanged="txtProdDate_TextChanged" ToolTip="Date"></asp:TextBox></td>
                     <td class="auto-style3">Shift</td>
                     <td class="auto-style3">
-                        <asp:DropDownList ID="ddlshift" runat="server">
+                        <asp:DropDownList ID="ddlshift" runat="server" AutoPostBack="true"
+                            OnSelectedIndexChanged="ddlshift_SelectedIndexChanged">
                             <asp:ListItem Value="G">General</asp:ListItem>
                             <asp:ListItem Value="A">A Shift</asp:ListItem>
                             <asp:ListItem Value="B">B Shift</asp:ListItem>
@@ -186,18 +240,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr id="row1" runat="server">
                         <td class="auto-style1">06:00AM - 07:00 AM</td>
-                             <td class="auto-style2"><asp:TextBox ID="TextBox1" runat="server" /></td>
-                             <td class="auto-style2"><asp:TextBox ID="TextBox2" runat="server" /></td>
-                             <td class="auto-style2"><asp:TextBox ID="TextBox3" runat="server" /></td>
-                             <td class="auto-style2"><asp:TextBox ID="TextBox4" runat="server" /></td>
+                        <td class="auto-style2"><asp:TextBox ID="TextBox1" runat="server" /></td>
+                        <td class="auto-style2"><asp:TextBox ID="TextBox2" runat="server" /></td>
+                        <td class="auto-style2"><asp:TextBox ID="TextBox3" runat="server" /></td>
+                        <td class="auto-style2"><asp:TextBox ID="TextBox4" runat="server" /></td>
            
                         <td>
                             <asp:DropDownList ID="ddlRemark1" runat="server"></asp:DropDownList>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="row2" runat="server">
                         <td class="auto-style1">07:00AM - 08:00 AM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox5" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox6" runat="server" /></td>
@@ -211,7 +265,7 @@
 
                     </tr>
 
-                    <tr>
+                    <tr id="row3" runat="server">
                         <td class="auto-style1">08:00AM - 09:00AM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox9" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox10" runat="server" /></td>
@@ -223,7 +277,7 @@
                         </td>
                     </tr>
 
-                    <tr>
+                    <tr id="row4" runat="server">
                         <td class="auto-style1">09:00AM - 10:00AM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox13" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox14" runat="server" /></td>
@@ -237,7 +291,7 @@
                         </td>
                     </tr>
 
-                    <tr>
+                    <tr id="row5" runat="server">
                         <td class="auto-style1">10:00AM - 11:00AM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox17" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox18" runat="server" /></td>
@@ -251,7 +305,7 @@
                         </td>
                     </tr>
 
-                    <tr>
+                    <tr id="row6" runat="server">
                         <td class="auto-style1">11:00AM - 12:00PM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox21" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox22" runat="server" /></td>
@@ -265,7 +319,7 @@
                         </td>
                     </tr>
 
-                    <tr>
+                    <tr id="row7" runat="server">
                         <td class="auto-style1">12:00PM - 13:00PM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox25" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox26" runat="server" /></td>
@@ -279,7 +333,7 @@
                         </td>
                     </tr>
 
-                    <tr>
+                    <tr id="row8" runat="server">
                         <td class="auto-style1">13:00PM - 14:00PM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox29" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox30" runat="server" /></td>
@@ -293,7 +347,7 @@
                         </td>
                     </tr>
 
-                    <tr>
+                    <tr id="row9" runat="server">
                         <td class="auto-style1">14:00PM - 15:00PM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox33" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox34" runat="server" /></td>
@@ -307,7 +361,7 @@
                         </td>
                     </tr>
 
-                    <tr>
+                    <tr id="row10" runat="server" >
                         <td class="auto-style1">15:00PM - 16:00PM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox37" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox38" runat="server" /></td>
@@ -321,7 +375,7 @@
                         </td>
                     </tr>
 
-                    <tr>
+                    <tr id="row11" runat="server">
                         <td class="auto-style1">16:00PM - 17:00PM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox41" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox42" runat="server" /></td>
@@ -334,7 +388,7 @@
                             </asp:DropDownList>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="row12" runat="server">
                         <td class="auto-style1">17:00PM - 18:00PM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox45" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox46" runat="server" /></td>
@@ -347,7 +401,7 @@
                             </asp:DropDownList>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="row13" runat="server" >
                         <td class="auto-style1">18:00PM - 19:00PM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox49" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox50" runat="server" /></td>
@@ -360,7 +414,7 @@
                             </asp:DropDownList>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="row14" runat="server">
                         <td class="auto-style1">19:00PM - 20:00PM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox53" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox54" runat="server" /></td>
@@ -374,7 +428,7 @@
                         </td>
                     </tr>
 
-                    <tr>
+                    <tr id="row15" runat="server">
                         <td class="auto-style1">20:00PM - 21:00PM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox57" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox58" runat="server" /></td>
@@ -387,7 +441,7 @@
                             </asp:DropDownList>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="row16" runat="server">
                         <td class="auto-style1">21:00PM - 22:00PM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox61" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox62" runat="server" /></td>
@@ -400,7 +454,7 @@
                             </asp:DropDownList>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="row17" runat="server">
                         <td class="auto-style1">22:00PM - 23:00PM</td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox65" runat="server" /></td>
                         <td class="auto-style2"><asp:TextBox ID="TextBox66" runat="server" /></td>
@@ -420,4 +474,4 @@
         </div>
     </form>
 </body>
-</html>
+</html> 

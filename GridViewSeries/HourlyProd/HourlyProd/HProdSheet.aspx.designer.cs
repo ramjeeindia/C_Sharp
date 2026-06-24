@@ -87,6 +87,15 @@ namespace HourlyProd
         protected global::System.Web.UI.WebControls.Button Button1;
 
         /// <summary>
+        /// row1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row1;
+
+        /// <summary>
         /// TextBox1 control.
         /// </summary>
         /// <remarks>
@@ -130,6 +139,15 @@ namespace HourlyProd
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark1;
+
+        /// <summary>
+        /// row2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row2;
 
         /// <summary>
         /// TextBox5 control.
@@ -177,6 +195,15 @@ namespace HourlyProd
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark2;
 
         /// <summary>
+        /// row3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row3;
+
+        /// <summary>
         /// TextBox9 control.
         /// </summary>
         /// <remarks>
@@ -220,6 +247,15 @@ namespace HourlyProd
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark3;
+
+        /// <summary>
+        /// row4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row4;
 
         /// <summary>
         /// TextBox13 control.
@@ -267,6 +303,15 @@ namespace HourlyProd
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark4;
 
         /// <summary>
+        /// row5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row5;
+
+        /// <summary>
         /// TextBox17 control.
         /// </summary>
         /// <remarks>
@@ -310,6 +355,15 @@ namespace HourlyProd
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark5;
+
+        /// <summary>
+        /// row6 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row6;
 
         /// <summary>
         /// TextBox21 control.
@@ -357,6 +411,15 @@ namespace HourlyProd
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark6;
 
         /// <summary>
+        /// row7 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row7;
+
+        /// <summary>
         /// TextBox25 control.
         /// </summary>
         /// <remarks>
@@ -400,6 +463,15 @@ namespace HourlyProd
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark7;
+
+        /// <summary>
+        /// row8 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row8;
 
         /// <summary>
         /// TextBox29 control.
@@ -447,6 +519,15 @@ namespace HourlyProd
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark8;
 
         /// <summary>
+        /// row9 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row9;
+
+        /// <summary>
         /// TextBox33 control.
         /// </summary>
         /// <remarks>
@@ -490,6 +571,15 @@ namespace HourlyProd
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark9;
+
+        /// <summary>
+        /// row10 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row10;
 
         /// <summary>
         /// TextBox37 control.
@@ -537,6 +627,15 @@ namespace HourlyProd
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark10;
 
         /// <summary>
+        /// row11 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row11;
+
+        /// <summary>
         /// TextBox41 control.
         /// </summary>
         /// <remarks>
@@ -580,6 +679,15 @@ namespace HourlyProd
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark11;
+
+        /// <summary>
+        /// row12 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row12;
 
         /// <summary>
         /// TextBox45 control.
@@ -627,6 +735,15 @@ namespace HourlyProd
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark12;
 
         /// <summary>
+        /// row13 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row13;
+
+        /// <summary>
         /// TextBox49 control.
         /// </summary>
         /// <remarks>
@@ -670,6 +787,15 @@ namespace HourlyProd
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark13;
+
+        /// <summary>
+        /// row14 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row14;
 
         /// <summary>
         /// TextBox53 control.
@@ -717,6 +843,15 @@ namespace HourlyProd
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark14;
 
         /// <summary>
+        /// row15 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row15;
+
+        /// <summary>
         /// TextBox57 control.
         /// </summary>
         /// <remarks>
@@ -762,6 +897,15 @@ namespace HourlyProd
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark15;
 
         /// <summary>
+        /// row16 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row16;
+
+        /// <summary>
         /// TextBox61 control.
         /// </summary>
         /// <remarks>
@@ -805,6 +949,15 @@ namespace HourlyProd
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlRemark16;
+
+        /// <summary>
+        /// row17 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row17;
 
         /// <summary>
         /// TextBox65 control.
