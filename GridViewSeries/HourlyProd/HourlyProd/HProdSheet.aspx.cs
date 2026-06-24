@@ -225,6 +225,13 @@ namespace HourlyProd
 
         protected void Button1_Click(object sender, EventArgs e)
         {
+            // ✅ STEP 1: VALIDATE HEADER
+            if (!ValidateHeader())
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "msg",
+                    "alert('⚠ Please fill all header details correctly before saving!');", true);
+                return; // 🚫 STOP SAVE
+            }
             string cs = "Data Source=SAPSERV;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
 
             using (SqlConnection con = new SqlConnection(cs))
@@ -254,6 +261,32 @@ namespace HourlyProd
             Response.Write("<script>alert('Data Saved Successfully');</script>");
         }
 
+        private bool ValidateHeader()
+        {
+            if (string.IsNullOrWhiteSpace(txtProdDate.Text))
+                return false;
+
+            if (ddlshift.SelectedValue == "0" || string.IsNullOrEmpty(ddlshift.SelectedValue))
+                return false;
+
+            if (ddlMachine.SelectedValue == "0" || string.IsNullOrEmpty(ddlMachine.SelectedValue))
+                return false;
+
+            if (ddlOperator.SelectedValue == "0" || string.IsNullOrEmpty(ddlOperator.SelectedValue))
+                return false;
+
+            if (ddlprocess.SelectedIndex == 0)
+                return false;
+
+            if (string.IsNullOrWhiteSpace(txtCycleTime.Text))
+                return false;
+
+            decimal cycle;
+            if (!decimal.TryParse(txtCycleTime.Text, out cycle) || cycle <= 0)
+                return false;
+
+            return true;
+        }
         protected void ddlOperator_SelectedIndexChanged(object sender, EventArgs e)
         {
             string name = ddlOperator.SelectedItem.Text;
@@ -279,7 +312,7 @@ namespace HourlyProd
             checkCmd.Parameters.AddWithValue("@Shift", ddlshift.SelectedValue);
             checkCmd.Parameters.AddWithValue("@op", ddlOperator.SelectedValue);
             checkCmd.Parameters.AddWithValue("@mc", ddlMachine.SelectedValue);
-            checkCmd.Parameters.AddWithValue("@process", ddlprocess.Text);
+            checkCmd.Parameters.AddWithValue("@process", ddlprocess.SelectedValue);
             checkCmd.Parameters.AddWithValue("@time", time);
 
             int count = (int)checkCmd.ExecuteScalar();
@@ -293,7 +326,7 @@ namespace HourlyProd
             ActualQty=@actual,
             RejectQty=@reject,
             ReworkQty=@rework,
-            CycleTime=@cycle
+            CycleTime=@cycle,
             Remarks=@remarks
         WHERE ProdDate=@date
           AND Shift=@Shift
@@ -344,6 +377,8 @@ namespace HourlyProd
                 insertCmd.Parameters.AddWithValue("@rework", string.IsNullOrEmpty(rw) ? 0 : Convert.ToInt32(rw));
 
                 insertCmd.ExecuteNonQuery();
+
+                Response.Write("The Data Has been Updated");
             }
         }
 
