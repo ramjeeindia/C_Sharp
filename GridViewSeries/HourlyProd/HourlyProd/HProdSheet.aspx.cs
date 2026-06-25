@@ -378,7 +378,7 @@ namespace HourlyProd
 
                 insertCmd.ExecuteNonQuery();
 
-                Response.Write("The Data Has been Updated");
+                
             }
         }
 
