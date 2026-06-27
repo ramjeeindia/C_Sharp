@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Hourly Production Report</title>
+
     <style>
         * {
             margin: 0;
@@ -17,27 +18,226 @@
 
         .header {
             width: 100%;
-            padding: 10px 0;
+            padding: 15px;
             text-align: center;
-            font-size: 28px;
+            font-size: 26px;
             font-weight: bold;
             color: white;
-            /* Gradient like your image */
             background: linear-gradient(to right, #6a11cb, #2575fc);
-            /* Shadow effect */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            /* Rounded edges */
+        }
+
+        .main {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+        }
+
+        .left-panel {
+            flex: 2;
+            background: #fff;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 20px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(to right, #3b5bbb, #5f7de0);
+            color: white;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+
+        td input {
+            width: 90%;
+            padding: 5px;
+        }
+
+        tfoot {
+            background: #ddd;
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
             border-radius: 5px;
-            margin: 10px auto;
-            max-width: 95%;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .save-btn {
+            background: #28a745;
+        }
+
+        .get-btn {
+            background: #007bff;
         }
     </style>
-   
 </head>
+
 <body>
-    <div class="header">
-        Hourly Production Sheet
+
+    <div class="header">Hourly Production Sheet</div>
+
+    <div class="main">
+        <div class="left-panel">
+
+            <!-- FORM -->
+            <div class="form-grid">
+                <div>
+                    <label>Production Date</label>
+                    <input type="date">
+                </div>
+
+                <div>
+                    <label>Shift</label>
+                    <input type="text">
+                </div>
+
+                <div>
+                    <label>Machine Name</label>
+                    <input type="text">
+                </div>
+
+                <div>
+                    <label>Operator Name</label>
+                    <input type="text">
+                </div>
+
+                <div>
+                    <label>Process Name</label>
+                    <input type="text">
+                </div>
+
+                <div>
+                    <label>Cycle Time</label>
+                    <input type="number">
+                </div>
+            </div>
+
+            <button class="btn save-btn">💾 Save</button>
+            <button class="btn get-btn">📥 Get Data</button>
+
+            <!-- TABLE -->
+            <div class="table-container">
+                <table id="prodTable">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Target</th>
+                            <th>Actual OK</th>
+                            <th>Reject</th>
+                            <th>Rework</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>06-07</td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="text"></td>
+                        </tr>
+
+                        <tr>
+                            <td>07-08</td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="text"></td>
+                        </tr>
+
+                        <tr>
+                            <td>08-09</td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="text"></td>
+                        </tr>
+                    </tbody>
+
+                    <!-- TOTAL ROW -->
+                    <tfoot>
+                        <tr>
+                            <td>Total</td>
+                            <td id="totTarget">0</td>
+                            <td id="totActual">0</td>
+                            <td id="totReject">0</td>
+                            <td id="totRework">0</td>
+                            <td>-</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
     </div>
+
+    <!-- SCRIPT -->
+    <script>
+        function calcTotal() {
+            let table = document.getElementById("prodTable");
+            let rows = table.tBodies[0].rows;
+
+            let tTarget = 0, tActual = 0, tReject = 0, tRework = 0;
+
+            for (let i = 0; i < rows.length; i++) {
+                let cells = rows[i].cells;
+
+                tTarget += Number(cells[1].children[0].value) || 0;
+                tActual += Number(cells[2].children[0].value) || 0;
+                tReject += Number(cells[3].children[0].value) || 0;
+                tRework += Number(cells[4].children[0].value) || 0;
+            }
+
+            document.getElementById("totTarget").innerText = tTarget;
+            document.getElementById("totActual").innerText = tActual;
+            document.getElementById("totReject").innerText = tReject;
+            document.getElementById("totRework").innerText = tRework;
+        }
+    </script>
 
 </body>
 </html>
