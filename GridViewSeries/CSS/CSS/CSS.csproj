@@ -120,6 +120,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
+    <Content Include="FormDesign.html" />
     <Content Include="Global.asax" />
     <Content Include="1_css.html" />
     <Content Include="Scripts\bootstrap.bundle.js" />

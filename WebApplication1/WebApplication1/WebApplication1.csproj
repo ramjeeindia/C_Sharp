@@ -8,16 +8,16 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4B19DE9A-9C4C-4DB0-96A5-A330077A225A}</ProjectGuid>
+    <ProjectGuid>{ACCCB2AB-FA18-4058-AB78-E916252A96DE}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ADO</RootNamespace>
-    <AssemblyName>ADO</AssemblyName>
+    <RootNamespace>WebApplication1</RootNamespace>
+    <AssemblyName>WebApplication1</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort>44395</IISExpressSSLPort>
+    <IISExpressSSLPort>44368</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -99,19 +99,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="1_Connection\localconn.aspx" />
-    <Content Include="1_Connection\remoteconn.aspx" />
-    <Content Include="1_Connection\usingconfig.aspx" />
-    <Content Include="3_StoreConFile\TestConnSaving.aspx" />
-    <Content Include="4_SqlCommand\exenonquery.aspx" />
-    <Content Include="4_SqlCommand\insertnonquery.aspx" />
-    <Content Include="4_SqlCommand\SqlCmd.aspx" />
-    <Content Include="5_SqlInjection\InjPrevention.aspx" />
-    <Content Include="5_SqlInjection\SqlInjection.aspx" />
-    <Content Include="7_CallStrProc\CallSqlProc.aspx" />
-    <Content Include="7_CallStrProc\InsertItemCode.aspx" />
-    <Content Include="8_SqlDataRdr\rdreachrow.aspx" />
-    <Content Include="8_SqlDataRdr\SqlDataRdr.aspx" />
     <Content Include="About.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -134,7 +121,6 @@
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="HourlyProd.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -163,7 +149,6 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
-    <Content Include="ADODOTNET.xlsx" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -198,97 +183,6 @@
     <Content Include="Site.Mobile.Master" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="1_Connection\localconn.aspx.cs">
-      <DependentUpon>localconn.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="1_Connection\localconn.aspx.designer.cs">
-      <DependentUpon>localconn.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="1_Connection\remoteconn.aspx.cs">
-      <DependentUpon>remoteconn.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="1_Connection\remoteconn.aspx.designer.cs">
-      <DependentUpon>remoteconn.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="1_Connection\usingconfig.aspx.cs">
-      <DependentUpon>usingconfig.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="1_Connection\usingconfig.aspx.designer.cs">
-      <DependentUpon>usingconfig.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="3_StoreConFile\TestConnSaving.aspx.cs">
-      <DependentUpon>TestConnSaving.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="3_StoreConFile\TestConnSaving.aspx.designer.cs">
-      <DependentUpon>TestConnSaving.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="4_SqlCommand\exenonquery.aspx.cs">
-      <DependentUpon>exenonquery.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="4_SqlCommand\exenonquery.aspx.designer.cs">
-      <DependentUpon>exenonquery.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="4_SqlCommand\insertnonquery.aspx.cs">
-      <DependentUpon>insertnonquery.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="4_SqlCommand\insertnonquery.aspx.designer.cs">
-      <DependentUpon>insertnonquery.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="4_SqlCommand\SqlCmd.aspx.cs">
-      <DependentUpon>SqlCmd.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="4_SqlCommand\SqlCmd.aspx.designer.cs">
-      <DependentUpon>SqlCmd.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="5_SqlInjection\InjPrevention.aspx.cs">
-      <DependentUpon>InjPrevention.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="5_SqlInjection\InjPrevention.aspx.designer.cs">
-      <DependentUpon>InjPrevention.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="5_SqlInjection\SqlInjection.aspx.cs">
-      <DependentUpon>SqlInjection.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="5_SqlInjection\SqlInjection.aspx.designer.cs">
-      <DependentUpon>SqlInjection.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="7_CallStrProc\CallSqlProc.aspx.cs">
-      <DependentUpon>CallSqlProc.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="7_CallStrProc\CallSqlProc.aspx.designer.cs">
-      <DependentUpon>CallSqlProc.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="7_CallStrProc\InsertItemCode.aspx.cs">
-      <DependentUpon>InsertItemCode.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="7_CallStrProc\InsertItemCode.aspx.designer.cs">
-      <DependentUpon>InsertItemCode.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="8_SqlDataRdr\rdreachrow.aspx.cs">
-      <DependentUpon>rdreachrow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="8_SqlDataRdr\rdreachrow.aspx.designer.cs">
-      <DependentUpon>rdreachrow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="8_SqlDataRdr\SqlDataRdr.aspx.cs">
-      <DependentUpon>SqlDataRdr.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="8_SqlDataRdr\SqlDataRdr.aspx.designer.cs">
-      <DependentUpon>SqlDataRdr.aspx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
@@ -315,13 +209,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="HourlyProd.aspx.cs">
-      <DependentUpon>HourlyProd.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="HourlyProd.aspx.designer.cs">
-      <DependentUpon>HourlyProd.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
@@ -332,14 +219,12 @@
     </Compile>
     <Compile Include="Site.Mobile.Master.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.designer.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
@@ -379,9 +264,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>60599</DevelopmentServerPort>
+          <DevelopmentServerPort>59584</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44395/</IISUrl>
+          <IISUrl>https://localhost:44368/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
