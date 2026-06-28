@@ -18,12 +18,22 @@
 
         .header {
             width: 100%;
-            padding: 15px;
-            text-align: center;
-            font-size: 26px;
-            font-weight: bold;
-            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
             background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            
+        }
+        .header-left img {
+            height: 100px;
+        }
+        .header-center {
+            flex: 1;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
         }
 
         .main {
@@ -104,17 +114,46 @@
 
         .save-btn {
             background: #28a745;
+            padding: 10px 60px;
         }
 
         .get-btn {
             background: #007bff;
         }
+
+        .OT-btn{
+            background:#000000;
+            color:#ffffff;
+        }
+        .vw-btn{
+            background:#06fc13;
+            color:#000000;
+        }
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .header-center {
+                font-size: 18px;
+            }
+
+            .header-left img {
+                height: 35px;
+            }
+        }
     </style>
 </head>
 
 <body>
-
-    <div class="header">Hourly Production Sheet</div>
+    <div class="header">
+        <img src="https://www.sabohema.com/images/logo.png">
+        <div class="header-title">Hourly Production Sheet</div>
+        <div style="width:140px;"></div> <!-- balance spacing -->
+    </div>
 
     <div class="main">
         <div class="left-panel">
@@ -153,7 +192,16 @@
             </div>
 
             <button class="btn save-btn">💾 Save</button>
-            <button class="btn get-btn">📥 Get Data</button>
+            <select onchange="addOT(this.value)" class="btn OT-btn">
+                <option value="">⏱️ Add Overtime</option>
+                <option value="1">1 Hour OT</option>
+                <option value="2">2 Hours OT</option>
+                <option value="3">3 Hours OT</option>
+                <option value="4">4 Hours OT</option>
+            </select>
+            
+            <button class="btn vw-btn">📊 View Report</button>
+            <button class="btn get-btn">📥 Get Saved Data</button>
 
             <!-- TABLE -->
             <div class="table-container">
@@ -165,6 +213,7 @@
                             <th>Actual OK</th>
                             <th>Reject</th>
                             <th>Rework</th>
+                            <th>DownTime</th>
                             <th>Remarks</th>
                         </tr>
                     </thead>
@@ -176,6 +225,8 @@
                             <td><input type="number" oninput="calcTotal()"></td>
                             <td><input type="number" oninput="calcTotal()"></td>
                             <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+
                             <td><input type="text"></td>
                         </tr>
 
@@ -185,6 +236,8 @@
                             <td><input type="number" oninput="calcTotal()"></td>
                             <td><input type="number" oninput="calcTotal()"></td>
                             <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+
                             <td><input type="text"></td>
                         </tr>
 
@@ -194,6 +247,8 @@
                             <td><input type="number" oninput="calcTotal()"></td>
                             <td><input type="number" oninput="calcTotal()"></td>
                             <td><input type="number" oninput="calcTotal()"></td>
+                            <td><input type="number" oninput="calcTotal()"></td>
+
                             <td><input type="text"></td>
                         </tr>
                     </tbody>
@@ -206,6 +261,8 @@
                             <td id="totActual">0</td>
                             <td id="totReject">0</td>
                             <td id="totRework">0</td>
+                            <td id="totDownTime">0</td>
+
                             <td>-</td>
                         </tr>
                     </tfoot>
@@ -221,7 +278,7 @@
             let table = document.getElementById("prodTable");
             let rows = table.tBodies[0].rows;
 
-            let tTarget = 0, tActual = 0, tReject = 0, tRework = 0;
+            let tTarget = 0, tActual = 0, tReject = 0, tRework = 0, tDownTime=0;
 
             for (let i = 0; i < rows.length; i++) {
                 let cells = rows[i].cells;
@@ -230,12 +287,16 @@
                 tActual += Number(cells[2].children[0].value) || 0;
                 tReject += Number(cells[3].children[0].value) || 0;
                 tRework += Number(cells[4].children[0].value) || 0;
+                tDownTime += Number(cells[5].children[0].value) || 0;
+
             }
 
             document.getElementById("totTarget").innerText = tTarget;
             document.getElementById("totActual").innerText = tActual;
             document.getElementById("totReject").innerText = tReject;
             document.getElementById("totRework").innerText = tRework;
+            document.getElementById("totDownTime").innerText = tRework;
+
         }
     </script>
 
