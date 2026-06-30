@@ -110,14 +110,14 @@
         .table-container {
             width: 100%;
             overflow-x: auto;
-            text-align:center;
+         
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             border-radius: 5px;
-            text-align:center;
+            
         }
 
         thead {

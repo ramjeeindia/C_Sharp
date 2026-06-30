@@ -239,23 +239,23 @@ namespace HourlyProd
                 con.Open();
 
                 // Function to insert row
-                SaveOrUpdateRow("06-07", TextBox1.Text, TextBox2.Text, TextBox3.Text, TextBox4.Text, ddlRemark1.SelectedValue, con);
-                SaveOrUpdateRow("07-08", TextBox5.Text, TextBox6.Text, TextBox7.Text, TextBox8.Text, ddlRemark2.SelectedValue, con);
-                SaveOrUpdateRow("08-09", TextBox9.Text, TextBox10.Text, TextBox11.Text, TextBox12.Text, ddlRemark3.SelectedValue, con);
-                SaveOrUpdateRow("09-10", TextBox13.Text, TextBox14.Text, TextBox15.Text, TextBox16.Text, ddlRemark4.SelectedValue, con);
-                SaveOrUpdateRow("10-11", TextBox17.Text, TextBox18.Text, TextBox19.Text, TextBox20.Text, ddlRemark5.SelectedValue, con);
-                SaveOrUpdateRow("11-12", TextBox21.Text, TextBox22.Text, TextBox23.Text, TextBox24.Text, ddlRemark6.SelectedValue, con);
-                SaveOrUpdateRow("12-13", TextBox25.Text, TextBox26.Text, TextBox27.Text, TextBox28.Text, ddlRemark7.SelectedValue, con);
-                SaveOrUpdateRow("13-14", TextBox29.Text, TextBox30.Text, TextBox31.Text, TextBox32.Text, ddlRemark8.SelectedValue, con);
-                SaveOrUpdateRow("14-15", TextBox33.Text, TextBox34.Text, TextBox35.Text, TextBox36.Text, ddlRemark9.SelectedValue, con);
-                SaveOrUpdateRow("15-16", TextBox37.Text, TextBox38.Text, TextBox39.Text, TextBox40.Text, ddlRemark10.SelectedValue, con);
-                SaveOrUpdateRow("16-17", TextBox41.Text, TextBox42.Text, TextBox43.Text, TextBox44.Text, ddlRemark11.SelectedValue, con);
-                SaveOrUpdateRow("17-18", TextBox45.Text, TextBox46.Text, TextBox47.Text, TextBox48.Text, ddlRemark12.SelectedValue, con);
-                SaveOrUpdateRow("18-19", TextBox49.Text, TextBox50.Text, TextBox51.Text, TextBox52.Text, ddlRemark13.SelectedValue, con);
-                SaveOrUpdateRow("19-20", TextBox53.Text, TextBox54.Text, TextBox55.Text, TextBox56.Text, ddlRemark14.SelectedValue, con);
-                SaveOrUpdateRow("20-21", TextBox57.Text, TextBox58.Text, TextBox59.Text, TextBox60.Text, ddlRemark15.SelectedValue, con);
-                SaveOrUpdateRow("21-22", TextBox61.Text, TextBox62.Text, TextBox63.Text, TextBox64.Text, ddlRemark16.SelectedValue, con);
-                SaveOrUpdateRow("22-23", TextBox65.Text, TextBox66.Text, TextBox67.Text, TextBox68.Text, ddlRemark17.SelectedValue, con);
+                SaveOrUpdateRow("06-07", TextBox1.Text, TextBox2.Text, TextBox3.Text, TextBox4.Text, TextBox5.Text, ddlRemark1.SelectedValue, con);
+                SaveOrUpdateRow("07-08", TextBox6.Text, TextBox7.Text, TextBox8.Text, TextBox9.Text, TextBox10.Text, ddlRemark2.SelectedValue, con);
+                SaveOrUpdateRow("08-09", TextBox11.Text, TextBox12.Text, TextBox13.Text, TextBox14.Text, TextBox15.Text, ddlRemark3.SelectedValue, con);
+                SaveOrUpdateRow("09-10", TextBox16.Text, TextBox17.Text, TextBox18.Text, TextBox19.Text, TextBox20.Text, ddlRemark4.SelectedValue, con);
+                SaveOrUpdateRow("10-11", TextBox21.Text, TextBox22.Text, TextBox23.Text, TextBox24.Text, TextBox25.Text, ddlRemark5.SelectedValue, con);
+                SaveOrUpdateRow("11-12", TextBox26.Text, TextBox27.Text, TextBox28.Text, TextBox29.Text, TextBox30.Text, ddlRemark6.SelectedValue, con);
+                SaveOrUpdateRow("12-13", TextBox31.Text, TextBox32.Text, TextBox33.Text, TextBox34.Text, TextBox35.Text, ddlRemark7.SelectedValue, con);
+                SaveOrUpdateRow("13-14", TextBox36.Text, TextBox37.Text, TextBox38.Text, TextBox39.Text, TextBox40.Text, ddlRemark8.SelectedValue, con);
+                SaveOrUpdateRow("14-15", TextBox41.Text, TextBox42.Text, TextBox43.Text, TextBox44.Text, TextBox45.Text, ddlRemark9.SelectedValue, con);
+                SaveOrUpdateRow("15-16", TextBox46.Text, TextBox47.Text, TextBox48.Text, TextBox49.Text, TextBox50.Text, ddlRemark10.SelectedValue, con);
+                SaveOrUpdateRow("16-17", TextBox51.Text, TextBox52.Text, TextBox53.Text, TextBox54.Text, TextBox55.Text, ddlRemark11.SelectedValue, con);
+                SaveOrUpdateRow("17-18", TextBox56.Text, TextBox57.Text, TextBox58.Text, TextBox59.Text, TextBox60.Text, ddlRemark12.SelectedValue, con);
+                SaveOrUpdateRow("18-19", TextBox61.Text, TextBox62.Text, TextBox63.Text, TextBox64.Text, TextBox65.Text, ddlRemark13.SelectedValue, con);
+                SaveOrUpdateRow("19-20", TextBox66.Text, TextBox67.Text, TextBox68.Text, TextBox69.Text, TextBox70.Text, ddlRemark14.SelectedValue, con);
+                SaveOrUpdateRow("20-21", TextBox71.Text, TextBox72.Text, TextBox73.Text, TextBox74.Text, TextBox75.Text, ddlRemark15.SelectedValue, con);
+                SaveOrUpdateRow("21-22", TextBox76.Text, TextBox77.Text, TextBox78.Text, TextBox79.Text, TextBox80.Text, ddlRemark16.SelectedValue, con);
+                SaveOrUpdateRow("22-23", TextBox81.Text, TextBox82.Text, TextBox83.Text, TextBox84.Text, TextBox85.Text, ddlRemark17.SelectedValue, con);
             }
 
             Response.Write("<script>alert('Data Saved Successfully');</script>");
@@ -281,22 +281,17 @@ namespace HourlyProd
             if (string.IsNullOrWhiteSpace(txtCycleTime.Text))
                 return false;
 
-            decimal cycle;
-            if (!decimal.TryParse(txtCycleTime.Text, out cycle) || cycle <= 0)
+            if (!int.TryParse(txtCycleTime.Text, out int cycle) || cycle <= 0)
                 return false;
 
             return true;
         }
         protected void ddlOperator_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string name = ddlOperator.SelectedItem.Text;
-            string id = ddlOperator.SelectedValue;
-
-            // Example usage
-            //Response.Write("Selected: " + name);
+            
         }
 
-        void SaveOrUpdateRow(string time, string t, string a, string r, string rw, string remarks, SqlConnection con)
+        void SaveOrUpdateRow(string time, string t, string a, string r, string rw,string b, string remarks, SqlConnection con)
         {
             string checkQuery = @"SELECT COUNT(*) FROM ProductionSheet 
                           WHERE ProdDate=@date 
@@ -326,7 +321,7 @@ namespace HourlyProd
             ActualQty=@actual,
             RejectQty=@reject,
             ReworkQty=@rework,
-            CycleTime=@cycle,
+            DownTime=@down,
             Remarks=@remarks
         WHERE ProdDate=@date
           AND Shift=@Shift
@@ -339,6 +334,7 @@ namespace HourlyProd
                 updateCmd.Parameters.AddWithValue("@actual", string.IsNullOrEmpty(a) ? 0 : Convert.ToInt32(a));
                 updateCmd.Parameters.AddWithValue("@reject", string.IsNullOrEmpty(r) ? 0 : Convert.ToInt32(r));
                 updateCmd.Parameters.AddWithValue("@rework", string.IsNullOrEmpty(rw) ? 0 : Convert.ToInt32(rw));
+                updateCmd.Parameters.AddWithValue("@down", string.IsNullOrEmpty(b) ? 0 : Convert.ToInt32(b));
 
                 updateCmd.Parameters.AddWithValue("@cycle", txtCycleTime.Text);
 
@@ -358,8 +354,8 @@ namespace HourlyProd
                 // ✅ INSERT
                 SqlCommand insertCmd = new SqlCommand(@"
         INSERT INTO ProductionSheet
-        (ProdDate,Shift, OperatorID, MachineID, ProcessName, CycleTime, TimeSlot, TargetQty, ActualQty, RejectQty, ReworkQty, Remarks)
-        VALUES (@date,@Shift,@op,@mc,@process,@cycle,@time,@target,@actual,@reject,@rework,@remarks)", con);
+        (ProdDate,Shift, OperatorID, MachineID, ProcessName, CycleTime, TimeSlot, TargetQty, ActualQty, RejectQty, ReworkQty,DownTime, Remarks)
+        VALUES (@date,@Shift,@op,@mc,@process,@cycle,@time,@target,@actual,@reject,@rework,@down,@remarks)", con);
 
                 insertCmd.Parameters.AddWithValue("@date", txtProdDate.Text);
                 insertCmd.Parameters.AddWithValue("@shift", ddlshift.SelectedValue);
@@ -375,6 +371,7 @@ namespace HourlyProd
                 insertCmd.Parameters.AddWithValue("@actual", string.IsNullOrEmpty(a) ? 0 : Convert.ToInt32(a));
                 insertCmd.Parameters.AddWithValue("@reject", string.IsNullOrEmpty(r) ? 0 : Convert.ToInt32(r));
                 insertCmd.Parameters.AddWithValue("@rework", string.IsNullOrEmpty(rw) ? 0 : Convert.ToInt32(rw));
+                insertCmd.Parameters.AddWithValue("@down", string.IsNullOrEmpty(b) ? 0 : Convert.ToInt32(b));
 
                 insertCmd.ExecuteNonQuery();
 
@@ -396,12 +393,15 @@ namespace HourlyProd
         protected void txtCycleTime_TextChanged(object sender, EventArgs e)
         {
             
-            
+
+
         }
 
         protected void ddlShift_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
+
+        
     }
 }
