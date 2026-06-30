@@ -395,9 +395,13 @@ namespace HourlyProd
 
         protected void txtCycleTime_TextChanged(object sender, EventArgs e)
         {
-
+            
+            
         }
 
-        
+        protected void ddlShift_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

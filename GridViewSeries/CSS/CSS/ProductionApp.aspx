@@ -22,23 +22,27 @@
             width: 100%;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 10px 20px;
+            justify-content: center;
+            position: relative;
+            padding: 10px 10px;
+            background: linear-gradient(to right, #7b2ff7, #9b3bff);
             color: white;
-            height: 82px;
+            border-radius: 4px;
         }
 
             .header img {
-                height: 40px;
-                background-color: aliceblue;
-                width: 150px;
+                position: absolute;
+                left: 20px;
+                height: 45px;
+                width: auto;
+                background: #c6dfe9;
+                padding: 3px;
             }
 
         .header-title {
-            flex: 1;
             text-align: center;
             font-size: 24px;
-            font-weight: 600;
+            font-weight: bold;
         }
 
         .main {
@@ -106,12 +110,14 @@
         .table-container {
             width: 100%;
             overflow-x: auto;
+            text-align:center;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             border-radius: 5px;
+            text-align:center;
         }
 
         thead {
@@ -161,60 +167,27 @@
         .auto-style2 {
             width: 330px;
         }
-
+        .numeric-input {
+            text-align: center;
+        }
         
-
-       
     </style>
     <script>
-        function setTarget() {
+        function fillTarget() {
 
             var cycle = document.getElementById('<%= txtCycleTime.ClientID %>').value;
 
-            // Convert to number
-            cycle = parseFloat(cycle);
-
-            // Validation
-            if (isNaN(cycle) || cycle <= 0) {
+            if (cycle === "" || parseFloat(cycle) <= 0)
                 return;
-            }
 
-            // Calculate target (1 hour = 3600 sec)
-            var target = Math.floor(cycle);
+            // Target column inputs (inside repeater)
+            var targets = document.querySelectorAll("[id*='txtTarget']");
 
-            var targets = [
-        '<%= TextBox1.ClientID %>',
-        '<%= TextBox5.ClientID %>',
-        '<%= TextBox9.ClientID %>',
-        '<%= TextBox13.ClientID %>',
-        '<%= TextBox17.ClientID %>',
-        '<%= TextBox21.ClientID %>',
-        '<%= TextBox25.ClientID %>',
-        '<%= TextBox29.ClientID %>',
-        '<%= TextBox33.ClientID %>',
-        '<%= TextBox37.ClientID %>',
-        '<%= TextBox41.ClientID %>',
-        '<%= TextBox45.ClientID %>',
-        '<%= TextBox49.ClientID %>',
-        '<%= TextBox53.ClientID %>',
-        '<%= TextBox57.ClientID %>',
-        '<%= TextBox61.ClientID %>',
-                '<%= TextBox65.ClientID %>'
-            ];
-
-            targets.forEach(function (id) {
-                var el = document.getElementById(id);
-                if (el) {
-                    el.value = target;
-
-                    // Optional highlight
-                    el.style.backgroundColor = "#e7f3ff";
-                }
+            targets.forEach(function (txt) {
+                txt.value = cycle;
             });
         }
-
-
-    </script>
+</script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -237,11 +210,10 @@
 
                     <div>
                         <label>Shift</label>
-                        <asp:DropDownList ID="ddlshift" runat="server" AutoPostBack="true"
-                            OnSelectedIndexChanged="ddlshift_SelectedIndexChanged">
-                            <asp:ListItem Value="G">General</asp:ListItem>
-                            <asp:ListItem Value="A">A Shift</asp:ListItem>
-                            <asp:ListItem Value="B">B Shift</asp:ListItem>
+                        <asp:DropDownList ID="ddlshift" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlShift_SelectedIndexChanged">
+                            <asp:ListItem Value="G" Text="General"></asp:ListItem>
+                            <asp:ListItem Value="A" Text="A Shift"></asp:ListItem>
+                            <asp:ListItem Value="B" Text="B Shift"></asp:ListItem>
                         </asp:DropDownList>
                     </div>
 
@@ -267,7 +239,8 @@
 
                     <div>
                         <label>Cycle Time</label>
-                        <asp:TextBox ID="txtCycleTime" placeholder="Fill Cycle Time" onkeyup="setTarget()" runat="server" OnTextChanged="txtCycleTime_TextChanged"></asp:TextBox>
+                        <asp:TextBox ID="txtCycleTime" placeholder="Fill Cycle Time" AutoPostBack="true" 
+                            CssClass="form-control" onkeyup="fillTarget()" runat="server" OnTextChanged="txtCycleTime_TextChanged"></asp:TextBox>
 
                     </div>
                 </div>
@@ -281,332 +254,63 @@
                     <option value="4">4 Hours OT</option>
                 </select>
 
-                <button class="btn vw-btn">📊 View Report</button>
+                <button class="btn vw-btn" hidden="hidden">📊 View Report</button>
                 <button class="btn get-btn">📥 Get Saved Data</button>
 
             </div>
         </div>
-        <!-- TABLE -->
-        <div class="table-container">
-            <table id="prodTable">
-                <thead>
-                    <tr>
-                        <th>Time (Hrs)</th>
-                        <th>Target</th>
-                        <th>Actual OK</th>
-                        <th>Reject</th>
-                        <th>Rework</th>
-                        <th>DownTime</th>
-                        <th>Remarks</th>
-                    </tr>
-                </thead>
+        <asp:Repeater ID="rptProduction" runat="server">
+            <HeaderTemplate>
+                <table id="prodTable">
+                    <thead>
+                        <tr>
+                            <th>Time (Hrs)</th>
+                            <th>Target</th>
+                            <th>Actual OK</th>
+                            <th>Reject</th>
+                            <th>Rework</th>
+                            <th>DownTime</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            </HeaderTemplate>
 
-                <tbody>
-                    <tr id="row1" runat="server">
-                        <td class="auto-style1">06:00AM - 07:00 AM</td>
-                        <td class="auto-style2"><asp:TextBox ID="TextBox1" runat="server" /></td>
-                        <td class="auto-style2"><asp:TextBox ID="TextBox2" runat="server" /></td>
-                        <td class="auto-style2"><asp:TextBox ID="TextBox3" runat="server" /></td>
-                        <td class="auto-style2"><asp:TextBox ID="TextBox4" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox5" runat="server" /></td>
+            <ItemTemplate>
+                <tr>
+                    <td><%# Eval("TimeRange") %></td>
 
-                        <td>
-                            <asp:DropDownList ID="ddlRemark1" runat="server"></asp:DropDownList>
-                        </td>
-                    </tr>
-                    <tr id="row2" runat="server">
-                        <td class="auto-style1">07:00AM - 08:00 AM</td>
-                        <td class="auto-style2"><asp:TextBox ID="TextBox6" runat="server" /></td>
-                        <td class="auto-style2"><asp:TextBox ID="TextBox7" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox8" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox9" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox10" runat="server" /></td>
+                    <td>
+                        <asp:TextBox ID="txtTarget" TextMode="Number" ReadOnly="true" color="green" runat="server" CssClass="form-control numeric-input"
+                            style="background-color:#28a745; color: white; text-align: center; font-weight: 600;"/></td>
+                    <td>
+                        <asp:TextBox ID="txtActual" TextMode="Number" runat="server" CssClass="form-control numeric-input" /></td>
+                    <td>
+                        <asp:TextBox ID="txtReject" TextMode="Number" runat="server"
+                            style="color:#fc1111; text-align: center; font-weight: 600;"
+                            CssClass="form-control numeric-input" /></td>
+                    <td>
+                        <asp:TextBox ID="txtRework" TextMode="Number" runat="server" CssClass="form-control numeric-input" /></td>
+                    <td>
+                        <asp:TextBox ID="txtDownTime" TextMode="Number" runat="server" CssClass="form-control numeric-input" /></td>
 
-                        <td>
-                            <asp:DropDownList ID="ddlRemark2" runat="server">
-                            </asp:DropDownList>
-                        </td>
+                    <td>
+                        <asp:DropDownList ID="ddlRemark" runat="server">
+                            <asp:ListItem Text="--Select--" Value="" />
+                            <asp:ListItem Text="OK" Value="OK" />
+                            <asp:ListItem Text="Issue" Value="Issue" />
+                            <asp:ListItem Text="Machine Down" Value="Machine Down" />
+                        </asp:DropDownList>
+                    </td>
+                </tr>
+            </ItemTemplate>
 
-                    </tr>
-
-                    <tr id="row3" runat="server">
-                        <td class="auto-style1">08:00AM - 09:00AM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox11" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox12" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox13" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox14" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox15" runat="server" /></td>
-
-                        <td>
-                            <asp:DropDownList ID="ddlRemark3" runat="server"></asp:DropDownList>
-                        </td>
-                    </tr>
-
-                    <tr id="row4" runat="server">
-                        <td class="auto-style1">09:00AM - 10:00AM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox16" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox17" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox18" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox19" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox20" runat="server" /></td>
-                        <td>
-                            <asp:DropDownList ID="ddlRemark4" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-
-                    <tr id="row5" runat="server">
-                        <td class="auto-style1">10:00AM - 11:00AM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox21" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox22" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox23" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox24" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox25" runat="server" /></td>
-                        <td>
-                            <asp:DropDownList ID="ddlRemark5" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-
-                    <tr id="row6" runat="server">
-                        <td class="auto-style1">11:00AM - 12:00PM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox26" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox27" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox28" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox29" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox30" runat="server" /></td>
-
-                        <td>
-                            <asp:DropDownList ID="ddlRemark6" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-
-                    <tr id="row7" runat="server">
-                        <td class="auto-style1">12:00PM - 13:00PM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox31" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox32" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox33" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox34" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox35" runat="server" /></td>
-                        <td>
-                            <asp:DropDownList ID="ddlRemark7" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-
-                    <tr id="row8" runat="server">
-                        <td class="auto-style1">13:00PM - 14:00PM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox36" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox37" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox38" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox39" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox40" runat="server" /></td>
-
-                        <td>
-                            <asp:DropDownList ID="ddlRemark8" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-
-                    <tr id="row9" runat="server">
-                        <td class="auto-style1">14:00PM - 15:00PM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox41" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox42" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox43" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox44" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox45" runat="server" /></td>
-
-                        <td>
-                            <asp:DropDownList ID="ddlRemark9" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-
-                    <tr id="row10" runat="server">
-                        <td class="auto-style1">15:00PM - 16:00PM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox46" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox47" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox48" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox49" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox50" runat="server" /></td>
-
-                        <td>
-                            <asp:DropDownList ID="ddlRemark10" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-
-                    <tr id="row11" runat="server">
-                        <td class="auto-style1">16:00PM - 17:00PM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox51" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox52" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox53" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox54" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox55" runat="server" /></td>
-
-                        <td>
-                            <asp:DropDownList ID="ddlRemark11" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-                    <tr id="row12" runat="server">
-                        <td class="auto-style1">17:00PM - 18:00PM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox56" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox57" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox58" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox59" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox60" runat="server" /></td>
-                        <td>
-                            <asp:DropDownList ID="ddlRemark12" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-                    <tr id="row13" runat="server">
-                        <td class="auto-style1">18:00PM - 19:00PM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox61" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox62" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox63" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox64" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox65" runat="server" /></td>
-                        <td>
-                            <asp:DropDownList ID="ddlRemark13" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-                    <tr id="row14" runat="server">
-                        <td class="auto-style1">19:00PM - 20:00PM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox66" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox67" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox68" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox69" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox70" runat="server" /></td>
-                        <td>
-                            <asp:DropDownList ID="ddlRemark14" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-
-                    <tr id="row15" runat="server">
-                        <td class="auto-style1">20:00PM - 21:00PM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox71" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox72" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox73" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox74" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox75" runat="server" /></td>
-
-                        <td>
-                            <asp:DropDownList ID="ddlRemark15" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-                    <tr id="row16" runat="server">
-                        <td class="auto-style1">21:00PM - 22:00PM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox76" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox77" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox78" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox79" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox80" runat="server" /></td>
-                        <td>
-                            <asp:DropDownList ID="ddlRemark16" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-                    <tr id="row17" runat="server">
-                        <td class="auto-style1">22:00PM - 23:00PM</td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox81" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox82" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox83" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox84" runat="server" /></td>
-                        <td class="auto-style2">
-                            <asp:TextBox ID="TextBox85" runat="server" /></td>
-                        <td>
-                            <asp:DropDownList ID="ddlRemark17" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-
+            <FooterTemplate>
                 </tbody>
-            </table>
-        </div>
+        </table>
+   
+            </FooterTemplate>
+        </asp:Repeater>
     </form>
 </body>
 </html>
