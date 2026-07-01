@@ -317,6 +317,7 @@ namespace ProductionSheet
                     TextBox txtActual = (TextBox)row.FindControl("TextBox" + ((i - 1) * 4 + 2));
                     TextBox txtReject = (TextBox)row.FindControl("TextBox" + ((i - 1) * 4 + 3));
                     TextBox txtRework = (TextBox)row.FindControl("TextBox" + ((i - 1) * 4 + 4));
+                    TextBox txtDownTime = (TextBox)row.FindControl("TextBox" + ((i - 1) * 5 + 5));
 
                     DropDownList ddlRemarks = (DropDownList)row.FindControl("ddlRemark" + i);
 
@@ -325,8 +326,9 @@ namespace ProductionSheet
                     if (string.IsNullOrWhiteSpace(txtActual.Text.Trim()))
                     {
                         ScriptManager.RegisterStartupScript(this, GetType(), "msg",
-                            $"alert('Actual Qty Saved and Balance Entry required for row {i}');", true);
-                        return;
+                            $"alert('Data Saved Successfully');", true);
+                        //$"alert('Actual Qty Saved and Balance Entry required for row {i}');", true);
+                return;
                     }
 
                     if (txtActual == null)
@@ -352,6 +354,7 @@ namespace ProductionSheet
                         txtActual?.Text,
                         txtReject?.Text,
                         txtRework?.Text,
+                        txtDownTime?.Text,
                         remarks,
                         con);
                 }
@@ -362,12 +365,13 @@ namespace ProductionSheet
         }
 
 
-        void SaveOrUpdateRow(string time, string t, string a, string r, string rw, string remarks, SqlConnection con)
+        void SaveOrUpdateRow(string time, string t, string a, string r, string rw,string dt ,string remarks, SqlConnection con)
         {
             int target = string.IsNullOrEmpty(t) ? 0 : Convert.ToInt32(t);
             int actual = string.IsNullOrEmpty(a) ? 0 : Convert.ToInt32(a);
             int reject = string.IsNullOrEmpty(r) ? 0 : Convert.ToInt32(r);
             int rework = string.IsNullOrEmpty(rw) ? 0 : Convert.ToInt32(rw);
+            int downtime = string.IsNullOrEmpty(dt) ? 0 : Convert.ToInt32(dt);
 
             string query = @"
 IF EXISTS (
@@ -382,6 +386,7 @@ BEGIN
         ActualQty=@actual,
         RejectQty=@reject,
         ReworkQty=@rework,
+        DownTime=@downtime,
         Remarks=@remarks
     WHERE ProdDate=@date AND OperatorID=@op 
     AND MachineID=@mc AND ProcessName=@process AND TimeSlot=@time
@@ -389,9 +394,9 @@ END
 ELSE
 BEGIN
     INSERT INTO ProductionSheet
-    (ProdDate, Shift, OperatorID, MachineID, ProcessName, CycleTime, TimeSlot, TargetQty, ActualQty, RejectQty, ReworkQty, Remarks)
+    (ProdDate, Shift, OperatorID, MachineID, ProcessName, CycleTime, TimeSlot, TargetQty, ActualQty, RejectQty, ReworkQty,DownTime, Remarks)
     VALUES
-    (@date,@shift,@op,@mc,@process,@cycle,@time,@target,@actual,@reject,@rework,@remarks)
+    (@date,@shift,@op,@mc,@process,@cycle,@time,@target,@actual,@reject,@rework,@downtime,@remarks)
 END";
 
             SqlCommand cmd = new SqlCommand(query, con);
@@ -409,6 +414,7 @@ END";
             cmd.Parameters.AddWithValue("@reject", reject);
             cmd.Parameters.AddWithValue("@rework", rework);
             //cmd.Parameters.AddWithValue("@remarks", remarks ?? "");
+            cmd.Parameters.AddWithValue("@downtime", downtime);
             cmd.Parameters.AddWithValue("@remarks", string.IsNullOrWhiteSpace(remarks) ? "" : remarks);
 
             cmd.ExecuteNonQuery();

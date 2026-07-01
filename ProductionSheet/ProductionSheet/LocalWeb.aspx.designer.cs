@@ -132,6 +132,15 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox4;
 
         /// <summary>
+        /// TextBox5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox5;
+
+        /// <summary>
         /// ddlRemark1 control.
         /// </summary>
         /// <remarks>
@@ -148,15 +157,6 @@ namespace ProductionSheet
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlTableRow row2;
-
-        /// <summary>
-        /// TextBox5 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox5;
 
         /// <summary>
         /// TextBox6 control.
@@ -186,24 +186,6 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox8;
 
         /// <summary>
-        /// ddlRemark2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark2;
-
-        /// <summary>
-        /// row3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row3;
-
-        /// <summary>
         /// TextBox9 control.
         /// </summary>
         /// <remarks>
@@ -222,6 +204,24 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox10;
 
         /// <summary>
+        /// ddlRemark2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark2;
+
+        /// <summary>
+        /// row3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row3;
+
+        /// <summary>
         /// TextBox11 control.
         /// </summary>
         /// <remarks>
@@ -238,24 +238,6 @@ namespace ProductionSheet
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox12;
-
-        /// <summary>
-        /// ddlRemark3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark3;
-
-        /// <summary>
-        /// row4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row4;
 
         /// <summary>
         /// TextBox13 control.
@@ -285,6 +267,24 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox15;
 
         /// <summary>
+        /// ddlRemark3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark3;
+
+        /// <summary>
+        /// row4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row4;
+
+        /// <summary>
         /// TextBox16 control.
         /// </summary>
         /// <remarks>
@@ -292,24 +292,6 @@ namespace ProductionSheet
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox16;
-
-        /// <summary>
-        /// ddlRemark4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark4;
-
-        /// <summary>
-        /// row5 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row5;
 
         /// <summary>
         /// TextBox17 control.
@@ -348,22 +330,22 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox20;
 
         /// <summary>
-        /// ddlRemark5 control.
+        /// ddlRemark4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark5;
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark4;
 
         /// <summary>
-        /// row6 control.
+        /// row5 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row6;
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row5;
 
         /// <summary>
         /// TextBox21 control.
@@ -402,24 +384,6 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox24;
 
         /// <summary>
-        /// ddlRemark6 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark6;
-
-        /// <summary>
-        /// row7 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row7;
-
-        /// <summary>
         /// TextBox25 control.
         /// </summary>
         /// <remarks>
@@ -427,6 +391,24 @@ namespace ProductionSheet
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox25;
+
+        /// <summary>
+        /// ddlRemark5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark5;
+
+        /// <summary>
+        /// row6 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row6;
 
         /// <summary>
         /// TextBox26 control.
@@ -456,24 +438,6 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox28;
 
         /// <summary>
-        /// ddlRemark7 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark7;
-
-        /// <summary>
-        /// row8 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row8;
-
-        /// <summary>
         /// TextBox29 control.
         /// </summary>
         /// <remarks>
@@ -492,6 +456,24 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox30;
 
         /// <summary>
+        /// ddlRemark6 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark6;
+
+        /// <summary>
+        /// row7 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row7;
+
+        /// <summary>
         /// TextBox31 control.
         /// </summary>
         /// <remarks>
@@ -508,24 +490,6 @@ namespace ProductionSheet
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox32;
-
-        /// <summary>
-        /// ddlRemark8 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark8;
-
-        /// <summary>
-        /// row9 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row9;
 
         /// <summary>
         /// TextBox33 control.
@@ -555,6 +519,24 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox35;
 
         /// <summary>
+        /// ddlRemark7 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark7;
+
+        /// <summary>
+        /// row8 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row8;
+
+        /// <summary>
         /// TextBox36 control.
         /// </summary>
         /// <remarks>
@@ -562,24 +544,6 @@ namespace ProductionSheet
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox36;
-
-        /// <summary>
-        /// ddlRemark9 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark9;
-
-        /// <summary>
-        /// row10 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row10;
 
         /// <summary>
         /// TextBox37 control.
@@ -618,22 +582,22 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox40;
 
         /// <summary>
-        /// ddlRemark10 control.
+        /// ddlRemark8 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark10;
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark8;
 
         /// <summary>
-        /// row11 control.
+        /// row9 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row11;
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row9;
 
         /// <summary>
         /// TextBox41 control.
@@ -672,24 +636,6 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox44;
 
         /// <summary>
-        /// ddlRemark11 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark11;
-
-        /// <summary>
-        /// row12 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row12;
-
-        /// <summary>
         /// TextBox45 control.
         /// </summary>
         /// <remarks>
@@ -697,6 +643,24 @@ namespace ProductionSheet
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox45;
+
+        /// <summary>
+        /// ddlRemark9 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark9;
+
+        /// <summary>
+        /// row10 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row10;
 
         /// <summary>
         /// TextBox46 control.
@@ -726,24 +690,6 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox48;
 
         /// <summary>
-        /// ddlRemark12 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark12;
-
-        /// <summary>
-        /// row13 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row13;
-
-        /// <summary>
         /// TextBox49 control.
         /// </summary>
         /// <remarks>
@@ -762,6 +708,24 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox50;
 
         /// <summary>
+        /// ddlRemark10 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark10;
+
+        /// <summary>
+        /// row11 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row11;
+
+        /// <summary>
         /// TextBox51 control.
         /// </summary>
         /// <remarks>
@@ -778,24 +742,6 @@ namespace ProductionSheet
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox52;
-
-        /// <summary>
-        /// ddlRemark13 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark13;
-
-        /// <summary>
-        /// row14 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row14;
 
         /// <summary>
         /// TextBox53 control.
@@ -825,6 +771,24 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox55;
 
         /// <summary>
+        /// ddlRemark11 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark11;
+
+        /// <summary>
+        /// row12 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row12;
+
+        /// <summary>
         /// TextBox56 control.
         /// </summary>
         /// <remarks>
@@ -832,24 +796,6 @@ namespace ProductionSheet
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox56;
-
-        /// <summary>
-        /// ddlRemark14 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark14;
-
-        /// <summary>
-        /// row15 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row15;
 
         /// <summary>
         /// TextBox57 control.
@@ -888,22 +834,22 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox60;
 
         /// <summary>
-        /// ddlRemark15 control.
+        /// ddlRemark12 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark15;
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark12;
 
         /// <summary>
-        /// row16 control.
+        /// row13 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row16;
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row13;
 
         /// <summary>
         /// TextBox61 control.
@@ -942,24 +888,6 @@ namespace ProductionSheet
         protected global::System.Web.UI.WebControls.TextBox TextBox64;
 
         /// <summary>
-        /// ddlRemark16 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRemark16;
-
-        /// <summary>
-        /// row17 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow row17;
-
-        /// <summary>
         /// TextBox65 control.
         /// </summary>
         /// <remarks>
@@ -967,6 +895,24 @@ namespace ProductionSheet
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox65;
+
+        /// <summary>
+        /// ddlRemark13 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark13;
+
+        /// <summary>
+        /// row14 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row14;
 
         /// <summary>
         /// TextBox66 control.
@@ -994,6 +940,213 @@ namespace ProductionSheet
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox68;
+
+        /// <summary>
+        /// TextBox69 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox69;
+
+        /// <summary>
+        /// TextBox70 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox70;
+
+        /// <summary>
+        /// ddlRemark14 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark14;
+
+        /// <summary>
+        /// row15 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row15;
+
+        /// <summary>
+        /// TextBox71 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox71;
+
+        /// <summary>
+        /// TextBox72 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox72;
+
+        /// <summary>
+        /// TextBox73 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox73;
+
+        /// <summary>
+        /// TextBox74 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox74;
+
+        /// <summary>
+        /// TextBox75 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox75;
+
+        /// <summary>
+        /// ddlRemark15 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark15;
+
+        /// <summary>
+        /// row16 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row16;
+
+        /// <summary>
+        /// TextBox76 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox76;
+
+        /// <summary>
+        /// TextBox77 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox77;
+
+        /// <summary>
+        /// TextBox78 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox78;
+
+        /// <summary>
+        /// TextBox79 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox79;
+
+        /// <summary>
+        /// TextBox80 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox80;
+
+        /// <summary>
+        /// ddlRemark16 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlRemark16;
+
+        /// <summary>
+        /// row17 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow row17;
+
+        /// <summary>
+        /// TextBox81 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox81;
+
+        /// <summary>
+        /// TextBox82 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox82;
+
+        /// <summary>
+        /// TextBox83 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox83;
+
+        /// <summary>
+        /// TextBox84 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox84;
+
+        /// <summary>
+        /// TextBox85 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox85;
 
         /// <summary>
         /// ddlRemark17 control.
