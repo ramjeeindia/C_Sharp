@@ -51,14 +51,14 @@
             padding: 15px;
         }
 
-        .left-panel {
+        .header-panel {
             flex: 2;
             background: #fff;
             padding: 15px;
             border-radius: 6px;
         }
 
-        .form-grid {
+        .header-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px 20px;
@@ -198,10 +198,10 @@
         </div>
         <%--    Header Level Field--%>
         <div class="main">
-            <div class="left-panel">
+            <div class="header-panel">
 
                 <!-- FORM -->
-                <div class="form-grid">
+                <div class="header-grid">
                     <div>
                         <label>Production Date</label>
                         <asp:TextBox ID="txtProdDate" runat="server" TextMode="Date"
