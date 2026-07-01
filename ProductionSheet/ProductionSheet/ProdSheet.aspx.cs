@@ -27,14 +27,10 @@ namespace ProductionSheet
 
         private void LoadOperators()
         {
-            string connectionString = "Data Source=SAPSERV;Initial Catalog=SAVIOR;User ID=sa;Password=sa@2017;";
-
-            using (SqlConnection con = new SqlConnection(connectionString))
+            string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;            
+            using (SqlConnection con = new SqlConnection(CS))
             {
-                SqlCommand cmd = new SqlCommand(
-                    "SELECT DISTINCT Operator_Id, Operator_Name FROM VWSAVIORATT ORDER BY Operator_Name",
-                    con);
-
+                SqlCommand cmd = new SqlCommand("SELECT [Operator_Id],[Operator_Name] FROM [dbo].[Operators]",con);
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
                 ddlOperator.DataSource = rdr;
@@ -42,10 +38,63 @@ namespace ProductionSheet
                 ddlOperator.DataValueField = "Operator_Id";  // Value
                 ddlOperator.DataBind();
             }
-
-            // Default item
             ddlOperator.Items.Insert(0, new ListItem("--Select Operator--", "0"));
         }
+
+        private void LoadReason()
+        {
+            string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(CS))
+            {
+                using (SqlCommand cmd = new SqlCommand("SELECT ResonValue, ReasonText  FROM ReasonList ORDER BY ReasonText", con))
+                {
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    ddlprocess.DataSource = rdr;
+                    ddlprocess.DataTextField = "ItemName";   // Display
+                    ddlprocess.DataValueField = "ItemCode";  // Value
+                    ddlprocess.DataBind();
+                    ddlprocess.Items.Insert(0, "-- Select Reason --");
+                }
+            }
+        }
+        private void LoadMachine()
+        {
+            string conStr = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(conStr))
+            {
+                using (SqlCommand cmd = new SqlCommand("spMachineMaster", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    ddlMachine.DataSource = dr;
+                    ddlMachine.DataTextField = "MachineName";   // Display
+                    ddlMachine.DataValueField = "MachineCode";  // Value
+                    ddlMachine.DataBind();
+                    ddlMachine.Items.Insert(0, "-- Select Machine --");
+                }
+            }
+        }
+        private void LoadProcess()
+        {
+            string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(CS))
+            {
+                using (SqlCommand cmd = new SqlCommand("SELECT [ItemCode],[ItemName] FROM [dbo].[Process]", con))
+                {
+                    con.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    ddlprocess.DataSource = dr;
+                    ddlprocess.DataTextField = "ItemName";   // Display
+                    ddlprocess.DataValueField = "ItemCode";  // Value
+                    ddlprocess.DataBind();
+                    ddlprocess.Items.Insert(0, "-- Select Process --");
+                }
+            }
+        }
+
+        
 
         private void BindRemarks()
         {
@@ -84,76 +133,18 @@ namespace ProductionSheet
 
         }
 
+
         private void BindDropDown(DropDownList ddl, List<string> data)
         {
             ddl.DataSource = data;
             ddl.DataBind();
         }
 
-        private void LoadProcess()
-        {
-            string conStr = "Data Source=SAPSERV;Initial Catalog=SHAPLLIVE;User ID=sa;Password=sa@2017;";
-
-            using (SqlConnection con = new SqlConnection(conStr))
-            {
-                using (SqlCommand cmd = new SqlCommand("spProcessName", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    con.Open();
-                    SqlDataReader dr = cmd.ExecuteReader();
-                    ddlprocess.DataSource = dr;
-                    ddlprocess.DataTextField = "ItemName";   // Display
-                    ddlprocess.DataValueField = "ItemCode";  // Value
-                    ddlprocess.DataBind();
-                    ddlprocess.Items.Insert(0, "-- Select Process --");
-                }
-            }
-        }
-
-        private void LoadReason()
-        {
-            string conStr = "Data Source=SAPSERV;Initial Catalog=SHAPLLIVE;User ID=sa;Password=sa@2017;";
-
-            using (SqlConnection con = new SqlConnection(conStr))
-            {
-                using (SqlCommand cmd = new SqlCommand("SELECT ResonValue, ReasonText  FROM ReasonList ORDER BY ReasonText", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    con.Open();
-                    SqlDataReader dr = cmd.ExecuteReader();
-                    ddlprocess.DataSource = dr;
-                    ddlprocess.DataTextField = "ItemName";   // Display
-                    ddlprocess.DataValueField = "ItemCode";  // Value
-                    ddlprocess.DataBind();
-                    ddlprocess.Items.Insert(0, "-- Select Reason --");
-                }
-            }
-        }
-        private void LoadMachine()
-        {
-            string conStr = "Data Source=SAPSERV;Initial Catalog=SHAPLLIVE;User ID=sa;Password=sa@2017;";
-
-            using (SqlConnection con = new SqlConnection(conStr))
-            {
-                using (SqlCommand cmd = new SqlCommand("spMachineMaster", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    con.Open();
-                    SqlDataReader dr = cmd.ExecuteReader();
-                    ddlMachine.DataSource = dr;
-                    ddlMachine.DataTextField = "ItemName";   // Display
-                    ddlMachine.DataValueField = "ItemCode";  // Value
-                    ddlMachine.DataBind();
-                    ddlMachine.Items.Insert(0, "-- Select Machine --");
-                }
-            }
-        }
-
         protected void Button1_Click(object sender, EventArgs e)
         {
-            string cs = "Data Source=SAPSERV;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
+            string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
 
-            using (SqlConnection con = new SqlConnection(cs))
+            using (SqlConnection con = new SqlConnection(CS))
             {
                 con.Open();
 
