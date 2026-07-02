@@ -112,9 +112,8 @@ namespace ProductionSheet
                 "Under Maintenance",
                 "Material Shortage",
                 "Trial Runs"
-                
-            };
 
+            };
 
             BindDropDown(ddlRemark1, remarks);
             BindDropDown(ddlRemark2, remarks);
@@ -135,8 +134,6 @@ namespace ProductionSheet
             BindDropDown(ddlRemark17, remarks);
 
         }
-
-
         private void BindDropDown(DropDownList ddl, List<string> data)
         {
             ddl.Items.Clear();
@@ -146,17 +143,7 @@ namespace ProductionSheet
                 if (!string.IsNullOrWhiteSpace(item))
                     ddl.Items.Add(new ListItem(item, item));
             }
-            //ddl.DataSource = data;
-            //ddl.DataBind();
         }
-
-
-        protected void txtProdDate_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-
 
         protected void ddlshift_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -255,30 +242,13 @@ namespace ProductionSheet
         {
 
         }
-
-        protected void ddlOperator_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void ddlprocess_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         protected void txtCycleTime_TextChanged(object sender, EventArgs e)
         {
 
         }
-
-        protected void ddlRemark1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private string GetTimeSlot(int index)
         {
-     
+
             int startHour = 8; // default (G shift)
             string shift = ddlshift.SelectedValue;
 
@@ -301,7 +271,7 @@ namespace ProductionSheet
             return $"{currentHour:00}-{endHour:00}";
         }
 
-        
+
         protected void Button1_Click(object sender, EventArgs e)
         {
             string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
@@ -312,7 +282,7 @@ namespace ProductionSheet
                 for (int i = 1; i <= 17; i++)
                 {
                     Control row = FindControl("row" + i);
-                    if (row == null || !row.Visible) continue;  
+                    if (row == null || !row.Visible) continue;
                     TextBox txtTarget = (TextBox)row.FindControl("TextBox" + ((i - 1) * 4 + 1));
                     TextBox txtActual = (TextBox)row.FindControl("TextBox" + ((i - 1) * 4 + 2));
                     TextBox txtReject = (TextBox)row.FindControl("TextBox" + ((i - 1) * 4 + 3));
@@ -325,10 +295,9 @@ namespace ProductionSheet
 
                     if (string.IsNullOrWhiteSpace(txtActual.Text.Trim()))
                     {
-                        ScriptManager.RegisterStartupScript(this, GetType(), "msg",
-                            $"alert('Data Saved Successfully');", true);
-                        //$"alert('Actual Qty Saved and Balance Entry required for row {i}');", true);
-                return;
+                        ScriptManager.RegisterStartupScript(this, GetType(), "msg",                           
+                        $"alert('Actual Qty Saved and Balance Entry required for row {i}');", true);
+                        return;
                     }
 
                     if (txtActual == null)
@@ -345,7 +314,7 @@ namespace ProductionSheet
                     remarks = (remarks ?? "").Trim();
                     if (remarks == "" || remarks == "--Select--")
                     {
-                        remarks = "";   
+                        remarks = "";
                     }
 
                     SaveOrUpdateRow(
@@ -365,7 +334,7 @@ namespace ProductionSheet
         }
 
 
-        void SaveOrUpdateRow(string time, string t, string a, string r, string rw,string dt ,string remarks, SqlConnection con)
+        void SaveOrUpdateRow(string time, string t, string a, string r, string rw, string dt, string remarks, SqlConnection con)
         {
             int target = string.IsNullOrEmpty(t) ? 0 : Convert.ToInt32(t);
             int actual = string.IsNullOrEmpty(a) ? 0 : Convert.ToInt32(a);
@@ -402,7 +371,7 @@ END";
             SqlCommand cmd = new SqlCommand(query, con);
 
             cmd.Parameters.AddWithValue("@date", txtProdDate.Text);
-            cmd.Parameters.AddWithValue("@shift", ddlshift.SelectedValue);   
+            cmd.Parameters.AddWithValue("@shift", ddlshift.SelectedValue);
             cmd.Parameters.AddWithValue("@op", ddlOperator.SelectedValue);
             cmd.Parameters.AddWithValue("@mc", ddlMachine.SelectedValue);
             cmd.Parameters.AddWithValue("@process", ddlprocess.SelectedValue);
@@ -413,7 +382,6 @@ END";
             cmd.Parameters.AddWithValue("@actual", actual);
             cmd.Parameters.AddWithValue("@reject", reject);
             cmd.Parameters.AddWithValue("@rework", rework);
-            //cmd.Parameters.AddWithValue("@remarks", remarks ?? "");
             cmd.Parameters.AddWithValue("@downtime", downtime);
             cmd.Parameters.AddWithValue("@remarks", string.IsNullOrWhiteSpace(remarks) ? "" : remarks);
 

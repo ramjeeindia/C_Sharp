@@ -194,8 +194,7 @@
                     <tr>
                         <td>Production Date</td>
                         <td>
-                            <asp:TextBox ID="txtProdDate" runat="server"
-                                OnTextChanged="txtProdDate_TextChanged" ToolTip="Date"></asp:TextBox></td>
+                            <asp:TextBox ID="txtProdDate" runat="server" ToolTip="Date"></asp:TextBox></td>
 
                         <td>Shift</td>
                         <td>
@@ -218,16 +217,14 @@
                         </td>
                         <td>Operator Name</td>
                         <td>
-                            <asp:DropDownList ID="ddlOperator" runat="server" AutoPostBack="true"
-                                OnSelectedIndexChanged="ddlOperator_SelectedIndexChanged">
+                            <asp:DropDownList ID="ddlOperator" runat="server" AutoPostBack="true">
                             </asp:DropDownList>
                         </td>
                     </tr>
                     <tr>
                         <td>Process Name</td>
                         <td>
-                            <asp:DropDownList ID="ddlprocess" runat="server"
-                                OnSelectedIndexChanged="ddlprocess_SelectedIndexChanged">
+                            <asp:DropDownList ID="ddlprocess" runat="server">
                             </asp:DropDownList>
 
                         </td>
