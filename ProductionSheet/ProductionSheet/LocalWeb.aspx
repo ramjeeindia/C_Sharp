@@ -16,11 +16,11 @@
         }
 
         body {
-            background: #c6dfe9;
+            
             font-family: 'Segoe UI','Poppins', Tahoma, sans-serif;
         }
 
-        /* HEADER */
+
         .header {
             width: 100%;
             display: flex;
@@ -41,17 +41,17 @@
 
         .header img {
             position: absolute;
-            left: 15px;
+            left: 45px;
             height: 40px;
             background: #fff;
             padding: 4px;
             border-radius: 4px;
         }
 
-        /* MAIN LAYOUT */
+
         .main {
             display: flex;
-            flex-wrap: wrap; /* IMPORTANT */
+            flex-wrap: wrap;
             gap: 15px;
             padding: 15px;
         }
@@ -63,7 +63,7 @@
             padding: 10px;
         }
 
-        /* FORM GRID */
+
         .header-table {
             width: 100%;
         }
@@ -79,11 +79,12 @@
                     white-space: nowrap;
                 }
 
-                /* Input column */
+
                 .header-table td:nth-child(2),
                 .header-table td:nth-child(4) {
                     width: 35%;
                     padding: 5px;
+                    
                 }
 
             .header-table tr {
@@ -94,16 +95,16 @@
                     border-bottom: none;
                 }
 
-        /* INPUTS */
+
         input, select {
-            width: 100%; /* important for mobile */
+            width: 100%;
             padding: 8px;
             border-radius: 6px;
             border: 1px solid #ccc;
             font-size: 14px;
         }
 
-        /* BUTTON */
+
         .btn {
             padding: 10px 16px;
             border-radius: 6px;
@@ -116,24 +117,32 @@
             background: #28a745;
             color: white;
         }
+
+        input[type="number"] {
+            text-align: center;
+            font-weight:600;
+        }
+
+
+
         .auto-row {
             width: auto;
             padding: 15px;
-            white-space: nowrap; /* prevent breaking */
+            white-space: nowrap;
             border-collapse: collapse;
-            text-align: center;
+            
         }
 
-        /* TABLE */
+
         .table-container {
             width: 100%;
-            overflow-x: auto; /* SCROLL ON MOBILE */
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 600px; /* prevent breaking */
+            
         }
 
         th {
@@ -144,9 +153,11 @@
         }
 
         td {
-            padding: 2px;
-           
+            padding: 5px 30px;
         }
+
+         
+
 
         /* MOBILE RESPONSIVE */
         @media (max-width: 768px) {
@@ -257,14 +268,17 @@
                     <tr id="row1" runat="server">
                         <td class="time-col">06:00AM - 07:00 AM</td>
                         <td>
-                            <asp:TextBox ID="TextBox1" onkeyup="setTarget()" TextMode="Number" min="0" runat="server" /></td>
+                            <asp:TextBox ID="TextBox1" onkeyup="setTarget()" TextMode="Number" min="0" runat="server"
+                                /></td>
                         <td>
-                            <asp:TextBox ID="TextBox2" TextMode="Number" min="0" runat="server" /></td>
+                            <asp:TextBox ID="TextBox2" TextMode="Number" min="0" runat="server"
+                                /></td>
                         <td>
                             <asp:TextBox ID="TextBox3" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
-                            <asp:TextBox ID="TextBox4" TextMode="Number" min="0" runat="server" /></td>
+                            <asp:TextBox ID="TextBox4" TextMode="Number" min="0" runat="server"
+                                /></td>
                         <td>
                             <asp:TextBox ID="TextBox5" TextMode="Number"
                                 min="0" max="60"
@@ -283,7 +297,7 @@
                             <asp:TextBox ID="TextBox7" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox8" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox9" TextMode="Number" min="0" runat="server" /></td>
                         <td>
@@ -302,16 +316,16 @@
 
                     <tr id="row3" runat="server">
                         <td class="time-col">08:00AM - 09:00AM</td>
-                        <td>
+                        <td class="row-data">
                             <asp:TextBox ID="TextBox11" onkeyup="setTarget()" TextMode="Number" min="0" runat="server" /></td>
-                        <td>
+                        <td class="row-data">
                             <asp:TextBox ID="TextBox12" TextMode="Number" min="0" runat="server" /></td>
-                        <td>
+                        <td class="row-data">
                             <asp:TextBox ID="TextBox13" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
-                        <td>
+                                Style="color: #fa0e0e;" /></td>
+                        <td class="row-data">
                             <asp:TextBox ID="TextBox14" TextMode="Number" min="0" runat="server" /></td>
-                        <td>
+                        <td class="row-data">
                             <asp:TextBox ID="TextBox15"
                                 min="0" max="60"
                                 oninput="if(this.value > 60) this.value = 60; if(this.value < 0) this.value = 0;"
@@ -330,7 +344,7 @@
                             <asp:TextBox ID="TextBox17" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox18" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox19" TextMode="Number" min="0" runat="server" /></td>
                         <td>
@@ -353,7 +367,7 @@
                             <asp:TextBox ID="TextBox22" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox23" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox24" TextMode="Number" min="0" runat="server" /></td>
                         <td>
@@ -376,7 +390,7 @@
                             <asp:TextBox ID="TextBox27" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox28" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox29" TextMode="Number" min="0" runat="server" /></td>
                         <td>
@@ -399,7 +413,7 @@
                             <asp:TextBox ID="TextBox32" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox33" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox34" TextMode="Number" min="0" runat="server" /></td>
                         <td>
@@ -423,7 +437,7 @@
                             <asp:TextBox ID="TextBox37" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox38" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox39" TextMode="Number" min="0" runat="server" /></td>
                         <td>
@@ -447,7 +461,7 @@
                             <asp:TextBox ID="TextBox42" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox43" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox44" TextMode="Number" min="0" runat="server" /></td>
                         <td>
@@ -470,7 +484,7 @@
                             <asp:TextBox ID="TextBox47" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox48" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox49" TextMode="Number" min="0" runat="server" /></td>
                         <td>
@@ -493,7 +507,7 @@
                             <asp:TextBox ID="TextBox52" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox53" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox54" TextMode="Number" min="0" runat="server" /></td>
                         <td>
@@ -515,7 +529,7 @@
                             <asp:TextBox ID="TextBox57" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox58" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox59" TextMode="Number" min="0" runat="server" /></td>
                         <td>
@@ -537,7 +551,7 @@
                             <asp:TextBox ID="TextBox62" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox63" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox64" TextMode="Number" min="0" runat="server" /></td>
                         <td>
@@ -559,7 +573,7 @@
                             <asp:TextBox ID="TextBox67" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox68" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox69" TextMode="Number" min="0" runat="server" /></td>
                         <td>
@@ -582,7 +596,7 @@
                             <asp:TextBox ID="TextBox72" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox73" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox74" TextMode="Number" min="0" runat="server" /></td>
                         <td>
@@ -604,7 +618,7 @@
                             <asp:TextBox ID="TextBox77" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox78" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox79" TextMode="Number" min="0" runat="server" /></td>
                         <td>
@@ -626,7 +640,7 @@
                             <asp:TextBox ID="TextBox82" TextMode="Number" min="0" runat="server" /></td>
                         <td>
                             <asp:TextBox ID="TextBox83" TextMode="Number" min="0" runat="server"
-                                Style="color: #fa0e0e; text-align: center; font-weight: 600;" /></td>
+                                Style="color: #fa0e0e;" /></td>
                         <td>
                             <asp:TextBox ID="TextBox84" TextMode="Number" min="0" runat="server" /></td>
                         <td>

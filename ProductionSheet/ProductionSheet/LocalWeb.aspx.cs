@@ -288,14 +288,13 @@ namespace ProductionSheet
                     TextBox txtReject = (TextBox)row.FindControl("TextBox" + ((i - 1) * 4 + 3));
                     TextBox txtRework = (TextBox)row.FindControl("TextBox" + ((i - 1) * 4 + 4));
                     TextBox txtDownTime = (TextBox)row.FindControl("TextBox" + ((i - 1) * 5 + 5));
-
                     DropDownList ddlRemarks = (DropDownList)row.FindControl("ddlRemark" + i);
 
                     if (txtActual == null) continue;
 
                     if (string.IsNullOrWhiteSpace(txtActual.Text.Trim()))
                     {
-                        ScriptManager.RegisterStartupScript(this, GetType(), "msg",                           
+                        ScriptManager.RegisterStartupScript(this, GetType(), "msg",
                         $"alert('Actual Qty Saved and Balance Entry required for row {i}');", true);
                         return;
                     }
@@ -343,30 +342,30 @@ namespace ProductionSheet
             int downtime = string.IsNullOrEmpty(dt) ? 0 : Convert.ToInt32(dt);
 
             string query = @"
-IF EXISTS (
-    SELECT 1 FROM ProductionSheet 
-    WHERE ProdDate=@date AND OperatorID=@op 
-    AND MachineID=@mc AND ProcessName=@process AND TimeSlot=@time
-)
-BEGIN
-    UPDATE ProductionSheet SET
-        Shift=@shift,
-        TargetQty=@target,
-        ActualQty=@actual,
-        RejectQty=@reject,
-        ReworkQty=@rework,
-        DownTime=@downtime,
-        Remarks=@remarks
-    WHERE ProdDate=@date AND OperatorID=@op 
-    AND MachineID=@mc AND ProcessName=@process AND TimeSlot=@time
-END
-ELSE
-BEGIN
-    INSERT INTO ProductionSheet
-    (ProdDate, Shift, OperatorID, MachineID, ProcessName, CycleTime, TimeSlot, TargetQty, ActualQty, RejectQty, ReworkQty,DownTime, Remarks)
-    VALUES
-    (@date,@shift,@op,@mc,@process,@cycle,@time,@target,@actual,@reject,@rework,@downtime,@remarks)
-END";
+        IF EXISTS (
+            SELECT 1 FROM ProductionSheet 
+            WHERE ProdDate=@date AND OperatorID=@op 
+            AND MachineID=@mc AND ProcessName=@process AND TimeSlot=@time
+        )
+        BEGIN
+            UPDATE ProductionSheet SET
+                Shift=@shift,
+                TargetQty=@target,
+                ActualQty=@actual,
+                RejectQty=@reject,
+                ReworkQty=@rework,
+                DownTime=@downtime,
+                Remarks=@remarks
+            WHERE ProdDate=@date AND OperatorID=@op 
+            AND MachineID=@mc AND ProcessName=@process AND TimeSlot=@time
+        END
+        ELSE
+        BEGIN
+            INSERT INTO ProductionSheet
+            (ProdDate, Shift, OperatorID, MachineID, ProcessName, CycleTime, TimeSlot, TargetQty, ActualQty, RejectQty, ReworkQty,DownTime, Remarks)
+            VALUES
+            (@date,@shift,@op,@mc,@process,@cycle,@time,@target,@actual,@reject,@rework,@downtime,@remarks)
+        END";
 
             SqlCommand cmd = new SqlCommand(query, con);
 
@@ -398,9 +397,8 @@ END";
 
             return 10;
 
-            //BindTimeSlots();
-        }
 
+        }
 
 
     }
