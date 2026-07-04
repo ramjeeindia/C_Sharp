@@ -87,15 +87,6 @@ namespace LIVE_MRP
         protected global::System.Web.UI.WebControls.Button btnSave;
 
         /// <summary>
-        /// Lblot control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Lblot;
-
-        /// <summary>
         /// DdlOT control.
         /// </summary>
         /// <remarks>
@@ -103,6 +94,15 @@ namespace LIVE_MRP
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DdlOT;
+
+        /// <summary>
+        /// GetData control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button GetData;
 
         /// <summary>
         /// rptProduction control.

@@ -55,7 +55,11 @@
             width: 150px;
             font-weight: 600;
         }
-
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: left;
+        }
         .btn-save {
             background: #00c853;
             color: white;
@@ -67,6 +71,7 @@
             width: 200px;
         }
 
+       
         table {
             width: 100%;
             border-collapse: collapse;
@@ -82,7 +87,7 @@
         }
 
         .remarks-ddl {
-            width: 200px;
+            width: 160px;
             height: 34px;
             border-radius: 6px;
             border: 1px solid #ccc;
@@ -202,23 +207,23 @@
                         OnTextChanged="txtCycleTime_TextChanged" />
                 </div>
             </div>
-
-            <asp:Button ID="btnSave" runat="server" Text="Save" CssClass="btn-save" OnClick="btnSave_Click" ToolTip="हर घंटे सेव करें" />
-
-            <asp:Label ID="Lblot" runat="server" Text="Over Time Hours"
-                Style="color: #000000; font-weight: bold; border: 1px solid #ccc; padding: 5px; border-radius: 5px; border-block-color: #96f1e8;"
-                ToolTip="ओवरटाइम का चयन करें" />
+            <div class="button-group">
+            <asp:Button ID="btnSave" runat="server" Text="💾 Save" CssClass="btn-save" OnClick="btnSave_Click" ToolTip="हर घंटे सेव करें" />
 
             <asp:DropDownList ID="DdlOT" runat="server"
-                Style="width: 100px; background-color: #000000; color: #e6f0f5; padding: 6px; border-radius: 5px; text-align: center; font-weight: bold;"
+                Style="background-color: #000000; color: #e6f0f5; padding: 6px; border-radius: 5px; text-align: center; font-weight: bold;"
                 ToolTip="ओवरटाइम का चयन करें" OnSelectedIndexChanged="DdlOT_SelectedIndexChanged">
-                <asp:ListItem Text="Select OT" Value="0" />
+                <asp:ListItem Text="⏱️ Add Overtime" Value="0" />
                 <asp:ListItem Text="1 Hr" Value="1" />
                 <asp:ListItem Text="2 Hrs" Value="2" />
                 <asp:ListItem Text="3 Hrs" Value="3" />
                 <asp:ListItem Text="4 Hrs" Value="4" />
             </asp:DropDownList>
-
+            
+                     <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn get-btn" 
+                         Style="background-color:#ff6a00; padding: 6px; border-radius: 5px; text-align: center; font-weight: bold;"
+                         />
+               </div>
         </div>
 
         <!-- TABLE -->
