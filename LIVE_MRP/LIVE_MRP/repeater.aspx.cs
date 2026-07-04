@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Configuration;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace LIVE_MRP
 {
@@ -233,9 +234,24 @@ namespace LIVE_MRP
 
                     object result = cmd.ExecuteScalar();
 
+                    //if (result != null)
+                    //{
+                    //    txtCycleTime.Text = result.ToString(); // ✅ Auto fill
+                    //}
+                    //else
+                    //{
+                    //    txtCycleTime.Text = "";
+                    //}
+
                     if (result != null)
                     {
-                        txtCycleTime.Text = result.ToString(); // ✅ Auto fill
+                        double cycleTime = Convert.ToDouble(result);
+                        txtCycleTime.Text = cycleTime.ToString();
+
+                        // ✅ Hourly Target = 3600 / CycleTime
+                        int target = (int)Math.Floor(3600 / cycleTime);
+
+                        txtCycleTime.Text = target.ToString(); // 🔥 show in textbox/label
                     }
                     else
                     {
@@ -288,5 +304,55 @@ namespace LIVE_MRP
             rptProduction.DataSource = dt;
             rptProduction.DataBind();
         }
+
+        protected void rptProduction_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                HiddenField hdnTime = (HiddenField)e.Item.FindControl("hdnTime");
+                TextBox txtDownTime = (TextBox)e.Item.FindControl("txtDownTime");
+                DropDownList ddlRemarks = (DropDownList)e.Item.FindControl("ddlRemarks");
+
+                if (hdnTime == null || txtDownTime == null || ddlRemarks == null)
+                    return;
+
+                string timeSlot = hdnTime.Value.Trim();
+
+                switch (timeSlot)
+                {
+                    case "09:00AM - 10:00AM" when ddlShift.SelectedValue == "General":
+                        txtDownTime.Text = "15";
+                        ddlRemarks.SelectedValue = "Tea";
+                        break;
+
+                    case "12:00PM - 01:00PM" when ddlShift.SelectedValue == "General":
+                        txtDownTime.Text = "30";
+                        ddlRemarks.SelectedValue = "Lunch";
+                        break;
+
+                    case "03:00PM - 04:00PM" when ddlShift.SelectedValue == "General":
+                        txtDownTime.Text = "15";
+                        ddlRemarks.SelectedValue = "Tea";
+                        break;
+
+                    case "07:00AM - 08:00AM" when ddlShift.SelectedValue == "A":
+                        txtDownTime.Text = "15";
+                        ddlRemarks.SelectedValue = "Tea";
+                        break;
+
+                    case "10:00AM - 11:00AM" when ddlShift.SelectedValue == "A":
+                        txtDownTime.Text = "30";
+                        ddlRemarks.SelectedValue = "Lunch";
+                        break;
+
+                    case "01:00PM - 02:00PM" when ddlShift.SelectedValue == "A":
+                        txtDownTime.Text = "15";
+                        ddlRemarks.SelectedValue = "Tea";
+                        break;
+                }
+            }
+        }
+
+
     }
 }

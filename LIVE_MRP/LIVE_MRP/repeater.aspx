@@ -15,7 +15,7 @@
         .header-bar {
             background: linear-gradient(90deg, #7b2ff7, #00c6ff);
             color: white;
-            padding: 10px;
+            padding: 8px;
             font-size: 22px;
             text-align: center;
             border-radius: 8px;
@@ -164,15 +164,13 @@
     </style>
 
     <script>
+
         function calculateTarget() {
 
             var cycleTimeBox = document.getElementById('<%= txtCycleTime.ClientID %>');
             if (!cycleTimeBox) return;
-
             var cycleTime = parseFloat(cycleTimeBox.value);
-
             var target = 0;
-
             if (cycleTime && cycleTime > 0) {
                 target = Math.floor(3600 / cycleTime);
             }
@@ -187,6 +185,7 @@
         window.onload = function () {
             calculateTarget();
         };
+
 
         // ⏰ DIGITAL CLOCK
         function updateClock() {
@@ -226,6 +225,8 @@
         // Run every second
         setInterval(updateClock, 1000);
         updateClock();
+
+
     </script>
 
 
@@ -282,7 +283,7 @@
                         placeholder="एक पार्ट का साइकिल समय सेकंड में भरें"
                         ToolTip="एक पार्ट का साइकिल समय सेकंड में भरें"
                         OnTextChanged="txtCycleTime_TextChanged" onkeyup="calculateTarget()"></asp:TextBox>
-
+                   
                 </div>
 
                 <div class="form-group">
@@ -307,7 +308,7 @@
                     <asp:ListItem Text=" OT-4 Hours" Value="4" />
                 </asp:DropDownList>
 
-                <div id="digitalClock" style="font-size: 14px; padding-left: 15px; padding-right: 15px; font-weight: bold; background: #57efd8; display:border-box; width: auto; border-radius: 6px; text-align: center;">
+                <div id="digitalClock" style="font-size: 14px; padding-left: 25px; padding-right: 25px; font-weight: bold; background: #57efd8; display: border-box; width: auto; border-radius: 6px; text-align: center;">
                 </div>
 
                 <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn-get" />
@@ -329,7 +330,7 @@
             </thead>
 
             <tbody>
-                <asp:Repeater ID="rptProduction" runat="server">
+                <asp:Repeater ID="rptProduction" runat="server" OnItemDataBound="rptProduction_ItemDataBound">
                     <ItemTemplate>
                         <tr>
                             <!-- ✅ Time Slot -->
@@ -342,36 +343,36 @@
                             <!-- Target -->
                             <td>
                                 <asp:TextBox ID="txtTarget" runat="server"
-                                    CssClass="num-box target-box" TextMode="Number" min="0" ReadOnly="true"
+                                    CssClass="num-box target-box" TextMode="Number" min="0"
+                                    ReadOnly="true"
                                     Style="background: linear-gradient(90deg, #57efd8,#ffffff);" />
                             </td>
 
                             <!-- Actual -->
                             <td>
                                 <asp:TextBox ID="txtActual" runat="server"
-                                    CssClass="num-box" TextMode="Number" min="0"
-                                     />
+                                    CssClass="num-box actual" TextMode="Number" min="0"
+                                    Style="background: linear-gradient(90deg,#f7edb5,#ffffff);" />
                             </td>
 
                             <!-- Reject -->
                             <td>
                                 <asp:TextBox ID="txtReject" runat="server"
-                                    CssClass="num-box" ForeColor="Red"
-                                    TextMode="Number" min="0" Style="background: linear-gradient(90deg, #f2d2d2,#ffffff);"
-                                    />
+                                    CssClass="num-box reject" ForeColor="Red"
+                                    TextMode="Number" min="0" Style="background: linear-gradient(90deg, #f2d2d2,#ffffff);" />
                             </td>
 
                             <!-- Rework -->
                             <td>
                                 <asp:TextBox ID="txtRework" runat="server"
-                                    CssClass="num-box" TextMode="Number" min="0"
-                                    />
+                                    CssClass="num-box rework" TextMode="Number" min="0"
+                                    Style="background: linear-gradient(90deg,#d8d4d4,#ffffff);" />
                             </td>
 
                             <!-- DownTime -->
                             <td>
                                 <asp:TextBox ID="txtDownTime" runat="server"
-                                    CssClass="num-box"
+                                    CssClass="num-box downtime"
                                     TextMode="Number"
                                     min="0" max="60"
                                     placeholder="डाउनटाइम"
@@ -381,7 +382,7 @@
 
                             <!-- Remarks -->
                             <td>
-                                <asp:DropDownList ID="ddlRemarks" runat="server"
+                                <asp:DropDownList ID="ddlRemarks" runat="server" ToolTip="टार्गेट कम होने का कारण भरें"
                                     CssClass="remarks-ddl">
                                     <asp:ListItem Text="--Select--" Value="" />
                                     <asp:ListItem Text="Tea Break" Value="Tea" />
@@ -403,5 +404,36 @@
         </table>
 
     </form>
+    <script>
+        // actual + reject + rework should not exceed target
+        // ✅ SINGLE EVENT HANDLER
+        document.addEventListener("input", function (e) {
+
+            // Only run for our fields
+            if (!e.target.classList.contains("actual") &&
+                !e.target.classList.contains("reject") &&
+                !e.target.classList.contains("rework")) return;
+
+            var row = e.target.closest("tr");
+            if (!row) return;
+
+            var actual = parseFloat(row.querySelector(".actual")?.value) || 0;
+            var reject = parseFloat(row.querySelector(".reject")?.value) || 0;
+            var rework = parseFloat(row.querySelector(".rework")?.value) || 0;
+            var target = parseFloat(row.querySelector(".target-box")?.value) || 0;
+
+            console.log("Check:", actual, reject, rework, target); // 👈 DEBUG
+
+            if ((actual + reject + rework) > target) {
+
+                alert("❌ Total exceeds Quantity! टारगेट से ज्यादा संख्या सेव नहीं होगी");
+
+                e.target.value = "";
+                e.target.focus();
+            }
+        });
+
+
+    </script>
 </body>
 </html>
