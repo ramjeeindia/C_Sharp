@@ -55,11 +55,13 @@
             width: 150px;
             font-weight: 600;
         }
+
         .button-group {
             display: flex;
             gap: 10px;
             justify-content: left;
         }
+
         .btn-save {
             background: #00c853;
             color: white;
@@ -71,7 +73,16 @@
             width: 200px;
         }
 
-       
+        .btn-get {
+            background: #ff6a00;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -104,11 +115,13 @@
             color: white;
             padding: 10px;
             text-align: center;
+            overflow-x: auto;
         }
 
         table td {
             padding: 5px;
             text-align: center;
+            overflow-x: auto;
         }
 
         .form-control {
@@ -150,6 +163,72 @@
         }
     </style>
 
+    <script>
+        function calculateTarget() {
+
+            var cycleTimeBox = document.getElementById('<%= txtCycleTime.ClientID %>');
+            if (!cycleTimeBox) return;
+
+            var cycleTime = parseFloat(cycleTimeBox.value);
+
+            var target = 0;
+
+            if (cycleTime && cycleTime > 0) {
+                target = Math.floor(3600 / cycleTime);
+            }
+
+            // Fill all target boxes
+            document.querySelectorAll(".target-box").forEach(function (el) {
+                el.value = target;
+            });
+        }
+
+        // 🔥 AUTO RUN AFTER POSTBACK (IMPORTANT)
+        window.onload = function () {
+            calculateTarget();
+        };
+
+        // ⏰ DIGITAL CLOCK
+        function updateClock() {
+            var now = new Date();
+
+            var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            var months = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+
+            var dayName = days[now.getDay()];
+            var date = now.getDate();
+            var month = months[now.getMonth()];
+            var year = now.getFullYear();
+
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var seconds = now.getSeconds();
+
+            // 12-hour format
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+
+            // Leading zero
+            hours = hours < 10 ? "0" + hours : hours;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            var timeString = hours + ":" + minutes + ":" + seconds + " " + ampm;
+
+            var fullString = date + " " + month + " " + year +
+                " | " + dayName + "<br/>" + timeString;
+
+            document.getElementById("digitalClock").innerHTML = fullString;
+        }
+
+        // Run every second
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+
+
 </head>
 
 <body>
@@ -166,7 +245,10 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>Production Date</label>
-                    <asp:TextBox ID="txtDate" runat="server" CssClass="input-box" TextMode="Date" OnTextChanged="txtDate_TextChanged" />
+                    <asp:TextBox ID="txtDate" type="date" runat="server" CssClass="input-box" TextMode="Date" OnTextChanged="txtDate_TextChanged" />
+                    <script>
+                        document.getElementById("txtDate").value = new Date().toISOString().split('T')[0];
+                    </script>
                 </div>
 
                 <div class="form-group">
@@ -187,55 +269,61 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Operator Name</label>
-                    <asp:DropDownList ID="ddlOperator" runat="server"
-                        CssClass="input-box" OnSelectedIndexChanged="ddlOperator_SelectedIndexChanged" />
+                    <label>Process Name</label>
+                    <asp:DropDownList ID="ddlProcess" runat="server" AutoPostBack="true"
+                        OnSelectedIndexChanged="ddlProcess_SelectedIndexChanged" CssClass="input-box" />
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>Process Name</label>
-                    <asp:DropDownList ID="ddlProcess" runat="server" AutoPostBack="true"
-                        OnSelectedIndexChanged="ddlProcess_SelectedIndexChanged" CssClass="input-box" />
+                    <label>Cycle Time / Part</label>
+                    <asp:TextBox ID="txtCycleTime" CssClass="input-box target-box" TextMode="Number" min="0" runat="server"
+                        placeholder="एक पार्ट का साइकिल समय सेकंड में भरें"
+                        ToolTip="एक पार्ट का साइकिल समय सेकंड में भरें"
+                        OnTextChanged="txtCycleTime_TextChanged" onkeyup="calculateTarget()"></asp:TextBox>
+
                 </div>
 
                 <div class="form-group">
-                    <label>Cycle Time / Hour</label>
-                    <asp:TextBox ID="txtCycleTime" TextMode="Number" min="0" runat="server" CssClass="input-box"
-                        placeholder="एक पार्ट का साइकिल समय सेकंड में भरें"
-                        OnTextChanged="txtCycleTime_TextChanged" />
+
+                    <label>Operator Name</label>
+                    <asp:DropDownList ID="ddlOperator" runat="server"
+                        CssClass="input-box" OnSelectedIndexChanged="ddlOperator_SelectedIndexChanged" />
+
                 </div>
+
             </div>
             <div class="button-group">
-            <asp:Button ID="btnSave" runat="server" Text="💾 Save" CssClass="btn-save" OnClick="btnSave_Click" ToolTip="हर घंटे सेव करें" />
+                <asp:Button ID="btnSave" runat="server" Text="💾 Save" CssClass="btn-save" OnClick="btnSave_Click" ToolTip="हर घंटे सेव करें" />
 
-            <asp:DropDownList ID="DdlOT" runat="server"
-                Style="background-color: #000000; color: #e6f0f5; padding: 6px; border-radius: 5px; text-align: center; font-weight: bold;"
-                ToolTip="ओवरटाइम का चयन करें" OnSelectedIndexChanged="DdlOT_SelectedIndexChanged">
-                <asp:ListItem Text="⏱️ Add Overtime" Value="0" />
-                <asp:ListItem Text="1 Hr" Value="1" />
-                <asp:ListItem Text="2 Hrs" Value="2" />
-                <asp:ListItem Text="3 Hrs" Value="3" />
-                <asp:ListItem Text="4 Hrs" Value="4" />
-            </asp:DropDownList>
-            
-                     <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn get-btn" 
-                         Style="background-color:#ff6a00; padding: 6px; border-radius: 5px; text-align: center; font-weight: bold;"
-                         />
-               </div>
+                <asp:DropDownList ID="DdlOT" runat="server" AutoPostBack="true"
+                    Style="background-color: #000000; color: #e6f0f5; padding: 6px; border-radius: 5px; text-align: left; font-weight: bold;"
+                    ToolTip="ओवरटाइम का चयन करें" OnSelectedIndexChanged="DdlOT_SelectedIndexChanged">
+                    <asp:ListItem Text="⏱️ Add Overtime" Value="0" />
+                    <asp:ListItem Text=" OT-1 Hour" Value="1" />
+                    <asp:ListItem Text=" OT-2 Hours" Value="2" />
+                    <asp:ListItem Text=" OT-3 Hours" Value="3" />
+                    <asp:ListItem Text=" OT-4 Hours" Value="4" />
+                </asp:DropDownList>
+
+                <div id="digitalClock" style="font-size: 14px; padding-left: 15px; padding-right: 15px; font-weight: bold; background: #57efd8; display:border-box; width: auto; border-radius: 6px; text-align: center;">
+                </div>
+
+                <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn-get" />
+            </div>
         </div>
 
         <!-- TABLE -->
         <table>
             <thead>
                 <tr>
-                    <th>Time (Hrs)</th>
-                    <th>Target</th>
-                    <th>Actual</th>
-                    <th>Reject</th>
-                    <th>Rework</th>
-                    <th>DownTime</th>
+                    <th>Time Slot (Hrs)</th>
+                    <th>Target लक्ष्य संख्या</th>
+                    <th>Actual वास्तविक संख्या</th>
+                    <th>Reject अस्वीकृत</th>
+                    <th>Rework पुनर्निर्माण</th>
+                    <th>DownTime(मिनट)</th>
                     <th>Remarks</th>
                 </tr>
             </thead>
@@ -244,24 +332,54 @@
                 <asp:Repeater ID="rptProduction" runat="server">
                     <ItemTemplate>
                         <tr>
-                            <td><%# Eval("TimeSlot") %>
-                                <asp:HiddenField ID="hdnTime" Value='<%# Eval("TimeSlot") %>' runat="server" />
-
+                            <!-- ✅ Time Slot -->
+                            <td>
+                                <%# Eval("TimeSlot") %>
+                                <asp:HiddenField ID="hdnTime" runat="server"
+                                    Value='<%# Eval("TimeSlot") %>' />
                             </td>
 
+                            <!-- Target -->
                             <td>
-                                <asp:TextBox ID="txtTarget" placeholder="लक्ष्य" runat="server" CssClass="num-box" TextMode="Number" min="0" /></td>
-                            <td>
-                                <asp:TextBox ID="txtActual" placeholder="वास्तविक संख्या" runat="server" CssClass="num-box" TextMode="Number" min="0" /></td>
-                            <td>
-                                <asp:TextBox ID="txtReject" ForeColor="Red" placeholder="अस्वीकृत" runat="server" CssClass="num-box" TextMode="Number" min="0" /></td>
-                            <td>
-                                <asp:TextBox ID="txtRework" placeholder="पुनर्निर्माण" runat="server" CssClass="num-box" TextMode="Number" min="0" /></td>
-                            <td>
-                                <asp:TextBox ID="txtDownTime" placeholder="डाउनटाइम" runat="server" CssClass="num-box" TextMode="Number" min="0"
-                                    max="60" oninput="if(this.value > 60) this.value = 60; if(this.value < 0) this.value = 0;"
-                                    onkeydown="if(event.key === '-' || event.key === 'e') return false;" /></td>
+                                <asp:TextBox ID="txtTarget" runat="server"
+                                    CssClass="num-box target-box" TextMode="Number" min="0" ReadOnly="true"
+                                    Style="background: linear-gradient(90deg, #57efd8,#ffffff);" />
+                            </td>
 
+                            <!-- Actual -->
+                            <td>
+                                <asp:TextBox ID="txtActual" runat="server"
+                                    CssClass="num-box" TextMode="Number" min="0"
+                                     />
+                            </td>
+
+                            <!-- Reject -->
+                            <td>
+                                <asp:TextBox ID="txtReject" runat="server"
+                                    CssClass="num-box" ForeColor="Red"
+                                    TextMode="Number" min="0" Style="background: linear-gradient(90deg, #f2d2d2,#ffffff);"
+                                    />
+                            </td>
+
+                            <!-- Rework -->
+                            <td>
+                                <asp:TextBox ID="txtRework" runat="server"
+                                    CssClass="num-box" TextMode="Number" min="0"
+                                    />
+                            </td>
+
+                            <!-- DownTime -->
+                            <td>
+                                <asp:TextBox ID="txtDownTime" runat="server"
+                                    CssClass="num-box"
+                                    TextMode="Number"
+                                    min="0" max="60"
+                                    placeholder="डाउनटाइम"
+                                    oninput="if(this.value > 60) this.value = 60;"
+                                    onkeydown="if(event.key === '-' || event.key === 'e') return false;" />
+                            </td>
+
+                            <!-- Remarks -->
                             <td>
                                 <asp:DropDownList ID="ddlRemarks" runat="server"
                                     CssClass="remarks-ddl">
@@ -277,7 +395,6 @@
                                     <asp:ListItem Text="Trial Runs" Value="Trial" />
                                 </asp:DropDownList>
                             </td>
-
 
                         </tr>
                     </ItemTemplate>

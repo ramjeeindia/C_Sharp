@@ -51,15 +51,6 @@ namespace LIVE_MRP
         protected global::System.Web.UI.WebControls.DropDownList ddlMachine;
 
         /// <summary>
-        /// ddlOperator control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlOperator;
-
-        /// <summary>
         /// ddlProcess control.
         /// </summary>
         /// <remarks>
@@ -76,6 +67,15 @@ namespace LIVE_MRP
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCycleTime;
+
+        /// <summary>
+        /// ddlOperator control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlOperator;
 
         /// <summary>
         /// btnSave control.
