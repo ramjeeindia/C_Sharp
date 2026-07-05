@@ -3,9 +3,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Hourly Production Sheet</title>
 
+    <title>Hourly Production Sheet</title>
+    
     <style>
+        
         body {
             font-family: 'Segoe UI';
             background: #e6f0f5;
@@ -102,6 +104,7 @@
             height: 34px;
             border-radius: 6px;
             border: 1px solid #ccc;
+            text-align: center;
         }
 
         td:first-child {
@@ -172,7 +175,7 @@
             var cycleTime = parseFloat(cycleTimeBox.value);
             var target = 0;
             if (cycleTime && cycleTime > 0) {
-                target = Math.floor(3600 / cycleTime);
+                target = Math.floor(cycleTime);
             }
 
             // Fill all target boxes
@@ -190,12 +193,10 @@
         // ⏰ DIGITAL CLOCK
         function updateClock() {
             var now = new Date();
-
-            var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            
             var months = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"];
-
-            var dayName = days[now.getDay()];
+            
             var date = now.getDate();
             var month = months[now.getMonth()];
             var year = now.getFullYear();
@@ -204,21 +205,16 @@
             var minutes = now.getMinutes();
             var seconds = now.getSeconds();
 
-            // 12-hour format
             var ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
             hours = hours ? hours : 12;
 
-            // Leading zero
             hours = hours < 10 ? "0" + hours : hours;
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
 
             var timeString = hours + ":" + minutes + ":" + seconds + " " + ampm;
-
-            var fullString = date + " " + month + " " + year +
-                " | " + dayName + "<br/>" + timeString;
-
+            var fullString = "📅 " + date + " " + month + " " + year + " ⏱️ " + timeString;
             document.getElementById("digitalClock").innerHTML = fullString;
         }
 
@@ -278,7 +274,7 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>Cycle Time / Part</label>
+                    <label>Hourly Target</label>
                     <asp:TextBox ID="txtCycleTime" CssClass="input-box target-box" TextMode="Number" min="0" runat="server"
                         placeholder="एक पार्ट का साइकिल समय सेकंड में भरें"
                         ToolTip="एक पार्ट का साइकिल समय सेकंड में भरें"
@@ -308,7 +304,9 @@
                     <asp:ListItem Text=" OT-4 Hours" Value="4" />
                 </asp:DropDownList>
 
-                <div id="digitalClock" style="font-size: 14px; padding-left: 25px; padding-right: 25px; font-weight: bold; background: #57efd8; display: border-box; width: auto; border-radius: 6px; text-align: center;">
+                <div id="digitalClock" style="font-size: 14px; font-weight: bold; 
+                     background:#000000; color: #17D4FE;                   
+                     display:flex; padding: 6px; border-radius: 6px; text-align: center;">
                 </div>
 
                 <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn-get" />
@@ -375,7 +373,7 @@
                                     CssClass="num-box downtime"
                                     TextMode="Number"
                                     min="0" max="60"
-                                    placeholder="डाउनटाइम"
+                                    tooltip="डाउनटाइम"
                                     oninput="if(this.value > 60) this.value = 60;"
                                     onkeydown="if(event.key === '-' || event.key === 'e') return false;" />
                             </td>
@@ -384,7 +382,7 @@
                             <td>
                                 <asp:DropDownList ID="ddlRemarks" runat="server" ToolTip="टार्गेट कम होने का कारण भरें"
                                     CssClass="remarks-ddl">
-                                    <asp:ListItem Text="--Select--" Value="" />
+                                    <asp:ListItem Text=" " Value="" />
                                     <asp:ListItem Text="Tea Break" Value="Tea" />
                                     <asp:ListItem Text="Lunch Break" Value="Lunch" />
                                     <asp:ListItem Text="Model Change" Value="Model" />

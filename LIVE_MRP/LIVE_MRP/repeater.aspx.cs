@@ -129,24 +129,7 @@ namespace LIVE_MRP
 
         protected void ddlOperator_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Validate cycle time
-            if (!double.TryParse(txtCycleTime.Text, out double ct) || ct <= 0)
-                return;
-
-            int target = (int)Math.Floor(3600 / ct);
-
-            // Loop and set target
-            foreach (RepeaterItem item in rptProduction.Items)
-            {
-                TextBox txtTarget = item.FindControl("txtTarget") as TextBox;
-
-                if (txtTarget != null)
-                {
-                    txtTarget.Text = target.ToString();
-                }
-            }
-
-            // ✅ Run JS after postback
+            
             ScriptManager.RegisterStartupScript(this, this.GetType(),
                 "calc", "calculateTarget();", true);
         }
@@ -321,7 +304,7 @@ namespace LIVE_MRP
                 switch (timeSlot)
                 {
                     case "09:00AM - 10:00AM" when ddlShift.SelectedValue == "General":
-                        txtDownTime.Text = "15";
+                        txtDownTime.Text = "10";
                         ddlRemarks.SelectedValue = "Tea";
                         break;
 
@@ -331,12 +314,12 @@ namespace LIVE_MRP
                         break;
 
                     case "03:00PM - 04:00PM" when ddlShift.SelectedValue == "General":
-                        txtDownTime.Text = "15";
+                        txtDownTime.Text = "10";
                         ddlRemarks.SelectedValue = "Tea";
                         break;
 
                     case "07:00AM - 08:00AM" when ddlShift.SelectedValue == "A":
-                        txtDownTime.Text = "15";
+                        txtDownTime.Text = "10";
                         ddlRemarks.SelectedValue = "Tea";
                         break;
 
@@ -346,7 +329,7 @@ namespace LIVE_MRP
                         break;
 
                     case "01:00PM - 02:00PM" when ddlShift.SelectedValue == "A":
-                        txtDownTime.Text = "15";
+                        txtDownTime.Text = "10";
                         ddlRemarks.SelectedValue = "Tea";
                         break;
                 }
