@@ -20,7 +20,7 @@ namespace LIVE_MRP
         {
             if (!IsPostBack)
             {
-                         
+
                 ddlShift.SelectedValue = "General";
                 BindTimeSlots("General");
                 LoadMachines();
@@ -114,12 +114,12 @@ namespace LIVE_MRP
             string itemCode = ddlProcess.SelectedValue;
 
             LoadCycleTime(itemCode);
-            
+
         }
 
         protected void txtCycleTime_TextChanged(object sender, EventArgs e)
         {
-           
+
         }
 
         public int CalculateTarget(double cycleTime)
@@ -129,7 +129,7 @@ namespace LIVE_MRP
 
         protected void ddlOperator_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+
             ScriptManager.RegisterStartupScript(this, this.GetType(),
                 "calc", "calculateTarget();", true);
         }
@@ -145,7 +145,7 @@ namespace LIVE_MRP
 
             using (SqlConnection con = new SqlConnection(conStr))
             {
-                using (SqlCommand cmd = new SqlCommand("spGetMachines", con)) // ✅ FIXED NAME
+                using (SqlCommand cmd = new SqlCommand("spGetMachines", con)) 
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
@@ -153,11 +153,11 @@ namespace LIVE_MRP
                     SqlDataReader dr = cmd.ExecuteReader();
 
                     ddlMachine.DataSource = dr;
-                    ddlMachine.DataTextField = "MachineName"; // matches SP column
-                    ddlMachine.DataValueField = "Id";         // matches SP column
+                    ddlMachine.DataTextField = "MachineName"; 
+                    ddlMachine.DataValueField = "Id";         
                     ddlMachine.DataBind();
 
-                    ddlMachine.Items.Insert(0, new ListItem("-- Select Machine --", "0")); // ✅ better
+                    ddlMachine.Items.Insert(0, new ListItem("-- Select Machine --", "0")); 
                 }
             }
         }
@@ -234,7 +234,7 @@ namespace LIVE_MRP
                         // ✅ Hourly Target = 3600 / CycleTime
                         int target = (int)Math.Floor(3600 / cycleTime);
 
-                        txtCycleTime.Text = target.ToString(); // 🔥 show in textbox/label
+                        txtCycleTime.Text = target.ToString(); 
                     }
                     else
                     {
@@ -252,7 +252,7 @@ namespace LIVE_MRP
             DataTable dt = new DataTable();
             dt.Columns.Add("TimeSlot");
 
-            // 🔹 1. Load Normal Shift Slots from XML
+            // Load Normal Shift Slots from XML
             string xmlPath = Server.MapPath("~/TimeSlot.xml");
 
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
@@ -272,7 +272,7 @@ namespace LIVE_MRP
                 lastEndTime = DateTime.Parse(parts[1].Trim());
             }
 
-            // 🔥 2. ADD OT SLOTS
+            // ADD OT SLOTS
             for (int i = 0; i < otHours; i++)
             {
                 DateTime start = lastEndTime.AddHours(i);
@@ -283,72 +283,45 @@ namespace LIVE_MRP
                 dt.Rows.Add(newSlot);
             }
 
-            // 🔹 Bind to repeater
+            // Bind to repeater
             rptProduction.DataSource = dt;
             rptProduction.DataBind();
         }
 
         protected void rptProduction_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem)
+                return;
+
+            var hdnTime = (HiddenField)e.Item.FindControl("hdnTime");
+            var txtDownTime = (TextBox)e.Item.FindControl("txtDownTime");
+            var ddlRemarks = (DropDownList)e.Item.FindControl("ddlRemarks");
+
+            if (hdnTime == null || txtDownTime == null || ddlRemarks == null)
+                return;
+
+            string key = $"{ddlShift.SelectedValue}|{hdnTime.Value.Trim()}";
+
+            var rules = new Dictionary<string, Tuple<string, string>>
+        {
+            { "General|09:00AM - 10:00AM", Tuple.Create("15", "Tea") },
+            { "General|12:00PM - 01:00PM", Tuple.Create("30", "Lunch") },
+            { "General|03:00PM - 04:00PM", Tuple.Create("15", "Tea") },
+
+            { "A|07:00AM - 08:00AM", Tuple.Create("15", "Tea") },
+            { "A|10:00AM - 11:00AM", Tuple.Create("30", "Lunch") },
+            { "A|01:00PM - 02:00PM", Tuple.Create("15", "Tea") },
+
+            { "B|01:00PM - 02:00PM", Tuple.Create("15", "Tea") },
+            { "B|04:00PM - 05:00PM", Tuple.Create("30", "Lunch") },
+            { "B|07:00PM - 08:00PM", Tuple.Create("15", "Tea") }
+        };
+
+            if (rules.ContainsKey(key))
             {
-                HiddenField hdnTime = (HiddenField)e.Item.FindControl("hdnTime");
-                TextBox txtDownTime = (TextBox)e.Item.FindControl("txtDownTime");
-               
-                DropDownList ddlRemarks = (DropDownList)e.Item.FindControl("ddlRemarks");
-
-                if (hdnTime == null || txtDownTime == null || ddlRemarks == null)
-                    return;
-
-                string timeSlot = hdnTime.Value.Trim();
-
-                switch (timeSlot)
-                {
-                    case "09:00AM - 10:00AM" when ddlShift.SelectedValue == "General":
-                        txtDownTime.Text = "10";
-                        ddlRemarks.SelectedValue = "Tea";
-                        break;
-
-                    case "12:00PM - 01:00PM" when ddlShift.SelectedValue == "General":
-                        txtDownTime.Text = "30";
-                        ddlRemarks.SelectedValue = "Lunch";
-                        break;
-
-                    case "03:00PM - 04:00PM" when ddlShift.SelectedValue == "General":
-                        txtDownTime.Text = "10";
-                        ddlRemarks.SelectedValue = "Tea";
-                        break;
-
-                    case "07:00AM - 08:00AM" when ddlShift.SelectedValue == "A":
-                        txtDownTime.Text = "10";
-                        ddlRemarks.SelectedValue = "Tea";
-                        break;
-
-                    case "10:00AM - 11:00AM" when ddlShift.SelectedValue == "A":
-                        txtDownTime.Text = "30";
-                        ddlRemarks.SelectedValue = "Lunch";
-                        break;
-
-                    case "01:00PM - 02:00PM" when ddlShift.SelectedValue == "A":
-                        txtDownTime.Text = "10";
-                        ddlRemarks.SelectedValue = "Tea";
-                        break;
-
-                    case "01:00PM - 02:00PM" when ddlShift.SelectedValue == "B":
-                        txtDownTime.Text = "10";
-                        ddlRemarks.SelectedValue = "Tea";
-                        break;
-
-                    case "04:00PM - 05:00PM" when ddlShift.SelectedValue == "B":
-                        txtDownTime.Text = "30";
-                        ddlRemarks.SelectedValue = "Lunch";
-                        break;
-
-                    case "07:00PM - 08:00PM" when ddlShift.SelectedValue == "B":
-                        txtDownTime.Text = "10";
-                        ddlRemarks.SelectedValue = "Tea";
-                        break;
-                }
+                var rule = rules[key];
+                txtDownTime.Text = rule.Item1;
+                ddlRemarks.SelectedValue = rule.Item2;
             }
         }
 

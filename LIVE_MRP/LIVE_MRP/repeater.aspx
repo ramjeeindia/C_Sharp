@@ -71,7 +71,7 @@
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            width: 200px;
+            width: 150px;
         }
 
         .btn-get {
@@ -177,41 +177,69 @@
 
             document.querySelectorAll("tbody tr").forEach(function (row) {
 
+                if (row.offsetParent === null) return; // skip hidden rows
+
                 var remark = row.querySelector(".remarks-ddl")?.value;
                 var targetBox = row.querySelector(".target-box");
                 var downtimeBox = row.querySelector(".downtime");
 
                 var downtime = 0;
 
-                // 🔥 Deduct break time
                 if (remark === "Tea") {
-                    downtime = 10; // minutes
+                    downtime = 15;
                 } else if (remark === "Lunch" || remark === "Admin") {
-                    downtime = 30; // minutes
+                    downtime = 30;
                 }
 
-                // ✅ UPDATE DOWNTIME FIELD
-                if (downtimeBox) {
-                    downtimeBox.value = downtime;
-                }
+                if (downtimeBox) downtimeBox.value = downtime;
 
-                // 🔥 Convert minutes → seconds and calculate
-                // 🔥 TARGET CALCULATION
                 var availableTime = 3600 - (downtime * 60);
-                if (availableTime < 0) availableTime = 0;
-
                 var target = Math.floor(availableTime / cycleTime);
 
-                if (targetBox) {
-                    targetBox.value = target;
-                }
+                if (targetBox) targetBox.value = target;
+
             });
+
+            // ✅ ONLY HERE total should be calculated
+            updateTotalTarget();
         }
+
+
+        // 🔥 TOTAL CALCULATION (ONLY PLACE)
+        function updateTotalTarget() {
+
+            let totalTarget = 0;
+            let totalActual = 0;
+
+            document.querySelectorAll("tbody tr").forEach(row => {
+
+                if (row.offsetParent === null) return;
+
+                totalTarget += parseInt(row.querySelector(".target-box")?.value) || 0;
+                totalActual += parseInt(row.querySelector(".actual")?.value) || 0; // ✅ FIXED
+            });
+
+            document.getElementById("totalTargetValue").innerText = totalTarget;
+            document.getElementById("totalActualValue").innerText = totalActual;
+
+            // ✅ Efficiency
+            let efficiency = totalTarget > 0 ? ((totalActual / totalTarget) * 100).toFixed(1) : 0;
+
+            let effEl = document.getElementById("efficiencyValue");
+            effEl.innerText = efficiency + "%";
+
+            // 🎨 Color
+            if (efficiency >= 90) effEl.style.color = "green";
+            else if (efficiency >= 70) effEl.style.color = "orange";
+            else effEl.style.color = "red";
+        }
+
 
         // 🔥 Run on load
         window.onload = function () {
             calculateTarget();
         };
+
 
         // 🔥 Recalculate when remark changes
         document.addEventListener("change", function (e) {
@@ -220,7 +248,12 @@
             }
         });
 
-   
+        // ✅ LIVE Actual typing
+        document.addEventListener("input", function (e) {
+            if (e.target.classList.contains("actual")) { // ✅ FIXED
+                updateTotalTarget();
+            }
+        });
         
 
         // ⏰ DIGITAL CLOCK
@@ -340,8 +373,20 @@
                 <div id="digitalClock" style="font-size: 14px; font-weight: bold; background: #000000; color: #17D4FE; display: flex; padding: 6px; border-radius: 6px; text-align: center;">
                 </div>
 
+                 <!-- 🔥 Total Target Box -->
+                <div id="totalTargetBox" 
+                     style="background:#f1f3c2; padding:8px; border-radius:6px; font-weight:bold;">         
+                    🎯 Total Target: <span id="totalTargetValue">0</span>
+                </div>
+
+                <div class="summary-box" style="background:#f1f3c2;display: inline-block;box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding:8px; border-radius:6px; font-weight:bold;">⚡ Actual Total: <span id="totalActualValue"
+                    >0</span>
+                </div>
+                <div class="summary-box" 
+                    style="background: linear-gradient(90deg, #f1f3c2, #ffffff); padding:8px; border-radius:6px; font-weight:bold;">📊 Efficiency: <span id="efficiencyValue">0%</span>
+                </div>
                 <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn-get" />
-            </div>
+                </div>
         </div>
 
         <!-- TABLE -->
