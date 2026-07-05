@@ -5,9 +5,8 @@
 <head runat="server">
 
     <title>Hourly Production Sheet</title>
-    
+
     <style>
-        
         body {
             font-family: 'Segoe UI';
             background: #e6f0f5;
@@ -172,31 +171,65 @@
 
             var cycleTimeBox = document.getElementById('<%= txtCycleTime.ClientID %>');
             if (!cycleTimeBox) return;
-            var cycleTime = parseFloat(cycleTimeBox.value);
-            var target = 0;
-            if (cycleTime && cycleTime > 0) {
-                target = Math.floor(cycleTime);
-            }
 
-            // Fill all target boxes
-            document.querySelectorAll(".target-box").forEach(function (el) {
-                el.value = target;
+            var cycleTime = parseFloat(cycleTimeBox.value) || 0;
+            if (cycleTime <= 0) return;
+
+            document.querySelectorAll("tbody tr").forEach(function (row) {
+
+                var remark = row.querySelector(".remarks-ddl")?.value;
+                var targetBox = row.querySelector(".target-box");
+                var downtimeBox = row.querySelector(".downtime");
+
+                var downtime = 0;
+
+                // 🔥 Deduct break time
+                if (remark === "Tea") {
+                    downtime = 10; // minutes
+                } else if (remark === "Lunch" || remark === "Admin") {
+                    downtime = 30; // minutes
+                }
+
+                // ✅ UPDATE DOWNTIME FIELD
+                if (downtimeBox) {
+                    downtimeBox.value = downtime;
+                }
+
+                // 🔥 Convert minutes → seconds and calculate
+                // 🔥 TARGET CALCULATION
+                var availableTime = 3600 - (downtime * 60);
+                if (availableTime < 0) availableTime = 0;
+
+                var target = Math.floor(availableTime / cycleTime);
+
+                if (targetBox) {
+                    targetBox.value = target;
+                }
             });
         }
 
-        // 🔥 AUTO RUN AFTER POSTBACK (IMPORTANT)
+        // 🔥 Run on load
         window.onload = function () {
             calculateTarget();
         };
 
+        // 🔥 Recalculate when remark changes
+        document.addEventListener("change", function (e) {
+            if (e.target.classList.contains("remarks-ddl")) {
+                calculateTarget();
+            }
+        });
+
+   
+        
 
         // ⏰ DIGITAL CLOCK
         function updateClock() {
             var now = new Date();
-            
+
             var months = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"];
-            
+
             var date = now.getDate();
             var month = months[now.getMonth()];
             var year = now.getFullYear();
@@ -279,7 +312,7 @@
                         placeholder="एक पार्ट का साइकिल समय सेकंड में भरें"
                         ToolTip="एक पार्ट का साइकिल समय सेकंड में भरें"
                         OnTextChanged="txtCycleTime_TextChanged" onkeyup="calculateTarget()"></asp:TextBox>
-                   
+
                 </div>
 
                 <div class="form-group">
@@ -304,9 +337,7 @@
                     <asp:ListItem Text=" OT-4 Hours" Value="4" />
                 </asp:DropDownList>
 
-                <div id="digitalClock" style="font-size: 14px; font-weight: bold; 
-                     background:#000000; color: #17D4FE;                   
-                     display:flex; padding: 6px; border-radius: 6px; text-align: center;">
+                <div id="digitalClock" style="font-size: 14px; font-weight: bold; background: #000000; color: #17D4FE; display: flex; padding: 6px; border-radius: 6px; text-align: center;">
                 </div>
 
                 <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn-get" />
@@ -373,7 +404,7 @@
                                     CssClass="num-box downtime"
                                     TextMode="Number"
                                     min="0" max="60"
-                                    tooltip="डाउनटाइम"
+                                    ToolTip="डाउनटाइम"
                                     oninput="if(this.value > 60) this.value = 60;"
                                     onkeydown="if(event.key === '-' || event.key === 'e') return false;" />
                             </td>
@@ -381,6 +412,7 @@
                             <!-- Remarks -->
                             <td>
                                 <asp:DropDownList ID="ddlRemarks" runat="server" ToolTip="टार्गेट कम होने का कारण भरें"
+                                    Style="background: linear-gradient(90deg,#fc3636,#00c853,#4e73df);"
                                     CssClass="remarks-ddl">
                                     <asp:ListItem Text=" " Value="" />
                                     <asp:ListItem Text="Tea Break" Value="Tea" />

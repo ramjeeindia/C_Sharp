@@ -294,6 +294,7 @@ namespace LIVE_MRP
             {
                 HiddenField hdnTime = (HiddenField)e.Item.FindControl("hdnTime");
                 TextBox txtDownTime = (TextBox)e.Item.FindControl("txtDownTime");
+               
                 DropDownList ddlRemarks = (DropDownList)e.Item.FindControl("ddlRemarks");
 
                 if (hdnTime == null || txtDownTime == null || ddlRemarks == null)
@@ -329,6 +330,21 @@ namespace LIVE_MRP
                         break;
 
                     case "01:00PM - 02:00PM" when ddlShift.SelectedValue == "A":
+                        txtDownTime.Text = "10";
+                        ddlRemarks.SelectedValue = "Tea";
+                        break;
+
+                    case "01:00PM - 02:00PM" when ddlShift.SelectedValue == "B":
+                        txtDownTime.Text = "10";
+                        ddlRemarks.SelectedValue = "Tea";
+                        break;
+
+                    case "04:00PM - 05:00PM" when ddlShift.SelectedValue == "B":
+                        txtDownTime.Text = "30";
+                        ddlRemarks.SelectedValue = "Lunch";
+                        break;
+
+                    case "07:00PM - 08:00PM" when ddlShift.SelectedValue == "B":
                         txtDownTime.Text = "10";
                         ddlRemarks.SelectedValue = "Tea";
                         break;
