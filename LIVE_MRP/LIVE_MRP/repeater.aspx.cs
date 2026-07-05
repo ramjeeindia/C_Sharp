@@ -21,26 +21,152 @@ namespace LIVE_MRP
             if (!IsPostBack)
             {
 
-                ddlShift.SelectedValue = "General";
-                BindTimeSlots("General");
+                ddlShift.SelectedValue = "G";
+                BindTimeSlots("G");
                 LoadMachines();
                 LoadOperators();
                 ddlProcess.Items.Insert(0, new ListItem("-- Select Process --", "0"));
 
             }
         }
+
+        protected void GetData_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnSave_Click(object sender, EventArgs e)
+        {
+            string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
+
+            using (SqlConnection con = new SqlConnection(CS))
+            {
+                con.Open();
+
+                foreach (RepeaterItem item in rptProduction.Items)
+                {
+                    HiddenField hdnTime = (HiddenField)item.FindControl("hdnTime");
+                    TextBox txtTarget = (TextBox)item.FindControl("txtTarget");
+                    TextBox txtActual = (TextBox)item.FindControl("txtActual");
+                    TextBox txtReject = (TextBox)item.FindControl("txtReject");
+                    TextBox txtRework = (TextBox)item.FindControl("txtRework");
+                    TextBox txtDownTime = (TextBox)item.FindControl("txtDownTime");
+                    DropDownList ddlRemarks = (DropDownList)item.FindControl("ddlRemarks");
+
+                    // ✅ SAFE CONVERSION
+                    int actual = string.IsNullOrEmpty(txtActual.Text) ? 0 : Convert.ToInt32(txtActual.Text);
+                    int reject = string.IsNullOrEmpty(txtReject.Text) ? 0 : Convert.ToInt32(txtReject.Text);
+                    int rework = string.IsNullOrEmpty(txtRework.Text) ? 0 : Convert.ToInt32(txtRework.Text);
+                    int downtime = string.IsNullOrEmpty(txtDownTime.Text) ? 0 : Convert.ToInt32(txtDownTime.Text);
+
+                    if ((actual + reject + rework ) == 0)
+                    {
+                        continue; // ❌ SKIP EMPTY ROW
+                    }
+
+
+                    string query = @"
+IF EXISTS (
+    SELECT 1 FROM HourlyProduction
+    WHERE 
+        ProductionDate = @ProductionDate
+        AND Shift = @Shift
+        AND Machine = @Machine
+        AND Process = @Process
+        AND TimeSlot = @TimeSlot
+)
+BEGIN
+    UPDATE HourlyProduction
+    SET
+        CycleTime = @CycleTime,
+        Target = @Target,
+        Actual = @Actual,
+        RejectQty = @RejectQty,
+        ReworkQty = @ReworkQty,
+        DownTime = @DownTime,
+        Remarks = @Remarks,
+        Operator = @Operator
+    WHERE 
+        ProductionDate = @ProductionDate
+        AND Shift = @Shift
+        AND Machine = @Machine
+        AND Process = @Process
+        AND TimeSlot = @TimeSlot
+END
+ELSE
+BEGIN
+    INSERT INTO HourlyProduction
+    (
+        ProductionDate,
+        Shift,
+        Machine,
+        Process,
+        Operator,
+        TimeSlot,
+        CycleTime,
+        Target,
+        Actual,
+        RejectQty,
+        ReworkQty,
+        DownTime,
+        Remarks
+    )
+    VALUES
+    (
+        @ProductionDate,
+        @Shift,
+        @Machine,
+        @Process,
+        @Operator,
+        @TimeSlot,
+        @CycleTime,
+        @Target,
+        @Actual,
+        @RejectQty,
+        @ReworkQty,
+        @DownTime,
+        @Remarks
+    )
+END
+";
+
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.CommandType = CommandType.Text;
+
+                    // ✅ PARAMETERS (MATCHED TO YOUR TABLE)
+                    cmd.Parameters.AddWithValue("@ProductionDate", txtDate.Text);
+                    cmd.Parameters.AddWithValue("@Shift", ddlShift.SelectedValue);
+                    cmd.Parameters.AddWithValue("@Machine", ddlMachine.SelectedValue);
+                    cmd.Parameters.AddWithValue("@Process", ddlProcess.SelectedValue);
+                    cmd.Parameters.AddWithValue("@Operator", ddlOperator.SelectedValue);
+                    cmd.Parameters.AddWithValue("@TimeSlot", hdnTime.Value);
+
+                    cmd.Parameters.AddWithValue("@CycleTime", string.IsNullOrEmpty(txtCycleTime.Text) ? 0 : Convert.ToInt32(txtCycleTime.Text));
+                    cmd.Parameters.AddWithValue("@Target", string.IsNullOrEmpty(txtTarget.Text) ? 0 : Convert.ToInt32(txtTarget.Text));
+                    cmd.Parameters.AddWithValue("@Actual", string.IsNullOrEmpty(txtActual.Text) ? 0 : Convert.ToInt32(txtActual.Text));
+                    cmd.Parameters.AddWithValue("@RejectQty", string.IsNullOrEmpty(txtReject.Text) ? 0 : Convert.ToInt32(txtReject.Text));
+                    cmd.Parameters.AddWithValue("@ReworkQty", string.IsNullOrEmpty(txtRework.Text) ? 0 : Convert.ToInt32(txtRework.Text));
+                    cmd.Parameters.AddWithValue("@DownTime", string.IsNullOrEmpty(txtDownTime.Text) ? 0 : Convert.ToInt32(txtDownTime.Text));
+                    cmd.Parameters.AddWithValue("@Remarks", ddlRemarks.SelectedValue);
+
+                    cmd.ExecuteNonQuery();
+                }
+
+                con.Close();
+            }
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Saved Successfully');", true);
+
+        }
+
         private void BindTimeSlots(string shiftName)
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("TimeSlot");
-
             string xmlPath = Server.MapPath("~/TimeSlot.xml");
-
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc.Load(xmlPath);
-
             var nodes = doc.SelectNodes("//Shift[@Name='" + shiftName + "']/Slot");
-
             foreach (System.Xml.XmlNode node in nodes)
             {
                 dt.Rows.Add(node.InnerText.Trim());
@@ -53,7 +179,6 @@ namespace LIVE_MRP
         private void AddOTSlots(int hours)
         {
             List<string> timeList = new List<string>();
-
             foreach (RepeaterItem item in rptProduction.Items)
             {
                 Literal lit = (Literal)item.FindControl("litTimeSlot");
@@ -61,9 +186,7 @@ namespace LIVE_MRP
             }
 
             if (timeList.Count == 0) return;
-
             string lastSlot = timeList.Last();
-
             string[] parts = lastSlot.Split('-');
             DateTime lastEnd = DateTime.Parse(parts[1].Trim());
 
@@ -71,17 +194,13 @@ namespace LIVE_MRP
             {
                 DateTime newStart = lastEnd;
                 DateTime newEnd = newStart.AddHours(1);
-
                 string slot = newStart.ToString("hh:mmtt") + " - " + newEnd.ToString("hh:mmtt");
-
                 timeList.Add(slot);
-
                 lastEnd = newEnd;
             }
 
             DataTable dt = new DataTable();
             dt.Columns.Add("TimeSlot");
-
             foreach (var t in timeList)
             {
                 dt.Rows.Add(t);
@@ -91,28 +210,27 @@ namespace LIVE_MRP
             rptProduction.DataBind();
 
         }
-        protected void btnSave_Click(object sender, EventArgs e)
-        {
-
-        }
 
         protected void ddlMachine_SelectedIndexChanged(object sender, EventArgs e)
         {
             int machineId = Convert.ToInt32(ddlMachine.SelectedValue);
-
             LoadProcess(machineId);
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(),
+        "loadLocal", "setTimeout(loadFromLocal, 500);", true);
         }
 
 
         protected void ddlShift_SelectedIndexChanged(object sender, EventArgs e)
         {
             BindTimeSlots(ddlShift.SelectedValue);
+            ScriptManager.RegisterStartupScript(this, this.GetType(),
+        "loadLocal", "setTimeout(loadFromLocal, 500);", true);
         }
 
         protected void ddlProcess_SelectedIndexChanged(object sender, EventArgs e)
         {
             string itemCode = ddlProcess.SelectedValue;
-
             LoadCycleTime(itemCode);
 
         }
@@ -136,6 +254,8 @@ namespace LIVE_MRP
 
         protected void txtDate_TextChanged(object sender, EventArgs e)
         {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "loadLocal",
+        "setTimeout(function(){ loadFromLocal(); }, 500);", true);
 
         }
 
@@ -145,19 +265,16 @@ namespace LIVE_MRP
 
             using (SqlConnection con = new SqlConnection(conStr))
             {
-                using (SqlCommand cmd = new SqlCommand("spGetMachines", con)) 
+                using (SqlCommand cmd = new SqlCommand("spGetMachines", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-
                     con.Open();
                     SqlDataReader dr = cmd.ExecuteReader();
-
                     ddlMachine.DataSource = dr;
-                    ddlMachine.DataTextField = "MachineName"; 
-                    ddlMachine.DataValueField = "Id";         
+                    ddlMachine.DataTextField = "MachineName";
+                    ddlMachine.DataValueField = "Id";
                     ddlMachine.DataBind();
-
-                    ddlMachine.Items.Insert(0, new ListItem("-- Select Machine --", "0")); 
+                    ddlMachine.Items.Insert(0, new ListItem("-- Select Machine --", "0"));
                 }
             }
         }
@@ -188,15 +305,12 @@ namespace LIVE_MRP
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@MachineId", machineId);
-
                     con.Open();
                     SqlDataReader dr = cmd.ExecuteReader();
-
                     ddlProcess.DataSource = dr;
                     ddlProcess.DataTextField = "ItemName";   // Display
                     ddlProcess.DataValueField = "ItemCode";  // Value
                     ddlProcess.DataBind();
-
                     ddlProcess.Items.Insert(0, new ListItem("-- Select Process --", "0"));
                 }
             }
@@ -212,29 +326,14 @@ namespace LIVE_MRP
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ItemCode", itemCode);
-
                     con.Open();
-
                     object result = cmd.ExecuteScalar();
-
-                    //if (result != null)
-                    //{
-                    //    txtCycleTime.Text = result.ToString(); // ✅ Auto fill
-                    //}
-                    //else
-                    //{
-                    //    txtCycleTime.Text = "";
-                    //}
-
                     if (result != null)
                     {
                         double cycleTime = Convert.ToDouble(result);
                         txtCycleTime.Text = cycleTime.ToString();
-
-                        // ✅ Hourly Target = 3600 / CycleTime
                         int target = (int)Math.Floor(3600 / cycleTime);
-
-                        txtCycleTime.Text = target.ToString(); 
+                        txtCycleTime.Text = target.ToString();
                     }
                     else
                     {
@@ -243,30 +342,23 @@ namespace LIVE_MRP
                 }
             }
         }
+
         protected void DdlOT_SelectedIndexChanged(object sender, EventArgs e)
         {
             int otHours = Convert.ToInt32(DdlOT.SelectedValue);
-
             string shiftName = ddlShift.SelectedValue;
-
             DataTable dt = new DataTable();
             dt.Columns.Add("TimeSlot");
-
             // Load Normal Shift Slots from XML
             string xmlPath = Server.MapPath("~/TimeSlot.xml");
-
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc.Load(xmlPath);
-
             var nodes = doc.SelectNodes("//Shift[@Name='" + shiftName + "']/Slot");
-
             DateTime lastEndTime = DateTime.MinValue;
-
             foreach (System.Xml.XmlNode node in nodes)
             {
                 string slot = node.InnerText.Trim();
                 dt.Rows.Add(slot);
-
                 // Get last end time
                 string[] parts = slot.Split('-');
                 lastEndTime = DateTime.Parse(parts[1].Trim());
@@ -277,9 +369,7 @@ namespace LIVE_MRP
             {
                 DateTime start = lastEndTime.AddHours(i);
                 DateTime end = start.AddHours(1);
-
                 string newSlot = start.ToString("hh:mmtt") + " - " + end.ToString("hh:mmtt");
-
                 dt.Rows.Add(newSlot);
             }
 
@@ -304,9 +394,9 @@ namespace LIVE_MRP
 
             var rules = new Dictionary<string, Tuple<string, string>>
         {
-            { "General|09:00AM - 10:00AM", Tuple.Create("15", "Tea") },
-            { "General|12:00PM - 01:00PM", Tuple.Create("30", "Lunch") },
-            { "General|03:00PM - 04:00PM", Tuple.Create("15", "Tea") },
+            { "G|09:00AM - 10:00AM", Tuple.Create("15", "Tea") },
+            { "G|12:00PM - 01:00PM", Tuple.Create("30", "Lunch") },
+            { "G|03:00PM - 04:00PM", Tuple.Create("15", "Tea") },
 
             { "A|07:00AM - 08:00AM", Tuple.Create("15", "Tea") },
             { "A|10:00AM - 11:00AM", Tuple.Create("30", "Lunch") },

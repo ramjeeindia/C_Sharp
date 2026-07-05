@@ -2,7 +2,7 @@
 <Shifts>
 
 	<!-- GENERAL SHIFT -->
-	<Shift Name="General">
+	<Shift Name="G">
 		<Slot>08:00AM - 09:00AM</Slot>
 		<Slot>09:00AM - 10:00AM</Slot>
 		<Slot>10:00AM - 11:00AM</Slot>

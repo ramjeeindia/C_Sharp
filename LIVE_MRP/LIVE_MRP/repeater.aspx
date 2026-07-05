@@ -235,11 +235,6 @@
         }
 
 
-        // 🔥 Run on load
-        window.onload = function () {
-            calculateTarget();
-        };
-
 
         // 🔥 Recalculate when remark changes
         document.addEventListener("change", function (e) {
@@ -254,40 +249,146 @@
                 updateTotalTarget();
             }
         });
-        
+
 
         // ⏰ DIGITAL CLOCK
         function updateClock() {
             var now = new Date();
 
-            var months = ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"];
-
-            var date = now.getDate();
-            var month = months[now.getMonth()];
-            var year = now.getFullYear();
-
             var hours = now.getHours();
             var minutes = now.getMinutes();
             var seconds = now.getSeconds();
+            var ampm = hours >= 12 ? "PM" : "AM";
 
-            var ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12;
+            hours = hours % 12 || 12;
 
             hours = hours < 10 ? "0" + hours : hours;
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
 
+            var date = now.getDate();
+            var month = now.toLocaleString('default', { month: 'short' });
+            var year = now.getFullYear();
+
             var timeString = hours + ":" + minutes + ":" + seconds + " " + ampm;
-            var fullString = "📅 " + date + " " + month + " " + year + " ⏱️ " + timeString;
-            document.getElementById("digitalClock").innerHTML = fullString;
+            var fullString = "📅 " + date + " " + month + " " + year + " ⏰ " + timeString;
+
+            var clock = document.getElementById("digitalClock");
+
+            if (clock) {
+                clock.innerHTML = fullString;
+            }
+        }
+        function getKey() {
+            let date = document.getElementById("<%= txtDate.ClientID %>").value;
+            let shift = document.getElementById("<%= ddlShift.ClientID %>").value;
+            let machine = document.getElementById("<%= ddlMachine.ClientID %>").value;
+
+            return "production_" + date + "_" + shift + "_" + machine;
         }
 
-        // Run every second
-        setInterval(updateClock, 1000);
-        updateClock();
+        function saveToLocal() {
+            let data = [];
 
+            document.querySelectorAll("tbody tr").forEach(row => {
+
+                let actual = parseFloat(row.querySelector("[id*=txtActual]").value) || 0;
+                let reject = parseFloat(row.querySelector("[id*=txtReject]").value) || 0;
+                let rework = parseFloat(row.querySelector("[id*=txtRework]").value) || 0;
+                let downtime = parseFloat(row.querySelector("[id*=txtDownTime]").value) || 0;
+
+                // ✅ ONLY SAVE IF VALUE EXISTS
+                if ((actual + reject + rework + downtime) > 0) {
+
+                    let rowData = {
+                        time: row.querySelector("[id*=hdnTime]").value,
+                        actual: actual,
+                        reject: reject,
+                        rework: rework,
+                        downtime: downtime,
+                        remarks: row.querySelector("[id*=ddlRemarks]").value
+                    };
+
+                    data.push(rowData);
+                }
+            });
+
+            localStorage.setItem(getKey(), JSON.stringify(data));
+        }
+
+        function loadFromLocal() {
+
+            let data = JSON.parse(localStorage.getItem(getKey()));
+
+            if (!data) return;
+
+            let rows = document.querySelectorAll("tbody tr");
+
+            rows.forEach((row, i) => {
+                if (data[i]) {
+                    row.querySelector("[id*=txtActual]").value = data[i].actual;
+                    row.querySelector("[id*=txtReject]").value = data[i].reject;
+                    row.querySelector("[id*=txtRework]").value = data[i].rework;
+                    row.querySelector("[id*=txtDownTime]").value = data[i].downtime;
+                    row.querySelector("[id*=ddlRemarks]").value = data[i].remarks;
+                }
+            });
+        }
+
+
+
+        // 🔥 Run on load
+        window.onload = function () {
+            calculateTarget();
+            updateClock();
+            setInterval(updateClock, 1000);
+            loadFromLocal();
+
+
+        };
+
+
+        function validateHeader() {
+
+            var date = document.getElementById('<%= txtDate.ClientID %>').value;
+            var shift = document.getElementById('<%= ddlShift.ClientID %>').value;
+            var machine = document.getElementById('<%= ddlMachine.ClientID %>').value;
+            var operator = document.getElementById('<%= ddlOperator.ClientID %>').value;
+            var process = document.getElementById('<%= ddlProcess.ClientID %>').value;
+            var cycle = document.getElementById('<%= txtCycleTime.ClientID %>').value;
+
+            if (date.trim() === "") {
+                alert("⚠ Please select Production Date");
+                return false;
+            }
+
+            if (shift === "0" || shift === "") {
+                alert("⚠ Please select Shift");
+                return false;
+            }
+
+            if (machine === "0" || machine === "") {
+                alert("⚠ Please select Machine");
+                return false;
+            }
+
+            if (operator === "0" || operator === "") {
+                alert("⚠ Please select Operator");
+                return false;
+            }
+
+            if (process === "0" || process === "") {
+                alert("⚠ Please select Process");
+                return false;
+            }
+
+            if (cycle.trim() === "" || isNaN(cycle) || parseInt(cycle) <= 0) {
+                alert("⚠ Enter valid Cycle Time");
+                return false;
+            }
+
+            return true; // ✅ allow save
+        }
 
     </script>
 
@@ -317,9 +418,9 @@
                 <div class="form-group">
                     <label>Shift</label>
                     <asp:DropDownList ID="ddlShift" runat="server" AutoPostBack="true" CssClass="input-box" OnSelectedIndexChanged="ddlShift_SelectedIndexChanged">
-                        <asp:ListItem Text="General" Value="General" />
-                        <asp:ListItem Text="Shift A" Value="A" />
-                        <asp:ListItem Text="Shift B" Value="B" />
+                        <asp:ListItem Text="General" Value="G" />
+                        <asp:ListItem Text="A Shift" Value="A" />
+                        <asp:ListItem Text="B Shift" Value="B" />
                     </asp:DropDownList>
                 </div>
             </div>
@@ -342,8 +443,7 @@
                 <div class="form-group">
                     <label>Hourly Target</label>
                     <asp:TextBox ID="txtCycleTime" CssClass="input-box target-box" TextMode="Number" min="0" runat="server"
-                        placeholder="एक पार्ट का साइकिल समय सेकंड में भरें"
-                        ToolTip="एक पार्ट का साइकिल समय सेकंड में भरें"
+                        placeholder="Auto Calculate as per Master"
                         OnTextChanged="txtCycleTime_TextChanged" onkeyup="calculateTarget()"></asp:TextBox>
 
                 </div>
@@ -358,7 +458,7 @@
 
             </div>
             <div class="button-group">
-                <asp:Button ID="btnSave" runat="server" Text="💾 Save" CssClass="btn-save" OnClick="btnSave_Click" ToolTip="हर घंटे सेव करें" />
+                <asp:Button ID="btnSave" runat="server" Text="💾 Save" CssClass="btn-save" OnClick="btnSave_Click" ToolTip="हर घंटे सेव करें" OnClientClick="return validateHeader();"/>
 
                 <asp:DropDownList ID="DdlOT" runat="server" AutoPostBack="true"
                     Style="background-color: #000000; color: #e6f0f5; padding: 6px; border-radius: 5px; text-align: left; font-weight: bold;"
@@ -373,20 +473,21 @@
                 <div id="digitalClock" style="font-size: 14px; font-weight: bold; background: #000000; color: #17D4FE; display: flex; padding: 6px; border-radius: 6px; text-align: center;">
                 </div>
 
-                 <!-- 🔥 Total Target Box -->
-                <div id="totalTargetBox" 
-                     style="background:#f1f3c2; padding:8px; border-radius:6px; font-weight:bold;">         
+                <!-- 🔥 Total Target Box -->
+                <div id="totalTargetBox"
+                    style="background: #f1f3c2; padding: 8px; border-radius: 6px; font-weight: bold;">
                     🎯 Total Target: <span id="totalTargetValue">0</span>
                 </div>
 
-                <div class="summary-box" style="background:#f1f3c2;display: inline-block;box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding:8px; border-radius:6px; font-weight:bold;">⚡ Actual Total: <span id="totalActualValue"
-                    >0</span>
+                <div class="summary-box" style="background: #f1f3c2; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 8px; border-radius: 6px; font-weight: bold;">
+                    ⚡ Actual Total: <span id="totalActualValue">0</span>
                 </div>
-                <div class="summary-box" 
-                    style="background: linear-gradient(90deg, #f1f3c2, #ffffff); padding:8px; border-radius:6px; font-weight:bold;">📊 Efficiency: <span id="efficiencyValue">0%</span>
+                <div class="summary-box"
+                    style="background: linear-gradient(90deg, #f1f3c2, #ffffff); padding: 8px; border-radius: 6px; font-weight: bold;">
+                    📊 Efficiency: <span id="efficiencyValue">0%</span>
                 </div>
-                <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn-get" />
-                </div>
+                <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn-get" OnClick="GetData_Click" />
+            </div>
         </div>
 
         <!-- TABLE -->
