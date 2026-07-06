@@ -1,16 +1,20 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="repeater.aspx.cs" Inherits="LIVE_MRP.repeater" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ProductionApp.aspx.cs" Inherits="HourlyProd.ProductionApp" %>
 
 <!DOCTYPE html>
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-
     <title>Hourly Production Sheet</title>
-
     <style>
         body {
             font-family: 'Segoe UI';
             background: #e6f0f5;
             margin: 20px;
+        }
+
+        .header {
+            position: relative;
+            margin-bottom: 10px;
         }
 
         .header-bar {
@@ -23,6 +27,16 @@
             margin-bottom: 10px;
         }
 
+        .header img {
+            position: absolute;
+            top: 6px;
+            left: 10px;
+            height: 33px;
+            width: 150px;
+            background: #c6dfe9;
+            border-radius: 3px;
+        }
+
         .container-box {
             background: #fff;
             padding: 10px;
@@ -33,22 +47,22 @@
 
         .form-row {
             display: flex;
-            gap: 20px;
+            gap: 10px;
             margin-bottom: 12px;
         }
 
         .form-group {
             flex: 1;
             display: flex;
-            align-items: center; /* vertical alignment */
+            align-items: center;
         }
 
         .input-box {
-            flex: 1; /* take remaining space */
-            height: 38px;
+            width: 95%;
+            height: 32px;
+            flex: 1;
             border-radius: 6px;
             border: 1px solid #ccc;
-            padding: 6px 10px;
             box-sizing: border-box;
         }
 
@@ -60,33 +74,37 @@
         .button-group {
             display: flex;
             gap: 10px;
-            justify-content: left;
+            align-items: center;
         }
 
         .btn-save {
             background: #00c853;
             color: white;
-            padding: 10px 25px;
+            padding: 8px 20px;
             border: none;
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
             width: 150px;
+            white-space: nowrap;
         }
 
         .btn-get {
             background: #ff6a00;
             color: #fff;
-            padding: 10px 20px;
+            padding: 8px 18px;
             border-radius: 6px;
             border: none;
             font-weight: bold;
             cursor: pointer;
+            white-space: nowrap;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
+            min-width: 900px;
         }
 
         .num-box {
@@ -99,16 +117,17 @@
         }
 
         .remarks-ddl {
-            width: 160px;
-            height: 34px;
+            width: 100%;
+            height: 32px;
             border-radius: 6px;
             border: 1px solid #ccc;
             text-align: center;
+            min-width: 120px;
         }
 
         td:first-child {
             white-space: nowrap;
-            width: 160px;
+            width: 140px;
             font-weight: 500;
         }
 
@@ -118,12 +137,14 @@
             padding: 10px;
             text-align: center;
             overflow-x: auto;
+            white-space: nowrap;
         }
 
         table td {
             padding: 5px;
             text-align: center;
             overflow-x: auto;
+            vertical-align: middle;
         }
 
         .form-control {
@@ -134,35 +155,54 @@
             text-align: center;
         }
 
+        /* MOBILE RESPONSIVE */
         @media (max-width: 768px) {
 
             .form-row {
-                flex-direction: column; /* stack rows */
-                gap: 10px;
+                flex-direction: column;
+                gap: 8px;
             }
 
+            .button-group {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+                .button-group > * {
+                    width: 100% !important;
+                    text-align: center;
+                }
+
             .form-group {
-                flex-direction: column; /* label on top */
+                flex-direction: column;
                 align-items: flex-start;
             }
 
                 .form-group label {
                     width: 100%;
-                    margin-bottom: 5px;
+                    margin-bottom: 4px;
                 }
 
             .input-box {
                 width: 100%;
             }
 
-            .btn-save {
+            .btn-save,
+            .btn-get {
                 width: 100%;
             }
 
             .remarks-ddl {
                 width: 100%;
             }
+
+            table {
+                font-size: 12px;
+            }
         }
+					
+
     </style>
 
     <script>
@@ -171,184 +211,87 @@
 
             var cycleTimeBox = document.getElementById('<%= txtCycleTime.ClientID %>');
             if (!cycleTimeBox) return;
-
             var cycleTime = parseFloat(cycleTimeBox.value) || 0;
             if (cycleTime <= 0) return;
-
             document.querySelectorAll("tbody tr").forEach(function (row) {
-
                 if (row.offsetParent === null) return; // skip hidden rows
-
                 var remark = row.querySelector(".remarks-ddl")?.value;
                 var targetBox = row.querySelector(".target-box");
                 var downtimeBox = row.querySelector(".downtime");
-
                 var downtime = 0;
-
-                if (remark === "Tea") {
-                    downtime = 15;
-                } else if (remark === "Lunch" || remark === "Admin") {
-                    downtime = 30;
-                }
-
+                if (remark === "Tea") { downtime = 15; }
+                else if (remark === "Lunch" || remark === "Admin") { downtime = 30; }
                 if (downtimeBox) downtimeBox.value = downtime;
-
                 var availableTime = 3600 - (downtime * 60);
                 var target = Math.floor(availableTime / cycleTime);
-
                 if (targetBox) targetBox.value = target;
-
             });
-
-            // ✅ ONLY HERE total should be calculated
             updateTotalTarget();
         }
 
-
-        // 🔥 TOTAL CALCULATION (ONLY PLACE)
         function updateTotalTarget() {
-
             let totalTarget = 0;
             let totalActual = 0;
-
             document.querySelectorAll("tbody tr").forEach(row => {
-
                 if (row.offsetParent === null) return;
-
                 totalTarget += parseInt(row.querySelector(".target-box")?.value) || 0;
-                totalActual += parseInt(row.querySelector(".actual")?.value) || 0; // ✅ FIXED
+                totalActual += parseInt(row.querySelector(".actual")?.value) || 0;
             });
 
             document.getElementById("totalTargetValue").innerText = totalTarget;
             document.getElementById("totalActualValue").innerText = totalActual;
 
-            // ✅ Efficiency
+            // Efficiency
             let efficiency = totalTarget > 0 ? ((totalActual / totalTarget) * 100).toFixed(1) : 0;
-
             let effEl = document.getElementById("efficiencyValue");
             effEl.innerText = efficiency + "%";
-
-            // 🎨 Color
             if (efficiency >= 90) effEl.style.color = "green";
             else if (efficiency >= 70) effEl.style.color = "orange";
             else effEl.style.color = "red";
         }
 
-
-
-        // 🔥 Recalculate when remark changes
+        // Recalculate when remark changes
         document.addEventListener("change", function (e) {
-            if (e.target.classList.contains("remarks-ddl")) {
-                calculateTarget();
-            }
+            if (e.target.classList.contains("remarks-ddl")) { calculateTarget(); }
         });
 
-        // ✅ LIVE Actual typing
+        // Actual typing
         document.addEventListener("input", function (e) {
-            if (e.target.classList.contains("actual")) { // ✅ FIXED
-                updateTotalTarget();
-            }
+            if (e.target.classList.contains("actual")) { updateTotalTarget(); }
         });
 
 
-        // ⏰ DIGITAL CLOCK
+        // DIGITAL CLOCK
         function updateClock() {
             var now = new Date();
-
             var hours = now.getHours();
             var minutes = now.getMinutes();
             var seconds = now.getSeconds();
             var ampm = hours >= 12 ? "PM" : "AM";
-
             hours = hours % 12 || 12;
-
             hours = hours < 10 ? "0" + hours : hours;
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
-
             var date = now.getDate();
             var month = now.toLocaleString('default', { month: 'short' });
             var year = now.getFullYear();
-
             var timeString = hours + ":" + minutes + ":" + seconds + " " + ampm;
             var fullString = "📅 " + date + " " + month + " " + year + " ⏰ " + timeString;
-
             var clock = document.getElementById("digitalClock");
-
-            if (clock) {
-                clock.innerHTML = fullString;
-            }
-        }
-        function getKey() {
-            let date = document.getElementById("<%= txtDate.ClientID %>").value;
-            let shift = document.getElementById("<%= ddlShift.ClientID %>").value;
-            let machine = document.getElementById("<%= ddlMachine.ClientID %>").value;
-
-            return "production_" + date + "_" + shift + "_" + machine;
+            if (clock) { clock.innerHTML = fullString; }
         }
 
-        function saveToLocal() {
-            let data = [];
-
-            document.querySelectorAll("tbody tr").forEach(row => {
-
-                let actual = parseFloat(row.querySelector("[id*=txtActual]").value) || 0;
-                let reject = parseFloat(row.querySelector("[id*=txtReject]").value) || 0;
-                let rework = parseFloat(row.querySelector("[id*=txtRework]").value) || 0;
-                let downtime = parseFloat(row.querySelector("[id*=txtDownTime]").value) || 0;
-
-                // ✅ ONLY SAVE IF VALUE EXISTS
-                if ((actual + reject + rework + downtime) > 0) {
-
-                    let rowData = {
-                        time: row.querySelector("[id*=hdnTime]").value,
-                        actual: actual,
-                        reject: reject,
-                        rework: rework,
-                        downtime: downtime,
-                        remarks: row.querySelector("[id*=ddlRemarks]").value
-                    };
-
-                    data.push(rowData);
-                }
-            });
-
-            localStorage.setItem(getKey(), JSON.stringify(data));
-        }
-
-        function loadFromLocal() {
-
-            let data = JSON.parse(localStorage.getItem(getKey()));
-
-            if (!data) return;
-
-            let rows = document.querySelectorAll("tbody tr");
-
-            rows.forEach((row, i) => {
-                if (data[i]) {
-                    row.querySelector("[id*=txtActual]").value = data[i].actual;
-                    row.querySelector("[id*=txtReject]").value = data[i].reject;
-                    row.querySelector("[id*=txtRework]").value = data[i].rework;
-                    row.querySelector("[id*=txtDownTime]").value = data[i].downtime;
-                    row.querySelector("[id*=ddlRemarks]").value = data[i].remarks;
-                }
-            });
-        }
-
-
-
-        // 🔥 Run on load
+        // Run on load
         window.onload = function () {
             calculateTarget();
             updateClock();
             setInterval(updateClock, 1000);
-            loadFromLocal();
-
-
         };
 
 
         function validateHeader() {
+
+            // Header Validation Data Shift , Machine, Operator, Process, Cycle Time Required
 
             var date = document.getElementById('<%= txtDate.ClientID %>').value;
             var shift = document.getElementById('<%= ddlShift.ClientID %>').value;
@@ -357,55 +300,60 @@
             var process = document.getElementById('<%= ddlProcess.ClientID %>').value;
             var cycle = document.getElementById('<%= txtCycleTime.ClientID %>').value;
 
-            if (date.trim() === "") {
-                alert("⚠ Please select Production Date");
-                return false;
-            }
+            if (date.trim() === "") { alert("⚠ Please select Production Date"); return false; }
+            if (shift === "0" || shift === "") { alert("⚠ Please select Shift"); return false; }
+            if (machine === "0" || machine === "") { alert("⚠ Please select Machine"); return false; }
+            if (operator === "0" || operator === "") { alert("⚠ Please select Operator"); return false; }
+            if (process === "0" || process === "") { alert("⚠ Please select Process"); return false; }
+            if (cycle.trim() === "" || isNaN(cycle) || parseInt(cycle) <= 0) { alert("⚠ Enter valid Cycle Time"); return false; }
 
-            if (shift === "0" || shift === "") {
-                alert("⚠ Please select Shift");
-                return false;
-            }
+            // Row Validation (Remarks → Downtime)
+            var rows = document.querySelectorAll("table tbody tr");
 
-            if (machine === "0" || machine === "") {
-                alert("⚠ Please select Machine");
-                return false;
-            }
+            for (var i = 0; i < rows.length; i++) {
 
-            if (operator === "0" || operator === "") {
-                alert("⚠ Please select Operator");
-                return false;
-            }
+                var remarks = rows[i].querySelector(".remarks-ddl");
+                var downtime = rows[i].querySelector(".downtime");
 
-            if (process === "0" || process === "") {
-                alert("⚠ Please select Process");
-                return false;
-            }
+                if (!remarks || !downtime) continue;
 
-            if (cycle.trim() === "" || isNaN(cycle) || parseInt(cycle) <= 0) {
-                alert("⚠ Enter valid Cycle Time");
-                return false;
-            }
+                var remarksValue = remarks.value.trim();
+                var downtimeValue = downtime.value.trim();
 
-            return true; // ✅ allow save
+                // If remarks selected → downtime required
+                if (remarksValue !== "" && (downtimeValue === "" || parseInt(downtimeValue) <= 0)) {
+
+                    alert("⚠ Row " + (i + 1) + ":उत्पादन कम होने का कारण मिनट में भरें.");
+
+                    // Highlight fields
+                    remarks.style.border = "2px solid red";
+                    downtime.style.border = "2px solid red";
+
+                    downtime.focus();
+                    return false;
+                } else {
+                    // Reset border if valid
+                    remarks.style.border = "";
+                    downtime.style.border = "";
+                }
+            }
+            return true; //allow save
         }
+        
 
     </script>
-
-
 </head>
-
 <body>
     <form id="form1" runat="server">
 
         <!-- HEADER -->
-        <div class="header-bar">
-            Hourly Production Sheet
+        <div class="header">
+            <img src="Sabohema Logo.jpg" />
+            <div class="header-bar">
+                Hourly Production Sheet
+            </div>
         </div>
-
-        <!-- TOP FORM -->
         <div class="container-box">
-
             <div class="form-row">
                 <div class="form-group">
                     <label>Production Date</label>
@@ -443,22 +391,20 @@
                 <div class="form-group">
                     <label>Hourly Target</label>
                     <asp:TextBox ID="txtCycleTime" CssClass="input-box target-box" TextMode="Number" min="0" runat="server"
-                        placeholder="Auto Calculate as per Master"
+                        placeholder="Auto Calculate as per Master" ReadOnly="true"
                         OnTextChanged="txtCycleTime_TextChanged" onkeyup="calculateTarget()"></asp:TextBox>
 
                 </div>
 
                 <div class="form-group">
-
                     <label>Operator Name</label>
                     <asp:DropDownList ID="ddlOperator" runat="server"
                         CssClass="input-box" OnSelectedIndexChanged="ddlOperator_SelectedIndexChanged" />
-
                 </div>
-
             </div>
+            <!-- Button Group: Save, Overtime, Clock, Total Target, Actual Total, Efficiency-->
             <div class="button-group">
-                <asp:Button ID="btnSave" runat="server" Text="💾 Save" CssClass="btn-save" OnClick="btnSave_Click" ToolTip="हर घंटे सेव करें" OnClientClick="return validateHeader();"/>
+                <asp:Button ID="btnSave" runat="server" Text="💾 Save" CssClass="btn-save" OnClick="btnSave_Click" ToolTip="हर घंटे सेव करें" OnClientClick="return validateHeader();" />
 
                 <asp:DropDownList ID="DdlOT" runat="server" AutoPostBack="true"
                     Style="background-color: #000000; color: #e6f0f5; padding: 6px; border-radius: 5px; text-align: left; font-weight: bold;"
@@ -470,27 +416,28 @@
                     <asp:ListItem Text=" OT-4 Hours" Value="4" />
                 </asp:DropDownList>
 
-                <div id="digitalClock" style="font-size: 14px; font-weight: bold; background: #000000; color: #17D4FE; display: flex; padding: 6px; border-radius: 6px; text-align: center;">
+                <div id="digitalClock" 
+                    style="font-size: 14px; font-weight: bold; background: #000000; color: #17D4FE; display: flex; 
+                           padding: 6px; border-radius: 6px; text-align: center;">
                 </div>
 
-                <!-- 🔥 Total Target Box -->
                 <div id="totalTargetBox"
                     style="background: #f1f3c2; padding: 8px; border-radius: 6px; font-weight: bold;">
                     🎯 Total Target: <span id="totalTargetValue">0</span>
                 </div>
 
                 <div class="summary-box" style="background: #f1f3c2; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 8px; border-radius: 6px; font-weight: bold;">
-                    ⚡ Actual Total: <span id="totalActualValue">0</span>
+                    ⚡Actual Total: <span id="totalActualValue">0</span>
                 </div>
                 <div class="summary-box"
                     style="background: linear-gradient(90deg, #f1f3c2, #ffffff); padding: 8px; border-radius: 6px; font-weight: bold;">
                     📊 Efficiency: <span id="efficiencyValue">0%</span>
                 </div>
-                <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn-get" OnClick="GetData_Click" />
+                <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn-get" 
+                    hidden="true" OnClick="GetData_Click" />
             </div>
         </div>
-
-        <!-- TABLE -->
+        <!-- ROW TABLE -->
         <table>
             <thead>
                 <tr>
@@ -503,18 +450,16 @@
                     <th>Remarks</th>
                 </tr>
             </thead>
-
             <tbody>
                 <asp:Repeater ID="rptProduction" runat="server" OnItemDataBound="rptProduction_ItemDataBound">
                     <ItemTemplate>
                         <tr>
-                            <!-- ✅ Time Slot -->
+                            <!-- Time Slot -->
                             <td>
                                 <%# Eval("TimeSlot") %>
                                 <asp:HiddenField ID="hdnTime" runat="server"
                                     Value='<%# Eval("TimeSlot") %>' />
                             </td>
-
                             <!-- Target -->
                             <td>
                                 <asp:TextBox ID="txtTarget" runat="server"
@@ -522,28 +467,24 @@
                                     ReadOnly="true"
                                     Style="background: linear-gradient(90deg, #57efd8,#ffffff);" />
                             </td>
-
                             <!-- Actual -->
                             <td>
                                 <asp:TextBox ID="txtActual" runat="server"
                                     CssClass="num-box actual" TextMode="Number" min="0"
                                     Style="background: linear-gradient(90deg,#f7edb5,#ffffff);" />
                             </td>
-
                             <!-- Reject -->
                             <td>
                                 <asp:TextBox ID="txtReject" runat="server"
                                     CssClass="num-box reject" ForeColor="Red"
                                     TextMode="Number" min="0" Style="background: linear-gradient(90deg, #f2d2d2,#ffffff);" />
                             </td>
-
                             <!-- Rework -->
                             <td>
                                 <asp:TextBox ID="txtRework" runat="server"
                                     CssClass="num-box rework" TextMode="Number" min="0"
                                     Style="background: linear-gradient(90deg,#d8d4d4,#ffffff);" />
                             </td>
-
                             <!-- DownTime -->
                             <td>
                                 <asp:TextBox ID="txtDownTime" runat="server"
@@ -554,12 +495,11 @@
                                     oninput="if(this.value > 60) this.value = 60;"
                                     onkeydown="if(event.key === '-' || event.key === 'e') return false;" />
                             </td>
-
                             <!-- Remarks -->
                             <td>
                                 <asp:DropDownList ID="ddlRemarks" runat="server" ToolTip="टार्गेट कम होने का कारण भरें"
-                                    Style="background: linear-gradient(90deg,#fc3636,#ffffff);"
-                                    CssClass="remarks-ddl">
+                                    Style="background: linear-gradient(90deg,#c6dfe9,#ffffff);"
+                                    CssClass="remarks-ddl" OnClientClick="return validateHeader();">
                                     <asp:ListItem Text=" " Value="" />
                                     <asp:ListItem Text="Tea Break" Value="Tea" />
                                     <asp:ListItem Text="Lunch Break" Value="Lunch" />
@@ -572,43 +512,32 @@
                                     <asp:ListItem Text="Trial Runs" Value="Trial" />
                                 </asp:DropDownList>
                             </td>
-
                         </tr>
                     </ItemTemplate>
                 </asp:Repeater>
             </tbody>
         </table>
-
     </form>
     <script>
-        // actual + reject + rework should not exceed target
-        // ✅ SINGLE EVENT HANDLER
-        document.addEventListener("input", function (e) {
 
-            // Only run for our fields
+        // actual + reject + rework should not exceed target
+        document.addEventListener("input", function (e) {
             if (!e.target.classList.contains("actual") &&
                 !e.target.classList.contains("reject") &&
                 !e.target.classList.contains("rework")) return;
-
             var row = e.target.closest("tr");
             if (!row) return;
-
             var actual = parseFloat(row.querySelector(".actual")?.value) || 0;
             var reject = parseFloat(row.querySelector(".reject")?.value) || 0;
             var rework = parseFloat(row.querySelector(".rework")?.value) || 0;
             var target = parseFloat(row.querySelector(".target-box")?.value) || 0;
-
-            console.log("Check:", actual, reject, rework, target); // 👈 DEBUG
-
+            console.log("Check:", actual, reject, rework, target);
             if ((actual + reject + rework) > target) {
-
                 alert("❌ Total exceeds Quantity! टारगेट से ज्यादा संख्या सेव नहीं होगी");
-
                 e.target.value = "";
                 e.target.focus();
             }
         });
-
 
     </script>
 </body>
