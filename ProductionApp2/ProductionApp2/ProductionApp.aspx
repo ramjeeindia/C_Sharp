@@ -338,6 +338,8 @@
             return true; //allow save
         }
 
+
+
     </script>
 </head>
 <body>
@@ -442,12 +444,12 @@
                     <th>Target</th>
                     <th>Actual</th>
                     <th>Reject</th>
-                    <th>Reject Reason</th>
                     <th>Rework</th>
-                    <th>Rework Reason</th>
+                    <th>Reason</th>
                     <th>DownTime (मिनट)</th>
                     <th>Remarks</th>
                     <th>Submit</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -479,13 +481,7 @@
                                     CssClass="num-box reject" ForeColor="Red"
                                     TextMode="Number" min="0" Style="background: linear-gradient(90deg, #f2d2d2,#ffffff);" />
                             </td>
-
-                            <td>
-                                <asp:TextBox ID="txtRejectReason" runat="server"
-                                    CssClass="num-box reject-reason" TextMode="SingleLine"
-                                    Style="background: linear-gradient(90deg,#f2d2d2,#ffffff);" />
-                                </td>
-
+                                                        
                             <!-- Rework -->
                             <td>
                                 <asp:TextBox ID="txtRework" runat="server"
@@ -493,8 +489,8 @@
                                     Style="background: linear-gradient(90deg,#d8d4d4,#ffffff);" />
                             </td>
                              <td>
-                                <asp:TextBox ID="txtReworkReason" runat="server"
-                                    CssClass="num-box rework-reason" TextMode="SingleLine"
+                                <asp:TextBox ID="txtReason" runat="server"
+                                    CssClass="num-box reason-box" TextMode="SingleLine"
                                     Style="background: linear-gradient(90deg,#d8d4d4,#ffffff);" />
                             </td>
                             <!-- DownTime -->
@@ -525,8 +521,19 @@
                                 </asp:DropDownList>
                             </td>
                             <td>
-                                <asp:Button ID="BtnSubmit" runat="server" Text="Submit" CssClass="num-box btn-get" />
+                                <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="num-box btn-get"   OnClick="btnSubmit_Click"
+                                
+                                    />
                             </td>
+
+                            <td>
+                                <asp:Button ID="btnEdit" runat="server" Text="Edit"
+                                    CssClass="btn btn-warning"
+                                    OnClick="btnEdit_Click"
+                                    Visible="false" />
+                            </td>
+
+
                         </tr>
                     </ItemTemplate>
                 </asp:Repeater>

@@ -24,12 +24,6 @@ namespace ProductionApp2
                 LoadMachines();
                 LoadOperators();
                 ddlProcess.Items.Insert(0, new ListItem("-- Select Process --", "0"));
-
-                if (Session["UserName"] == null)
-                    Response.Redirect("Login.aspx");
-
-                if (Session["Role"].ToString() != "Admin")
-                    Response.Redirect("AccessDenied.aspx");
             }
         }
 
@@ -94,6 +88,7 @@ namespace ProductionApp2
                     TextBox txtReject = (TextBox)item.FindControl("txtReject");
                     TextBox txtRework = (TextBox)item.FindControl("txtRework");
                     TextBox txtDownTime = (TextBox)item.FindControl("txtDownTime");
+                    TextBox txtReason = (TextBox)item.FindControl("txtReason");
                     DropDownList ddlRemarks = (DropDownList)item.FindControl("ddlRemarks");
 
                     // CONVERSION
@@ -126,6 +121,7 @@ BEGIN
         Actual = @Actual,
         RejectQty = @RejectQty,
         ReworkQty = @ReworkQty,
+        Reason = @Reason,
         DownTime = @DownTime,
         Remarks = @Remarks,
         Operator = @Operator
@@ -151,6 +147,7 @@ BEGIN
         Actual,
         RejectQty,
         ReworkQty,
+        Reason,
         DownTime,
         Remarks
     )
@@ -167,6 +164,7 @@ BEGIN
         @Actual,
         @RejectQty,
         @ReworkQty,
+        @Reason,
         @DownTime,
         @Remarks
     )
@@ -188,6 +186,7 @@ END
                     cmd.Parameters.AddWithValue("@Actual", string.IsNullOrEmpty(txtActual.Text) ? 0 : Convert.ToInt32(txtActual.Text));
                     cmd.Parameters.AddWithValue("@RejectQty", string.IsNullOrEmpty(txtReject.Text) ? 0 : Convert.ToInt32(txtReject.Text));
                     cmd.Parameters.AddWithValue("@ReworkQty", string.IsNullOrEmpty(txtRework.Text) ? 0 : Convert.ToInt32(txtRework.Text));
+                    cmd.Parameters.AddWithValue("@Reason", txtReason.Text);
                     cmd.Parameters.AddWithValue("@DownTime", string.IsNullOrEmpty(txtDownTime.Text) ? 0 : Convert.ToInt32(txtDownTime.Text));
                     cmd.Parameters.AddWithValue("@Remarks", ddlRemarks.SelectedValue);
 
@@ -199,7 +198,7 @@ END
 
             ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Saved Successfully');", true);
         }
-    
+
 
 
 
@@ -380,33 +379,245 @@ END
 
         protected void rptProduction_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
+            //    if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem)
+            //        return;
+
+            //    var hdnTime = (HiddenField)e.Item.FindControl("hdnTime");
+            //    var txtDownTime = (TextBox)e.Item.FindControl("txtDownTime");
+            //    var ddlRemarks = (DropDownList)e.Item.FindControl("ddlRemarks");
+            //    if (hdnTime == null || txtDownTime == null || ddlRemarks == null) return;
+            //    string key = $"{ddlShift.SelectedValue}|{hdnTime.Value.Trim()}";
+            //    var rules = new Dictionary<string, Tuple<string, string>>
+            //{
+            //    { "G|09:00AM - 10:00AM", Tuple.Create("15", "Tea") },
+            //    { "G|12:00PM - 01:00PM", Tuple.Create("30", "Lunch") },
+            //    { "G|03:00PM - 04:00PM", Tuple.Create("15", "Tea") },
+            //    { "A|07:00AM - 08:00AM", Tuple.Create("15", "Tea") },
+            //    { "A|10:00AM - 11:00AM", Tuple.Create("30", "Lunch") },
+            //    { "A|01:00PM - 02:00PM", Tuple.Create("15", "Tea") },
+            //    { "B|01:00PM - 02:00PM", Tuple.Create("15", "Tea") },
+            //    { "B|04:00PM - 05:00PM", Tuple.Create("30", "Lunch") },
+            //    { "B|07:00PM - 08:00PM", Tuple.Create("15", "Tea") }
+            //};
+
+            //    if (rules.ContainsKey(key))
+            //    {
+            //        var rule = rules[key];
+            //        txtDownTime.Text = rule.Item1;
+            //        ddlRemarks.SelectedValue = rule.Item2;
+            //    }
             if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem)
                 return;
 
-            var hdnTime = (HiddenField)e.Item.FindControl("hdnTime");
-            var txtDownTime = (TextBox)e.Item.FindControl("txtDownTime");
-            var ddlRemarks = (DropDownList)e.Item.FindControl("ddlRemarks");
-            if (hdnTime == null || txtDownTime == null || ddlRemarks == null) return;
-            string key = $"{ddlShift.SelectedValue}|{hdnTime.Value.Trim()}";
-            var rules = new Dictionary<string, Tuple<string, string>>
-        {
-            { "G|09:00AM - 10:00AM", Tuple.Create("15", "Tea") },
-            { "G|12:00PM - 01:00PM", Tuple.Create("30", "Lunch") },
-            { "G|03:00PM - 04:00PM", Tuple.Create("15", "Tea") },
-            { "A|07:00AM - 08:00AM", Tuple.Create("15", "Tea") },
-            { "A|10:00AM - 11:00AM", Tuple.Create("30", "Lunch") },
-            { "A|01:00PM - 02:00PM", Tuple.Create("15", "Tea") },
-            { "B|01:00PM - 02:00PM", Tuple.Create("15", "Tea") },
-            { "B|04:00PM - 05:00PM", Tuple.Create("30", "Lunch") },
-            { "B|07:00PM - 08:00PM", Tuple.Create("15", "Tea") }
-        };
+            HiddenField hdnTime = (HiddenField)e.Item.FindControl("hdnTime");
+            TextBox txtDownTime = (TextBox)e.Item.FindControl("txtDownTime");
+            DropDownList ddlRemarks = (DropDownList)e.Item.FindControl("ddlRemarks");
 
-            if (rules.ContainsKey(key))
+            TextBox txtActual = (TextBox)e.Item.FindControl("txtActual");
+            TextBox txtReject = (TextBox)e.Item.FindControl("txtReject");
+            TextBox txtRework = (TextBox)e.Item.FindControl("txtRework");
+            Button btnSubmit = (Button)e.Item.FindControl("btnSubmit");
+            Button btnEdit = (Button)e.Item.FindControl("btnEdit");
+
+            bool isSubmitted = false;
+
+            try
             {
-                var rule = rules[key];
-                txtDownTime.Text = rule.Item1;
-                ddlRemarks.SelectedValue = rule.Item2;
+                object val = DataBinder.Eval(e.Item.DataItem, "IsSubmitted");
+                if (val != DBNull.Value && val != null)
+                    isSubmitted = Convert.ToBoolean(val);
             }
+            catch
+            {
+                isSubmitted = false; // fallback safety
+            }
+
+            
+
+            // ✅ Tea/Lunch Auto-fill ONLY if NOT submitted
+            var rules = new Dictionary<string, Tuple<string, string>>
+    {
+        { "G|09:00AM - 10:00AM", Tuple.Create("15", "Tea") },
+        { "G|12:00PM - 01:00PM", Tuple.Create("30", "Lunch") },
+        { "G|03:00PM - 04:00PM", Tuple.Create("15", "Tea") } ,
+        { "A|07:00AM - 08:00AM", Tuple.Create("15", "Tea") },
+        { "A|10:00AM - 11:00AM", Tuple.Create("30", "Lunch") },
+        { "A|01:00PM - 02:00PM", Tuple.Create("15", "Tea") },
+        { "B|01:00PM - 02:00PM", Tuple.Create("15", "Tea") },
+        { "B|04:00PM - 05:00PM", Tuple.Create("30", "Lunch") },
+        { "B|07:00PM - 08:00PM", Tuple.Create("15", "Tea") }
+
+    };
+
+            string key = ddlShift.SelectedValue + "|" + hdnTime.Value.Trim();
+
+            if (!isSubmitted && rules.ContainsKey(key))
+            {
+                txtDownTime.Text = rules[key].Item1;
+                ddlRemarks.SelectedValue = rules[key].Item2;
+            }
+
+            // ✅ LOCK UI
+            if (isSubmitted)
+            {
+                txtActual.ReadOnly = true;
+                txtReject.ReadOnly = true;
+                txtRework.ReadOnly = true;
+                txtDownTime.ReadOnly = true;
+                ddlRemarks.Enabled = false;
+
+                btnSubmit.BackColor = System.Drawing.Color.Green;
+                btnSubmit.Enabled = false;
+
+                if (btnEdit != null)
+                    btnEdit.Visible = true;
+            }
+            else
+            {
+                if (btnEdit != null)
+                    btnEdit.Visible = false;
+            }
+        }
+
+        private bool SaveHourlyProduction(string shift, string timeSlot, int actual, int reject, int rework, int downtime, string remarks)
+        {
+            string CS = "Data Source=ProIT;Initial Catalog=SHAPL;User ID=sa;Password=sa@1947;";
+            using (SqlConnection con = new SqlConnection(CS))
+            {
+                con.Open();
+
+                // ✅ CHECK DUPLICATE
+                SqlCommand checkCmd = new SqlCommand(@"
+            SELECT COUNT(*) FROM HourlyProduction 
+            WHERE Shift=@Shift AND TimeSlot=@TimeSlot AND ProductionDate=CAST(GETDATE() AS DATE)", con);
+
+                checkCmd.Parameters.AddWithValue("@Shift", shift);
+                checkCmd.Parameters.AddWithValue("@TimeSlot", timeSlot);
+
+                int count = (int)checkCmd.ExecuteScalar();
+
+                if (count > 0)
+                {
+                    // Already saved → prevent duplicate
+                    return false;
+                }
+
+                // ✅ INSERT
+                SqlCommand cmd = new SqlCommand(@"
+            INSERT INTO HourlyProduction
+            (Shift, TimeSlot, Actual, RejectQty, ReworkQty, DownTime, Remarks, IsSubmitted, ProductionDate)
+            VALUES
+            (@Shift, @TimeSlot, @Actual, @Reject, @Rework, @DownTime, @Remarks, 1, GETDATE())", con);
+
+                cmd.Parameters.AddWithValue("@Shift", shift);
+                cmd.Parameters.AddWithValue("@TimeSlot", timeSlot);
+                cmd.Parameters.AddWithValue("@Actual", actual);
+                cmd.Parameters.AddWithValue("@Reject", reject);
+                cmd.Parameters.AddWithValue("@Rework", rework);
+                cmd.Parameters.AddWithValue("@DownTime", downtime);
+                cmd.Parameters.AddWithValue("@Remarks", remarks);
+
+                cmd.ExecuteNonQuery();
+            }
+
+            return true;
+        }
+        protected void btnSubmit_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            RepeaterItem item = (RepeaterItem)btn.NamingContainer;
+
+            HiddenField hdnTime = (HiddenField)item.FindControl("hdnTime");
+            TextBox txtActual = (TextBox)item.FindControl("txtActual");
+            TextBox txtReject = (TextBox)item.FindControl("txtReject");
+            TextBox txtRework = (TextBox)item.FindControl("txtRework");
+            TextBox txtDownTime = (TextBox)item.FindControl("txtDownTime");
+            DropDownList ddlRemarks = (DropDownList)item.FindControl("ddlRemarks");
+
+            string timeSlot = hdnTime.Value.Trim();
+            string shift = ddlShift.SelectedValue;
+
+            int actual = string.IsNullOrEmpty(txtActual.Text) ? 0 : Convert.ToInt32(txtActual.Text);
+            int reject = string.IsNullOrEmpty(txtReject.Text) ? 0 : Convert.ToInt32(txtReject.Text);
+            int rework = string.IsNullOrEmpty(txtRework.Text) ? 0 : Convert.ToInt32(txtRework.Text);
+            int downtime = string.IsNullOrEmpty(txtDownTime.Text) ? 0 : Convert.ToInt32(txtDownTime.Text);
+            string remarks = ddlRemarks.SelectedValue;
+
+            // ✅ VALIDATION
+            if (actual <= 0)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "msg", "alert('Enter Actual Production');", true);
+                return;
+            }
+
+            // ✅ SAVE
+            bool isSaved = SaveHourlyProduction(shift, timeSlot, actual, reject, rework, downtime, remarks);
+
+            if (isSaved)
+            {
+                // ✅ LOCK UI
+                txtActual.ReadOnly = true;
+                txtReject.ReadOnly = true;
+                txtRework.ReadOnly = true;
+                txtDownTime.ReadOnly = true;
+                ddlRemarks.Enabled = false;
+
+                btn.BackColor = System.Drawing.Color.Green;
+                btn.Enabled = false;
+
+                Button btnEdit = (Button)item.FindControl("btnEdit");
+                if (btnEdit != null)
+                    btnEdit.Visible = true;
+            }
+        }
+
+        private void BindProduction()
+        {
+            string CS = "Data Source=ProIT;Initial Catalog=SHAPL;User ID=sa;Password=sa@1947;";
+            using (SqlConnection con = new SqlConnection(CS))
+            {
+                SqlDataAdapter da = new SqlDataAdapter(@"
+        SELECT 
+            t.TimeSlot,
+            ISNULL(p.Actual,0) AS Actual,
+            ISNULL(p.RejectQty,0) AS RejectQty,
+            ISNULL(p.ReworkQty,0) AS ReworkQty,
+            ISNULL(p.DownTime,0) AS DownTime,
+            ISNULL(p.Remarks,'') AS Remarks,
+            ISNULL(p.IsSubmitted,0) AS IsSubmitted
+        FROM TimeMaster t
+        LEFT JOIN HourlyProduction p 
+            ON t.TimeSlot = p.TimeSlot 
+            AND p.Shift=@Shift 
+            AND p.ProductionDate = CAST(GETDATE() AS DATE)
+        ", con);
+
+                da.SelectCommand.Parameters.AddWithValue("@Shift", ddlShift.SelectedValue);
+
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                rptProduction.DataSource = dt;
+                rptProduction.DataBind();
+            }
+        }
+
+        protected void btnEdit_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            RepeaterItem item = (RepeaterItem)btn.NamingContainer;
+
+            ((TextBox)item.FindControl("txtActual")).ReadOnly = false;
+            ((TextBox)item.FindControl("txtReject")).ReadOnly = false;
+            ((TextBox)item.FindControl("txtRework")).ReadOnly = false;
+            ((TextBox)item.FindControl("txtDownTime")).ReadOnly = false;
+            ((DropDownList)item.FindControl("ddlRemarks")).Enabled = true;
+
+            Button btnSubmit = (Button)item.FindControl("btnSubmit");
+            btnSubmit.Enabled = true;
+            btnSubmit.BackColor = System.Drawing.Color.Orange;
+
+            btn.Visible = false;
         }
     }
 }
