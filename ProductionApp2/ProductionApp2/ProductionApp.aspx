@@ -432,6 +432,10 @@
                     style="background: linear-gradient(90deg, #f1f3c2, #ffffff); padding: 8px; border-radius: 6px; font-weight: bold;">
                     📊 Efficiency: <span id="efficiencyValue">0%</span>
                 </div>
+                <asp:Button ID="btnEdit" runat="server" Text="Edit"
+                    CssClass="btn btn-warning"
+                    OnClick="btnEdit_Click"
+                    Visible="false" />
                 <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn-get" 
                     hidden="true" OnClick="GetData_Click" />
             </div>
@@ -449,7 +453,7 @@
                     <th>DownTime (मिनट)</th>
                     <th>Remarks</th>
                     <th>Submit</th>
-                    <th>Edit</th>
+                   
                 </tr>
             </thead>
             <tbody>
@@ -526,14 +530,7 @@
                                     />
                             </td>
 
-                            <td>
-                                <asp:Button ID="btnEdit" runat="server" Text="Edit"
-                                    CssClass="btn btn-warning"
-                                    OnClick="btnEdit_Click"
-                                    Visible="false" />
-                            </td>
-
-
+                           
                         </tr>
                     </ItemTemplate>
                 </asp:Repeater>
