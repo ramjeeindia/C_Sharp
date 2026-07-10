@@ -403,7 +403,7 @@
             </div>
             <!-- Button Group: Save, Overtime, Clock, Total Target, Actual Total, Efficiency-->
             <div class="button-group">
-                <asp:Button ID="btnSave" runat="server" Text="💾 Save" CssClass="btn-save" OnClick="btnSave_Click" ToolTip="हर घंटे सेव करें" OnClientClick="return validateHeader();" />
+                <asp:Button ID="btnSave" runat="server" Text="💾 Update" CssClass="btn-save" OnClick="btnSave_Click" OnClientClick="return validateHeader();" />
 
                 <asp:DropDownList ID="DdlOT" runat="server" AutoPostBack="true"
                     Style="background-color: #000000; color: #e6f0f5; padding: 6px; border-radius: 5px; text-align: left; font-weight: bold;"
@@ -432,10 +432,7 @@
                     style="background: linear-gradient(90deg, #f1f3c2, #ffffff); padding: 8px; border-radius: 6px; font-weight: bold;">
                     📊 Efficiency: <span id="efficiencyValue">0%</span>
                 </div>
-                <asp:Button ID="btnEdit" runat="server" Text="Edit"
-                    CssClass="btn btn-warning"
-                    OnClick="btnEdit_Click"
-                    Visible="false" />
+                
                 <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn-get" 
                     hidden="true" OnClick="GetData_Click" />
             </div>
@@ -468,38 +465,38 @@
                             </td>
                             <!-- Target -->
                             <td>
-                                <asp:TextBox ID="txtTarget" runat="server"
+                                <asp:TextBox ID="txtTarget" runat="server" Text='<%# Eval("Target") %>'
                                     CssClass="num-box target-box" TextMode="Number" min="0"
                                     ReadOnly="true"
                                     Style="background: linear-gradient(90deg, #57efd8,#ffffff);" />
                             </td>
                             <!-- Actual -->
                             <td>
-                                <asp:TextBox ID="txtActual" runat="server"
+                                <asp:TextBox ID="txtActual" runat="server" Text='<%# Eval("Actual") %>'
                                     CssClass="num-box actual" TextMode="Number" min="0"
                                     Style="background: linear-gradient(90deg,#f7edb5,#ffffff);" />
                             </td>
                             <!-- Reject -->
                             <td>
-                                <asp:TextBox ID="txtReject" runat="server"
+                                <asp:TextBox ID="txtReject" runat="server" Text='<%# Eval("Reject") %>'
                                     CssClass="num-box reject" ForeColor="Red"
                                     TextMode="Number" min="0" Style="background: linear-gradient(90deg, #f2d2d2,#ffffff);" />
                             </td>
                                                         
                             <!-- Rework -->
                             <td>
-                                <asp:TextBox ID="txtRework" runat="server"
+                                <asp:TextBox ID="txtRework" runat="server" Text='<%# Eval("Rework") %>'
                                     CssClass="num-box rework" TextMode="Number" min="0"
                                     Style="background: linear-gradient(90deg,#d8d4d4,#ffffff);" />
                             </td>
                              <td>
-                                <asp:TextBox ID="txtReason" runat="server"
+                                <asp:TextBox ID="txtReason" runat="server" Text='<%# Eval("Reason") %>'
                                     CssClass="num-box reason-box" TextMode="SingleLine"
-                                    Style="background: linear-gradient(90deg,#d8d4d4,#ffffff);" />
+                                    Style="background: linear-gradient(90deg,#d8d4d4,#ffffff); min-width: 120px; width: 100%" />
                             </td>
                             <!-- DownTime -->
                             <td>
-                                <asp:TextBox ID="txtDownTime" runat="server"
+                                <asp:TextBox ID="txtDownTime" runat="server" Text='<%# Eval("DownTime") %>'
                                     CssClass="num-box downtime"
                                     TextMode="Number"
                                     min="0" max="60"
@@ -510,6 +507,7 @@
                             <!-- Remarks -->
                             <td>
                                 <asp:DropDownList ID="ddlRemarks" runat="server" ToolTip="टार्गेट कम होने का कारण भरें"
+                                    SelectedValue='<%# Eval("Remarks") %>'
                                     Style="background: linear-gradient(90deg,#c6dfe9,#ffffff);"
                                     CssClass="remarks-ddl" OnClientClick="return validateHeader();">
                                     <asp:ListItem Text=" " Value="" />
@@ -525,9 +523,9 @@
                                 </asp:DropDownList>
                             </td>
                             <td>
-                                <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="num-box btn-get"   OnClick="btnSubmit_Click"
-                                
-                                    />
+                                <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="num-box btn-get"
+                                    CommandName="SubmitRow"
+                                    OnClick="btnSubmit_Click" ToolTip="हर घंटे सेव करें" />
                             </td>
 
                            
