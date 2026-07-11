@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-  <title>Hourly Production Sheet</title>
+    <title>Hourly Production Sheet</title>
     <style>
         body {
             font-family: 'Segoe UI';
@@ -200,8 +200,6 @@
                 font-size: 12px;
             }
         }
-					
-
     </style>
 
     <script>
@@ -340,6 +338,9 @@
 
 
 
+
+        
+
     </script>
 </head>
 <body>
@@ -415,9 +416,8 @@
                     <asp:ListItem Text=" OT-4 Hours" Value="4" />
                 </asp:DropDownList>
 
-                <div id="digitalClock" 
-                    style="font-size: 14px; font-weight: bold; background: #000000; color: #17D4FE; display: flex; 
-                           padding: 6px; border-radius: 6px; text-align: center;">
+                <div id="digitalClock"
+                    style="font-size: 14px; font-weight: bold; background: #000000; color: #17D4FE; display: flex; padding: 6px; border-radius: 6px; text-align: center;">
                 </div>
 
                 <div id="totalTargetBox"
@@ -432,8 +432,8 @@
                     style="background: linear-gradient(90deg, #f1f3c2, #ffffff); padding: 8px; border-radius: 6px; font-weight: bold;">
                     📊 Efficiency: <span id="efficiencyValue">0%</span>
                 </div>
-                
-                <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn-get" 
+
+                <asp:Button ID="GetData" runat="server" Text="📥 Get Saved Data" CssClass="btn-get"
                     hidden="true" OnClick="GetData_Click" />
             </div>
         </div>
@@ -450,7 +450,7 @@
                     <th>DownTime (मिनट)</th>
                     <th>Remarks</th>
                     <th>Submit</th>
-                   
+
                 </tr>
             </thead>
             <tbody>
@@ -459,44 +459,45 @@
                         <tr>
                             <!-- Time Slot -->
                             <td style="white-space: nowrap; width: 100%; display: block;">
+                             
                                 <%# Eval("TimeSlot") %>
                                 <asp:HiddenField ID="hdnTime" runat="server"
-                                    Value='<%# Eval("TimeSlot") %>'/>
+                                    Value='<%# Eval("TimeSlot") %>' />
                             </td>
                             <!-- Target -->
                             <td>
-                                <asp:TextBox ID="txtTarget" runat="server" Text='<%# Eval("Target") %>'
+                                <asp:TextBox ID="txtTarget" runat="server"
                                     CssClass="num-box target-box" TextMode="Number" min="0"
                                     ReadOnly="true"
                                     Style="background: linear-gradient(90deg, #57efd8,#ffffff);" />
                             </td>
                             <!-- Actual -->
                             <td>
-                                <asp:TextBox ID="txtActual" runat="server" Text='<%# Eval("Actual") %>'
+                                <asp:TextBox ID="txtActual" runat="server"
                                     CssClass="num-box actual" TextMode="Number" min="0"
                                     Style="background: linear-gradient(90deg,#f7edb5,#ffffff);" />
                             </td>
                             <!-- Reject -->
                             <td>
-                                <asp:TextBox ID="txtReject" runat="server" Text='<%# Eval("Reject") %>'
+                                <asp:TextBox ID="txtReject" runat="server"
                                     CssClass="num-box reject" ForeColor="Red"
                                     TextMode="Number" min="0" Style="background: linear-gradient(90deg, #f2d2d2,#ffffff);" />
                             </td>
-                                                        
+
                             <!-- Rework -->
                             <td>
-                                <asp:TextBox ID="txtRework" runat="server" Text='<%# Eval("Rework") %>'
+                                <asp:TextBox ID="txtRework" runat="server"
                                     CssClass="num-box rework" TextMode="Number" min="0"
                                     Style="background: linear-gradient(90deg,#d8d4d4,#ffffff);" />
                             </td>
-                             <td>
-                                <asp:TextBox ID="txtReason" runat="server" Text='<%# Eval("Reason") %>'
+                            <td>
+                                <asp:TextBox ID="txtReason" runat="server"
                                     CssClass="num-box reason-box" TextMode="SingleLine"
                                     Style="background: linear-gradient(90deg,#d8d4d4,#ffffff); min-width: 120px; width: 100%" />
                             </td>
                             <!-- DownTime -->
                             <td>
-                                <asp:TextBox ID="txtDownTime" runat="server" Text='<%# Eval("DownTime") %>'
+                                <asp:TextBox ID="txtDownTime" runat="server"
                                     CssClass="num-box downtime"
                                     TextMode="Number"
                                     min="0" max="60"
@@ -507,7 +508,6 @@
                             <!-- Remarks -->
                             <td>
                                 <asp:DropDownList ID="ddlRemarks" runat="server" ToolTip="टार्गेट कम होने का कारण भरें"
-                                    SelectedValue='<%# Eval("Remarks") %>'
                                     Style="background: linear-gradient(90deg,#c6dfe9,#ffffff);"
                                     CssClass="remarks-ddl" OnClientClick="return validateHeader();">
                                     <asp:ListItem Text=" " Value="" />
@@ -528,7 +528,7 @@
                                     OnClick="btnSubmit_Click" ToolTip="हर घंटे सेव करें" />
                             </td>
 
-                           
+
                         </tr>
                     </ItemTemplate>
                 </asp:Repeater>
@@ -557,5 +557,88 @@
         });
 
     </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+
+    function clean(val) {
+        return val ? val.replace(/\s+/g, '').toLowerCase() : "";
+    }
+
+    function loadHourlyData() {
+
+        var data = {
+            date: $('#<%= txtDate.ClientID %>').val(),
+        shift: $('#<%= ddlShift.ClientID %>').val(),
+        machine: $('#<%= ddlMachine.ClientID %>').val()
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "ProductionApp.aspx/GetHourlyDataJS",
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+        success: function (response) {
+
+            var result = response.d;
+
+            console.log("DB DATA:", result);
+
+            // 🔁 Loop repeater rows
+            $('#<%= rptProduction.ClientID %>').find('tr').each(function () {
+
+                var row = $(this);
+                var timeSlot = row.find('[id*=hdnTime]').val();
+
+                if (!timeSlot) return;
+
+                console.log("ROW TIMESLOT:", timeSlot);
+
+                // ✅ FIXED MATCH
+                var match = result.find(x =>
+                    clean(x.TimeSlot) === clean(timeSlot)
+                );
+
+                if (match) {
+
+                    console.log("MATCH FOUND:", match);
+
+                    row.find('[id*=txtTarget]').val(match.Target);
+                    row.find('[id*=txtActual]').val(match.Actual);
+                    row.find('[id*=txtReject]').val(match.RejectQty);
+                    row.find('[id*=txtRework]').val(match.ReworkQty);
+                    row.find('[id*=txtReason]').val(match.Reason);
+                    row.find('[id*=txtDownTime]').val(match.DownTime);
+                    row.find('[id*=ddlRemarks]').val(match.Remarks);
+
+                    // 🔒 Lock submitted rows
+                   
+                }
+            });
+        },
+
+        error: function (err) {
+            console.log("ERROR:", err);
+        }
+    });
+}
+
+
+// ✅ PAGE LOAD + FILTER CHANGE
+$(document).ready(function () {
+
+    loadHourlyData();
+
+    $('#<%= ddlShift.ClientID %>, #<%= ddlMachine.ClientID %>, #<%= txtDate.ClientID %>')
+        .change(function () {
+            loadHourlyData();
+        });
+
+});
+
+</script>
 </body>
 </html>

@@ -9,6 +9,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Xml;
 using System.Xml.Linq;
+using System.Web.Services;
+
 
 namespace ProductionApp2
 {
@@ -24,13 +26,14 @@ namespace ProductionApp2
                 LoadMachines();
                 LoadOperators();
                 ddlProcess.Items.Insert(0, new ListItem("-- Select Process --", "0"));
-                LoadHourlyData();
+                
             }
         }
 
-        private void LoadHourlyData()
+        public static List<object> GetHourlyDataJS(string date, string shift, string machine)
         {
             string CS = "Data Source=ProBook;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
+            List<object> list = new List<object>();
 
             using (SqlConnection con = new SqlConnection(CS))
             {
@@ -38,17 +41,31 @@ namespace ProductionApp2
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@ProductionDate", Convert.ToDateTime(txtDate.Text));
-                    cmd.Parameters.AddWithValue("@Shift", ddlShift.SelectedValue);
-                    cmd.Parameters.AddWithValue("@Machine", ddlMachine.SelectedValue);
+                    cmd.Parameters.AddWithValue("@ProductionDate", Convert.ToDateTime(date));
+                    cmd.Parameters.AddWithValue("@Shift", shift);
+                    cmd.Parameters.AddWithValue("@Machine", machine);
 
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
+                    con.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
 
-                   
+                    while (dr.Read())
+                    {
+                        list.Add(new
+                        {
+                            TimeSlot = dr["TimeSlot"].ToString(),
+                            Target = dr["Target"].ToString(),
+                            Actual = dr["Actual"].ToString(),
+                            RejectQty = dr["RejectQty"].ToString(),
+                            ReworkQty = dr["ReworkQty"].ToString(),
+                            Reason = dr["Reason"].ToString(),
+                            DownTime = dr["DownTime"].ToString(),
+                            Remarks = dr["Remarks"].ToString()                            
+                        });
+                    }
                 }
             }
+
+            return list;
         }
 
         protected void txtDate_TextChanged(object sender, EventArgs e)
@@ -229,55 +246,7 @@ END
 
         }
 
-        private void BindTimeSlots(string shiftName)
-        {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("TimeSlot");
-            string xmlPath = Server.MapPath("~/TimeSlot.xml");
-            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc.Load(xmlPath);
-            var nodes = doc.SelectNodes("//Shift[@Name='" + shiftName + "']/Slot");
-            foreach (System.Xml.XmlNode node in nodes)
-            {
-                dt.Rows.Add(node.InnerText.Trim());
-            }
-            rptProduction.DataSource = dt;
-            rptProduction.DataBind();
-        }
-
-        private void AddOTSlots(int hours)
-        {
-            List<string> timeList = new List<string>();
-            foreach (RepeaterItem item in rptProduction.Items)
-            {
-                Literal lit = (Literal)item.FindControl("litTimeSlot");
-                timeList.Add(lit.Text);
-            }
-
-            if (timeList.Count == 0) return;
-            string lastSlot = timeList.Last();
-            string[] parts = lastSlot.Split('-');
-            DateTime lastEnd = DateTime.Parse(parts[1].Trim());
-
-            for (int i = 0; i < hours; i++)
-            {
-                DateTime newStart = lastEnd;
-                DateTime newEnd = newStart.AddHours(1);
-                string slot = newStart.ToString("hh:mmtt") + " - " + newEnd.ToString("hh:mmtt");
-                timeList.Add(slot);
-                lastEnd = newEnd;
-            }
-
-            DataTable dt = new DataTable();
-            dt.Columns.Add("TimeSlot");
-            foreach (var t in timeList)
-            {
-                dt.Rows.Add(t);
-            }
-            rptProduction.DataSource = dt;
-            rptProduction.DataBind();
-        }
-
+        
         private void LoadMachines()
         {
             string CS = "Data Source=ProBook;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
@@ -435,6 +404,56 @@ END
         {
            
         }
-       
+
+        private void BindTimeSlots(string shiftName)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("TimeSlot");
+            string xmlPath = Server.MapPath("~/TimeSlot.xml");
+            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+            doc.Load(xmlPath);
+            var nodes = doc.SelectNodes("//Shift[@Name='" + shiftName + "']/Slot");
+            foreach (System.Xml.XmlNode node in nodes)
+            {
+                dt.Rows.Add(node.InnerText.Trim());
+            }
+            rptProduction.DataSource = dt;
+            rptProduction.DataBind();
+        }
+
+        private void AddOTSlots(int hours)
+        {
+            List<string> timeList = new List<string>();
+            foreach (RepeaterItem item in rptProduction.Items)
+            {
+                Literal lit = (Literal)item.FindControl("litTimeSlot");
+                timeList.Add(lit.Text);
+            }
+
+            if (timeList.Count == 0) return;
+            string lastSlot = timeList.Last();
+            string[] parts = lastSlot.Split('-');
+            DateTime lastEnd = DateTime.Parse(parts[1].Trim());
+
+            for (int i = 0; i < hours; i++)
+            {
+                DateTime newStart = lastEnd;
+                DateTime newEnd = newStart.AddHours(1);
+                string slot = newStart.ToString("hh:mmtt") + " - " + newEnd.ToString("hh:mmtt");
+                timeList.Add(slot);
+                lastEnd = newEnd;
+            }
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("TimeSlot");
+            foreach (var t in timeList)
+            {
+                dt.Rows.Add(t);
+            }
+            rptProduction.DataSource = dt;
+            rptProduction.DataBind();
+        }
+
+        
     }
 }
