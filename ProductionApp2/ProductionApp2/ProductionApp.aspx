@@ -404,7 +404,11 @@
             </div>
             <!-- Button Group: Save, Overtime, Clock, Total Target, Actual Total, Efficiency-->
             <div class="button-group">
-                <asp:Button ID="btnSave" runat="server" Text="💾 Update" CssClass="btn-save" OnClick="btnSave_Click" OnClientClick="return validateHeader();" />
+                <asp:Button ID="btnSave" runat="server" Text="💾 Update" CssClass="btn-save" 
+                    OnClick="btnSave_Click" 
+               
+                    OnClientClick="return checkPassword();"
+                    />
 
                 <asp:DropDownList ID="DdlOT" runat="server" AutoPostBack="true"
                     Style="background-color: #000000; color: #e6f0f5; padding: 6px; border-radius: 5px; text-align: left; font-weight: bold;"
@@ -524,7 +528,7 @@
                             </td>
                             <td>
                                 <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="num-box btn-get"
-                                    CommandName="SubmitRow"
+                                    CommandName="SubmitRow" OnClientClick="return validateHeader();"
                                     OnClick="btnSubmit_Click" ToolTip="हर घंटे सेव करें" />
                             </td>
 
@@ -639,6 +643,18 @@ $(document).ready(function () {
 
 });
 
+</script>
+    <script>
+        function checkPassword() {
+            var pass = prompt("Enter Password:");
+
+            if (pass === "123") {
+                return true; // allow button click
+            } else {
+                alert("❌ Wrong Password!");
+                return false; // stop postback
+            }
+        }
 </script>
 </body>
 </html>

@@ -402,95 +402,79 @@ END
 
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
+            Button btn = (Button)sender;
+            RepeaterItem item = (RepeaterItem)btn.NamingContainer;
+
+            // 🔹 Get controls ONLY from this row
+            HiddenField hdnTime = (HiddenField)item.FindControl("hdnTime");
+            TextBox txtTarget = (TextBox)item.FindControl("txtTarget");
+            TextBox txtActual = (TextBox)item.FindControl("txtActual");
+            TextBox txtReject = (TextBox)item.FindControl("txtReject");
+            TextBox txtRework = (TextBox)item.FindControl("txtRework");
+            TextBox txtReason = (TextBox)item.FindControl("txtReason");
+            TextBox txtDownTime = (TextBox)item.FindControl("txtDownTime");
+            DropDownList ddlRemarks = (DropDownList)item.FindControl("ddlRemarks");
+
+            int actual = string.IsNullOrEmpty(txtActual.Text) ? 0 : Convert.ToInt32(txtActual.Text);
+            int reject = string.IsNullOrEmpty(txtReject.Text) ? 0 : Convert.ToInt32(txtReject.Text);
+            int rework = string.IsNullOrEmpty(txtRework.Text) ? 0 : Convert.ToInt32(txtRework.Text);
+            int downtime = string.IsNullOrEmpty(txtDownTime.Text) ? 0 : Convert.ToInt32(txtDownTime.Text);
+
+            // 🚫 Skip empty row
+            if ((actual + reject + rework) == 0)
+            {
+                return;
+            }
+
             string CS = "Data Source=ProBook;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
 
             using (SqlConnection con = new SqlConnection(CS))
             {
                 con.Open();
 
-                foreach (RepeaterItem item in rptProduction.Items)
-                {
-                    HiddenField hdnTime = (HiddenField)item.FindControl("hdnTime");
-                    TextBox txtTarget = (TextBox)item.FindControl("txtTarget");
-                    TextBox txtActual = (TextBox)item.FindControl("txtActual");
-                    TextBox txtReject = (TextBox)item.FindControl("txtReject");
-                    TextBox txtRework = (TextBox)item.FindControl("txtRework");
-                    TextBox txtReason = (TextBox)item.FindControl("txtReason");
-                    TextBox txtDownTime = (TextBox)item.FindControl("txtDownTime");
-                    DropDownList ddlRemarks = (DropDownList)item.FindControl("ddlRemarks");
-
-                    int actual = string.IsNullOrEmpty(txtActual.Text) ? 0 : Convert.ToInt32(txtActual.Text);
-                    int reject = string.IsNullOrEmpty(txtReject.Text) ? 0 : Convert.ToInt32(txtReject.Text);
-                    int rework = string.IsNullOrEmpty(txtRework.Text) ? 0 : Convert.ToInt32(txtRework.Text);
-
-                    // Skip empty rows
-                    if ((actual + reject + rework) == 0)
-                    {
-                        continue;
-                    }
-
-                    string query = @"
+                string query = @"
 INSERT INTO HourlyProduction
 (
-    ProductionDate,
-    Shift,
-    Machine,
-    Process,
-    Operator,
-    TimeSlot,
-    CycleTime,
-    Target,
-    Actual,
-    RejectQty,
-    ReworkQty,
-    Reason,
-    DownTime,
-    Remarks
+    ProductionDate, Shift, Machine, Process, Operator,
+    TimeSlot, CycleTime, Target, Actual,
+    RejectQty, ReworkQty, Reason, DownTime, Remarks
 )
 VALUES
 (
-    @ProductionDate,
-    @Shift,
-    @Machine,
-    @Process,
-    @Operator,
-    @TimeSlot,
-    @CycleTime,
-    @Target,
-    @Actual,
-    @RejectQty,
-    @ReworkQty,
-    @Reason,
-    @DownTime,
-    @Remarks
+    @ProductionDate, @Shift, @Machine, @Process, @Operator,
+    @TimeSlot, @CycleTime, @Target, @Actual,
+    @RejectQty, @ReworkQty, @Reason, @DownTime, @Remarks
 )";
 
-                    SqlCommand cmd = new SqlCommand(query, con);
+                SqlCommand cmd = new SqlCommand(query, con);
 
-                    cmd.Parameters.AddWithValue("@ProductionDate", txtDate.Text);
-                    cmd.Parameters.AddWithValue("@Shift", ddlShift.SelectedValue);
-                    cmd.Parameters.AddWithValue("@Machine", ddlMachine.SelectedValue);
-                    cmd.Parameters.AddWithValue("@Process", ddlProcess.SelectedValue);
-                    cmd.Parameters.AddWithValue("@Operator", ddlOperator.SelectedValue);
-                    cmd.Parameters.AddWithValue("@TimeSlot", hdnTime.Value);
+                cmd.Parameters.AddWithValue("@ProductionDate", txtDate.Text);
+                cmd.Parameters.AddWithValue("@Shift", ddlShift.SelectedValue);
+                cmd.Parameters.AddWithValue("@Machine", ddlMachine.SelectedValue);
+                cmd.Parameters.AddWithValue("@Process", ddlProcess.SelectedValue);
+                cmd.Parameters.AddWithValue("@Operator", ddlOperator.SelectedValue);
+                cmd.Parameters.AddWithValue("@TimeSlot", hdnTime.Value);
 
-                    cmd.Parameters.AddWithValue("@CycleTime", string.IsNullOrEmpty(txtCycleTime.Text) ? 0 : Convert.ToInt32(txtCycleTime.Text));
-                    cmd.Parameters.AddWithValue("@Target", string.IsNullOrEmpty(txtTarget.Text) ? 0 : Convert.ToInt32(txtTarget.Text));
-                    cmd.Parameters.AddWithValue("@Actual", actual);
-                    cmd.Parameters.AddWithValue("@RejectQty", reject);
-                    cmd.Parameters.AddWithValue("@ReworkQty", rework);
-                    cmd.Parameters.AddWithValue("@Reason", txtReason.Text);
-                    cmd.Parameters.AddWithValue("@DownTime", string.IsNullOrEmpty(txtDownTime.Text) ? 0 : Convert.ToInt32(txtDownTime.Text));
-                    cmd.Parameters.AddWithValue("@Remarks", ddlRemarks.SelectedValue);
+                cmd.Parameters.AddWithValue("@CycleTime", string.IsNullOrEmpty(txtCycleTime.Text) ? 0 : Convert.ToInt32(txtCycleTime.Text));
+                cmd.Parameters.AddWithValue("@Target", string.IsNullOrEmpty(txtTarget.Text) ? 0 : Convert.ToInt32(txtTarget.Text));
+                cmd.Parameters.AddWithValue("@Actual", actual);
+                cmd.Parameters.AddWithValue("@RejectQty", reject);
+                cmd.Parameters.AddWithValue("@ReworkQty", rework);
+                cmd.Parameters.AddWithValue("@Reason", txtReason.Text);
+                cmd.Parameters.AddWithValue("@DownTime", downtime);
+                cmd.Parameters.AddWithValue("@Remarks", ddlRemarks.SelectedValue);
 
-                    cmd.ExecuteNonQuery();
-                }
-
-                con.Close();
+                cmd.ExecuteNonQuery();
             }
 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Submit Successfully');", true);
+            // ✅ UI Update
+            btn.Enabled = false;
+            btn.BackColor = System.Drawing.Color.Green;
+            btn.ForeColor = System.Drawing.Color.White;
+            btn.Text = "Submitted ✔";
+
         }
+        
 
         private void BindTimeSlots(string shiftName)
         {
