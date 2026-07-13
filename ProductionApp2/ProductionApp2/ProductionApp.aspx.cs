@@ -114,6 +114,7 @@ namespace ProductionApp2
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
+        
         {
             string CS = "Data Source=ProBook;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
 
@@ -526,5 +527,6 @@ VALUES
         }
 
         
+
     }
 }
