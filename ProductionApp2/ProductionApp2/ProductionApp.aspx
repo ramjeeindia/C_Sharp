@@ -337,11 +337,112 @@
         }
 
 
+        document.addEventListener("DOMContentLoaded", function () {
 
+            function isToday(dateStr) {
+                let today = new Date().toISOString().split('T')[0];
+                return dateStr === today;
+            }
 
-        
+            function loadSavedData() {
+
+                let dateEl = document.getElementById('<%= txtDate.ClientID %>');
+        let shiftEl = document.getElementById('<%= ddlShift.ClientID %>');
+        let machineEl = document.getElementById('<%= ddlMachine.ClientID %>');
+
+        if (!dateEl || !shiftEl || !machineEl) {
+            console.log("Controls not found");
+            return;
+        }
+
+        let date = dateEl.value;
+        let shift = shiftEl.value;
+        let machine = machineEl.value;
+
+        if (!isToday(date)) {
+            console.log("Not today → skip API");
+            return;
+        }
+
+        fetch('<%= ResolveUrl("~/Production.aspx/GetSavedData") %>', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json; charset=utf-8'
+                        },
+                        body: JSON.stringify({
+                            date: date,
+                            shift: shift,
+                            machine: machine
+                        })
+                    })
+                        .then(res => res.json())
+                        .then(res => {
+
+                            console.log("API response:", res);
+
+                            let data = res.d;
+
+                            if (!data || data.length === 0) {
+                                console.log("No data found");
+                                return;
+                            }
+
+                            fillRows(data);
+                        })
+                        .catch(err => console.error("API error:", err));
+                }
+
+                function fillRows(data) {
+
+                    let rows = document.querySelectorAll("#<%= rptProduction.ClientID %> tr");
+
+                    console.log("Rows found:", rows.length);
+
+                    data.forEach(item => {
+
+                        rows.forEach(row => {
+
+                            let time = row.querySelector("[id*=hdnTime]");
+
+                            if (!time) return;
+
+                            if (time.value === item.TimeSlot) {
+
+                                row.querySelector("[id*=txtTarget]").value = item.Target || "";
+                                row.querySelector("[id*=txtActual]").value = item.Actual || "";
+                                row.querySelector("[id*=txtReject]").value = item.Reject || "";
+                                row.querySelector("[id*=txtRework]").value = item.Rework || "";
+                                row.querySelector("[id*=txtReason]").value = item.Reason || "";
+                                row.querySelector("[id*=txtDownTime]").value = item.DownTime || "";
+                                row.querySelector("[id*=ddlRemarks]").value = item.Remarks || "";
+
+                                // 🔒 LOCK ROW
+                                row.querySelectorAll("input, select").forEach(el => el.disabled = true);
+
+                                let btn = row.querySelector("[id*=btnSubmit]");
+                                if (btn) {
+                                    btn.disabled = true;
+                                    btn.style.background = "green";
+                                    btn.value = "✔ Done";
+                                }
+                            }
+
+                        });
+
+                    });
+                }
+
+                // EVENTS
+                document.getElementById('<%= ddlShift.ClientID %>')?.addEventListener("change", loadSavedData);
+                document.getElementById('<%= ddlMachine.ClientID %>')?.addEventListener("change", loadSavedData);
+                document.getElementById('<%= txtDate.ClientID %>')?.addEventListener("change", loadSavedData);
+
+                // INITIAL LOAD
+                loadSavedData();
+            });
 
     </script>
+
 </head>
 <body>
     <form id="form1" runat="server">
@@ -404,11 +505,9 @@
             </div>
             <!-- Button Group: Save, Overtime, Clock, Total Target, Actual Total, Efficiency-->
             <div class="button-group">
-                <asp:Button ID="btnSave" runat="server" Text="💾 Update" CssClass="btn-save" 
-                    OnClick="btnSave_Click" 
-               
-                    OnClientClick="return checkPassword();"
-                    />
+                <asp:Button ID="btnSave" runat="server" Text="💾 Update" CssClass="btn-save"
+                    OnClick="btnSave_Click"
+                    OnClientClick="return checkPassword();" />
 
                 <asp:DropDownList ID="DdlOT" runat="server" AutoPostBack="true"
                     Style="background-color: #000000; color: #e6f0f5; padding: 6px; border-radius: 5px; text-align: left; font-weight: bold;"
@@ -463,7 +562,7 @@
                         <tr>
                             <!-- Time Slot -->
                             <td style="white-space: nowrap; width: 100%; display: block;">
-                             
+
                                 <%# Eval("TimeSlot") %>
                                 <asp:HiddenField ID="hdnTime" runat="server"
                                     Value='<%# Eval("TimeSlot") %>' />
@@ -561,17 +660,31 @@
         });
 
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function checkPassword() {
-            var pass = prompt("Enter Password:");
 
-            if (pass === "123") {
-                return true; // allow button click
-            } else {
-                alert("❌ Wrong Password!");
-                return false; // stop postback
+            Swal.fire({
+                title: '🔐 Enter Password',
+                input: 'password',   // ✅ THIS HIDES TYPING (••••)
+                inputPlaceholder: 'Enter password',
+                showCancelButton: true,
+                confirmButtonText: 'OK'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    if (result.value === "12345") {
+                        __doPostBack('<%= btnSave.UniqueID %>', '');
+                } else {
+                    Swal.fire("❌ Wrong Password!");
+                }
+
             }
+        });
+
+            return false; // stop default postback
         }
-</script>
+    </script>
 </body>
 </html>

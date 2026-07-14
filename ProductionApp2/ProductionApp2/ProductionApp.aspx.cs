@@ -526,7 +526,49 @@ VALUES
             rptProduction.DataBind();
         }
 
-        
+
+
+        [System.Web.Services.WebMethod]
+        public static List<object> GetSavedData(string date, string shift, string machine)
+        {
+            string CS = "Data Source=ProBook;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
+            List<object> data = new List<object>();
+
+            using (SqlConnection con = new SqlConnection(CS))
+            {
+                string query = @"
+        SELECT TimeSlot, Target, Actual, RejectQty, ReworkQty, Reason, DownTime, Remarks
+        FROM HourlyProduction
+        WHERE ProductionDate=@Date AND Shift=@Shift AND Machine=@Machine";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+
+                cmd.Parameters.AddWithValue("@Date", date);
+                cmd.Parameters.AddWithValue("@Shift", shift);
+                cmd.Parameters.AddWithValue("@Machine", machine);
+                
+
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    data.Add(new
+                    {
+                        TimeSlot = dr["TimeSlot"].ToString(),
+                        Target = dr["Target"].ToString(),
+                        Actual = dr["Actual"].ToString(),
+                        Reject = dr["RejectQty"].ToString(),
+                        Rework = dr["ReworkQty"].ToString(),
+                        Reason = dr["Reason"].ToString(),
+                        DownTime = dr["DownTime"].ToString(),
+                        Remarks = dr["Remarks"].ToString()
+                    });
+                }
+            }
+
+            return data;
+        }
 
     }
 }
