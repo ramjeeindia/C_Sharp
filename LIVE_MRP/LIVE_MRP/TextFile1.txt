@@ -6,7 +6,7 @@ CREATE TABLE MRP_Result
     ItemCode NVARCHAR(50),
     ItemName NVARCHAR(200),
     L1Qty DECIMAL(18,2)
-    
+Zoho on premise    
 )
 
 
