@@ -16,7 +16,7 @@ namespace ProductionApp2
 {
     public partial class ProductionApp : System.Web.UI.Page
     {
-        string CS = "Data Source=ProBook;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
+        string CS = "Data Source=DBCS;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -32,7 +32,7 @@ namespace ProductionApp2
 
         public static List<object> GetHourlyDataJS(string date, string shift, string machine)
         {
-            string CS = "Data Source=ProBook;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
+            string CS = "Data Source=DBCS;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
             List<object> list = new List<object>();
 
             using (SqlConnection con = new SqlConnection(CS))
@@ -116,7 +116,7 @@ namespace ProductionApp2
         protected void btnSave_Click(object sender, EventArgs e)
         
         {
-            string CS = "Data Source=ProBook;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
+            string CS = "Data Source=DBCS;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
 
             using (SqlConnection con = new SqlConnection(CS))
             {
@@ -250,7 +250,7 @@ END
         
         private void LoadMachines()
         {
-            string CS = "Data Source=ProBook;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
+            string CS = "Data Source=DBCS;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
             //string conStr = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
 
             using (SqlConnection con = new SqlConnection(CS))
@@ -271,7 +271,7 @@ END
 
         private void LoadOperators()
         {
-            string CS = "Data Source=ProBook;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
+            string CS = "Data Source=DBCS;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
             using (SqlConnection con = new SqlConnection(CS))
             {
                 SqlCommand cmd = new SqlCommand("SELECT [Operator_Id],[Operator_Name] FROM [dbo].[Operators]", con);
@@ -287,7 +287,7 @@ END
 
         private void LoadProcess(int machineId)
         {
-            string CS = "Data Source=ProBook;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
+            string CS = "Data Source=DBCS;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
 
             using (SqlConnection con = new SqlConnection(CS))
             {
@@ -309,7 +309,7 @@ END
 
         private void LoadCycleTime(string itemCode)
         {
-            string CS = "Data Source=ProBook;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
+            string CS = "Data Source=DBCS;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
 
             using (SqlConnection con = new SqlConnection(CS))
             {
@@ -323,6 +323,7 @@ END
                     {
                         double cycleTime = Convert.ToDouble(result);
                         txtCycleTime.Text = cycleTime.ToString();
+                        //int target = (int)Math.Floor(cycleTime);
                         int target = (int)Math.Floor(3600 / cycleTime);
                         txtCycleTime.Text = target.ToString();
                     }
@@ -427,7 +428,7 @@ END
                 return;
             }
 
-            string CS = "Data Source=ProBook;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
+            string CS = "Data Source=DBCS;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
 
             using (SqlConnection con = new SqlConnection(CS))
             {
@@ -531,7 +532,7 @@ VALUES
         [System.Web.Services.WebMethod]
         public static List<object> GetSavedData(string date, string shift, string machine)
         {
-            string CS = "Data Source=ProBook;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
+            string CS = "Data Source=DBCS;Initial Catalog=QRCODE;User ID=sa;Password=sa@2017;";
             List<object> data = new List<object>();
 
             using (SqlConnection con = new SqlConnection(CS))
