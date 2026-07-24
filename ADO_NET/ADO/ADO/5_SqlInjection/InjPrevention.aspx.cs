@@ -15,6 +15,8 @@ namespace ADO._5_SqlInjection
         protected void Page_Load(object sender, EventArgs e)
         {
 
+
+
         }
 
         protected void btngetitm_Click(object sender, EventArgs e)
