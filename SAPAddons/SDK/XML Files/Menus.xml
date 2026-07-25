@@ -1,0 +1,31 @@
+﻿<Application>
+	<Menus>
+		<action type="add">
+			<Menu Checked="0" Enabled="1" FatherUID="43520" Position="15" String="SAP B1 SDK Training" Type="2" UniqueID="mnuSDK" >
+				<Menus>
+					<action type="add">					
+							<Menu Checked="0" Enabled="1" FatherUID="mnuSDK" Position="0" String="First Program" Type="1" UniqueID="mnuFP" />
+							<Menu Checked="0" Enabled="1" FatherUID="mnuSDK" Position="1" String="Internal Sales Order" Type="1" UniqueID="mnuISO" />						
+					</action>
+				</Menus>
+			</Menu>
+		</action>
+
+
+		<action type="add">
+			<Menu Checked="0" Enabled="1" FatherUID="2048" Position="1" String="Internal Sales Order" Type="1" UniqueID="mnuISO1" >				
+			</Menu>
+		</action>
+
+		<action type="add">
+			<Menu Checked="0" Enabled="1" FatherUID="2048" Position="2" String="SAP B1 SDK Training" Type="2" UniqueID="mnuSDK1" >
+				<Menus>
+					<action type="add">
+						<Menu Checked="0" Enabled="1" FatherUID="mnuSDK1" Position="0" String="First Program" Type="1" UniqueID="mnuFP1" />
+						<Menu Checked="0" Enabled="1" FatherUID="mnuSDK1" Position="1" String="Internal Sales Order" Type="1" UniqueID="mnuISO2" />
+					</action>
+				</Menus>
+			</Menu>
+		</action>
+	</Menus>
+</Application>
