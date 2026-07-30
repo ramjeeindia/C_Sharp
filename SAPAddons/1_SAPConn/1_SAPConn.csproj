@@ -119,14 +119,15 @@
     <Compile Include="B1Connection.cs" />
     <Compile Include="ConnMethod2.cs" />
     <Compile Include="DIConnection.cs" />
-    <Compile Include="EventHandler.cs" />
+    <Compile Include="B1EventHandler.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="Menu.cs" />
+    <Compile Include="B1Menu.cs" />
     <Compile Include="ProgramRun.cs" />
-    <Compile Include="SampleForm.cs" />
+    <Compile Include="SampleB1Form.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Images\" />
+    <Content Include="Images\Screenshot 2026-07-30 211910.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

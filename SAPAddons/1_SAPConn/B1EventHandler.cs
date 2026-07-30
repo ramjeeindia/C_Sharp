@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using _1_SAPConn;
 
 namespace _1_SAPConn
 {
-    public class EventHandler
+    public class B1EventHandler
     {
         private Application app;
 
-        public EventHandler(Application application)
+        public B1EventHandler(Application application)
         {
             app = application;
 
@@ -25,7 +26,8 @@ namespace _1_SAPConn
 
             if (!pVal.BeforeAction && pVal.MenuUID == "MY_MENU")
             {
-               new Forms.SampleForm(app).CreateForm();
+                new SampleB1Form(app).CreateForm();
+
             }
         }
 

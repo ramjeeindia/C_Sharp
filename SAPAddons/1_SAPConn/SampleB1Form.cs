@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace _1_SAPConn
 {
-    public class SampleForm
+    public class SampleB1Form
     {
         private Application app;
 
-        public SampleForm(Application application)
+        public SampleB1Form(Application application)
         {
             app = application;
         }

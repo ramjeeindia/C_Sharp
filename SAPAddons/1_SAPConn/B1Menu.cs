@@ -8,11 +8,11 @@ using SAPbouiCOM;
 
 namespace _1_SAPConn
 {
-    public class Menu
+    public class B1Menu
     {
         private Application app;
 
-        public Menu(Application application)
+        public B1Menu(Application application)
         {
             app = application;
             CreateMenu();
