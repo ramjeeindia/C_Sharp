@@ -1,0 +1,996 @@
+SET NOCOUNT ON;
+
+------------------------------------------------------------
+-- CLEAN OLD TEMP TABLES
+------------------------------------------------------------
+IF OBJECT_ID('tempdb..#FGData') IS NOT NULL
+    DROP TABLE #FGData;
+
+IF OBJECT_ID('tempdb..#BOM') IS NOT NULL
+    DROP TABLE #BOM;
+
+IF OBJECT_ID('tempdb..#Requirement') IS NOT NULL
+    DROP TABLE #Requirement;
+
+IF OBJECT_ID('tempdb..#Result') IS NOT NULL
+    DROP TABLE #Result;
+
+IF OBJECT_ID('tempdb..#Stock') IS NOT NULL
+    DROP TABLE #Stock;
+
+
+------------------------------------------------------------
+-- 1. FG REQUIREMENT
+------------------------------------------------------------
+CREATE TABLE #FGData
+(
+    Father          VARCHAR(50) COLLATE DATABASE_DEFAULT,
+    FatherName      VARCHAR(200) COLLATE DATABASE_DEFAULT,
+    SO_Qty          FLOAT,
+    Min_Level       FLOAT,
+    FG_Stk          FLOAT,
+    FG_Requirement  FLOAT
+);
+
+
+INSERT INTO #FGData
+(
+    Father,FatherName,SO_Qty,Min_Level,FG_Stk,FG_Requirement
+)
+SELECT T0.ItemCode,T5.ItemName,ISNULL(T7.SO_Qty, 0) AS SO_Qty,
+    MAX(ISNULL(T0.MinStock, 0)) AS Min_Level,SUM(ISNULL(T0.OnHand, 0)) AS FG_Stk,
+    CASE WHEN ISNULL(T7.SO_Qty, 0) + MAX(ISNULL(T0.MinStock, 0)) - SUM(ISNULL(T0.OnHand, 0)) > 0
+        THEN ISNULL(T7.SO_Qty, 0) + MAX(ISNULL(T0.MinStock, 0)) - SUM(ISNULL(T0.OnHand, 0))
+        ELSE 0 END AS FG_Requirement
+
+FROM OITW T0
+
+INNER JOIN OITM T5 ON T5.ItemCode COLLATE DATABASE_DEFAULT = T0.ItemCode COLLATE DATABASE_DEFAULT
+
+LEFT JOIN (SELECT ItemCode,SUM(OpenQty) AS SO_Qty FROM RDR1 WHERE LineStatus = 'O' GROUP BY ItemCode) T7
+    ON T7.ItemCode COLLATE DATABASE_DEFAULT = T0.ItemCode COLLATE DATABASE_DEFAULT
+
+WHERE T0.WhsCode IN ('MST','ASM','PKG','PWH','FGW','IQC','IPQA','BHJWH001','BHJWH002','BHJWH054','TOOLROOM','M/C SHOP')
+    AND T5.ItmsGrpCod = 103
+    AND T0.ItemCode IN ('10100240100','1010024P000')
+
+GROUP BY
+    T0.ItemCode,
+    T5.ItemName,
+    T7.SO_Qty;
+
+
+------------------------------------------------------------
+-- 2. STOCK OF ALL CHILD ITEMS
+------------------------------------------------------------
+CREATE TABLE #Stock
+(
+    ItemCode    VARCHAR(50) COLLATE DATABASE_DEFAULT,ChildStock  FLOAT
+);
+
+
+INSERT INTO #Stock
+(
+    ItemCode,ChildStock
+)
+SELECT ItemCode,SUM(ISNULL(OnHand, 0)) AS ChildStock FROM OITW
+WHERE WhsCode IN ('MST','ASM','PKG','PWH','FGW','IQC','IPQA','BHJWH001','BHJWH002','BHJWH054','TOOLROOM','M/C SHOP')
+    
+GROUP BY ItemCode;
+
+
+------------------------------------------------------------
+-- 3. COMPLETE BOM
+--
+-- RootFather = original FG
+-- ParentItem = immediate parent of Child
+-- Child      = current BOM child
+------------------------------------------------------------
+CREATE TABLE #BOM
+(
+    RootFather      VARCHAR(50) COLLATE DATABASE_DEFAULT,
+    FatherName      VARCHAR(200) COLLATE DATABASE_DEFAULT,
+
+    ParentItem      VARCHAR(50) COLLATE DATABASE_DEFAULT,
+    ParentName      VARCHAR(200) COLLATE DATABASE_DEFAULT,
+
+    Child           VARCHAR(50) COLLATE DATABASE_DEFAULT,
+    ChildName       VARCHAR(200) COLLATE DATABASE_DEFAULT,
+
+    BomType         VARCHAR(10) COLLATE DATABASE_DEFAULT,
+    LEVELX          INT,
+    BOMQty          FLOAT,
+    BOMPath         VARCHAR(MAX) COLLATE DATABASE_DEFAULT
+);
+
+
+------------------------------------------------------------
+-- 4. CREATE COMPLETE BOM USING RECURSIVE CTE
+------------------------------------------------------------
+;WITH BOM_CTE AS
+(
+    --------------------------------------------------------
+    -- LEVEL 2
+    --------------------------------------------------------
+    SELECT T0.Code AS RootFather,
+        F.ItemName AS FatherName,
+        T0.Code AS ParentItem,
+        F.ItemName AS ParentName,
+        T1.Code AS Child,
+        C.ItemName AS ChildName,
+        C.TreeType AS BomType,
+        2 AS LEVELX,
+        CAST(T1.Quantity AS FLOAT) AS BOMQty,
+        CAST
+        (
+            T0.Code
+            + ' > '
+            + T1.Code
+            AS VARCHAR(MAX)
+        ) AS BOMPath
+
+    FROM OITT T0
+
+    INNER JOIN ITT1 T1
+        ON T1.Father COLLATE DATABASE_DEFAULT
+           = T0.Code COLLATE DATABASE_DEFAULT
+
+    INNER JOIN OITM F
+        ON F.ItemCode COLLATE DATABASE_DEFAULT
+           = T0.Code COLLATE DATABASE_DEFAULT
+
+    INNER JOIN OITM C
+        ON C.ItemCode COLLATE DATABASE_DEFAULT
+           = T1.Code COLLATE DATABASE_DEFAULT
+
+    WHERE
+        F.ItmsGrpCod = 103
+
+        AND C.ItmsGrpCod NOT IN (140,132)
+
+        AND T0.Code IN
+        (
+            '10100240100',
+            '1010024P000'
+        )
+
+
+    UNION ALL
+
+
+    --------------------------------------------------------
+    -- LEVEL 3 AND ABOVE
+    --------------------------------------------------------
+    SELECT
+
+        B.RootFather,
+
+        B.FatherName,
+
+        B.Child AS ParentItem,
+
+        B.ChildName AS ParentName,
+
+        T1.Code AS Child,
+
+        C.ItemName AS ChildName,
+
+        C.TreeType AS BomType,
+
+        B.LEVELX + 1 AS LEVELX,
+
+        CAST(T1.Quantity AS FLOAT) AS BOMQty,
+
+        CAST
+        (
+            B.BOMPath
+            + ' > '
+            + T1.Code
+            AS VARCHAR(MAX)
+        ) AS BOMPath
+
+    FROM BOM_CTE B
+
+    INNER JOIN ITT1 T1
+        ON T1.Father COLLATE DATABASE_DEFAULT
+           = B.Child COLLATE DATABASE_DEFAULT
+
+    INNER JOIN OITM C
+        ON C.ItemCode COLLATE DATABASE_DEFAULT
+           = T1.Code COLLATE DATABASE_DEFAULT
+
+    WHERE
+
+        B.BomType = 'P'
+
+        AND C.ItmsGrpCod NOT IN (140,132)
+
+        ----------------------------------------------------
+        -- PREVENT BOM CIRCULAR LOOP
+        ----------------------------------------------------
+        AND
+        (
+            B.BOMPath COLLATE DATABASE_DEFAULT
+            NOT LIKE
+            '%> '
+            + T1.Code COLLATE DATABASE_DEFAULT
+            + ' >%'
+
+            AND
+
+            B.BOMPath COLLATE DATABASE_DEFAULT
+            NOT LIKE
+            '%> '
+            + T1.Code COLLATE DATABASE_DEFAULT
+        )
+)
+
+INSERT INTO #BOM
+(
+    RootFather,
+    FatherName,
+
+    ParentItem,
+    ParentName,
+
+    Child,
+    ChildName,
+
+    BomType,
+
+    LEVELX,
+
+    BOMQty,
+
+    BOMPath
+)
+SELECT
+
+    RootFather,
+    FatherName,
+
+    ParentItem,
+    ParentName,
+
+    Child,
+    ChildName,
+
+    BomType,
+
+    LEVELX,
+
+    BOMQty,
+
+    BOMPath
+
+FROM BOM_CTE
+
+OPTION (MAXRECURSION 0);
+
+
+------------------------------------------------------------
+-- 5. REQUIREMENT TABLE
+------------------------------------------------------------
+CREATE TABLE #Requirement
+(
+    RootFather          VARCHAR(50) COLLATE DATABASE_DEFAULT,
+    FatherName          VARCHAR(200) COLLATE DATABASE_DEFAULT,
+
+    ParentItem          VARCHAR(50) COLLATE DATABASE_DEFAULT,
+    ParentName          VARCHAR(200) COLLATE DATABASE_DEFAULT,
+
+    Child               VARCHAR(50) COLLATE DATABASE_DEFAULT,
+    ChildName           VARCHAR(200) COLLATE DATABASE_DEFAULT,
+
+    LEVELX              INT,
+
+    BOMQty              FLOAT,
+
+    GrossRequirement    FLOAT,
+
+    BOMPath             VARCHAR(MAX) COLLATE DATABASE_DEFAULT
+);
+
+
+------------------------------------------------------------
+-- 6. RESULT TABLE
+------------------------------------------------------------
+CREATE TABLE #Result
+(
+    RootFather          VARCHAR(50) COLLATE DATABASE_DEFAULT,
+    FatherName          VARCHAR(200) COLLATE DATABASE_DEFAULT,
+
+    SO_Qty              FLOAT,
+    Min_Level           FLOAT,
+    FG_Stk              FLOAT,
+    FG_Requirement      FLOAT,
+
+    ParentItem          VARCHAR(50) COLLATE DATABASE_DEFAULT,
+    ParentName          VARCHAR(200) COLLATE DATABASE_DEFAULT,
+
+    Child               VARCHAR(50) COLLATE DATABASE_DEFAULT,
+    ChildName           VARCHAR(200) COLLATE DATABASE_DEFAULT,
+
+    BomType             VARCHAR(10) COLLATE DATABASE_DEFAULT,
+
+    LEVELX              INT,
+
+    BOMQty              FLOAT,
+
+    GrossRequirement    FLOAT,
+
+    Child_Stk           FLOAT,
+
+    AllocatedStock      FLOAT,
+
+    ActualShortage      FLOAT,
+
+    RemainingStock      FLOAT,
+
+    BOMPath             VARCHAR(MAX) COLLATE DATABASE_DEFAULT
+);
+
+
+------------------------------------------------------------
+-- 7. LEVEL 2 REQUIREMENT
+--
+-- FG Requirement × BOM Qty
+------------------------------------------------------------
+INSERT INTO #Requirement
+(
+    RootFather,
+    FatherName,
+
+    ParentItem,
+    ParentName,
+
+    Child,
+    ChildName,
+
+    LEVELX,
+
+    BOMQty,
+
+    GrossRequirement,
+
+    BOMPath
+)
+SELECT
+
+    B.RootFather,
+
+    F.FatherName,
+
+    B.ParentItem,
+
+    B.ParentName,
+
+    B.Child,
+
+    B.ChildName,
+
+    B.LEVELX,
+
+    B.BOMQty,
+
+    --------------------------------------------------------
+    -- LEVEL 2
+    --
+    -- FG REQUIREMENT × BOM QTY
+    --------------------------------------------------------
+    F.FG_Requirement * B.BOMQty,
+
+    B.BOMPath
+
+FROM #BOM B
+
+INNER JOIN #FGData F
+    ON F.Father COLLATE DATABASE_DEFAULT
+       = B.RootFather COLLATE DATABASE_DEFAULT
+
+WHERE
+    B.LEVELX = 2
+
+    AND F.FG_Requirement > 0;
+
+
+------------------------------------------------------------
+-- 8. CURRENT LEVEL
+------------------------------------------------------------
+DECLARE @CurrentLevel INT;
+
+SET @CurrentLevel = 2;
+
+
+------------------------------------------------------------
+-- 9. PROCESS EACH BOM LEVEL
+------------------------------------------------------------
+WHILE EXISTS
+(
+    SELECT 1
+    FROM #Requirement
+    WHERE LEVELX = @CurrentLevel
+)
+BEGIN
+
+
+    --------------------------------------------------------
+    -- CURRENT LEVEL DATA
+    --------------------------------------------------------
+    ;WITH CURRENT_REQ AS
+    (
+        SELECT
+
+            R.*,
+
+            ISNULL(S.ChildStock, 0) AS Child_Stk,
+
+
+            ------------------------------------------------
+            -- STOCK ALREADY USED BY EARLIER LEVELS
+            --
+            -- IMPORTANT:
+            -- Same physical child stock cannot be reused.
+            ------------------------------------------------
+            ISNULL
+            (
+                (
+                    SELECT
+                        SUM(X.AllocatedStock)
+
+                    FROM #Result X
+
+                    WHERE
+                        X.Child COLLATE DATABASE_DEFAULT
+                        =
+                        R.Child COLLATE DATABASE_DEFAULT
+                ),
+                0
+            ) AS StockUsedBefore
+
+
+        FROM #Requirement R
+
+        LEFT JOIN #Stock S
+
+            ON S.ItemCode COLLATE DATABASE_DEFAULT
+               =
+               R.Child COLLATE DATABASE_DEFAULT
+
+        WHERE
+            R.LEVELX = @CurrentLevel
+    ),
+
+
+    --------------------------------------------------------
+    -- ADD PREVIOUS ROWS OF SAME CHILD
+    --
+    -- Example:
+    --
+    -- Child stock = 3
+    --
+    -- FG1 requirement = 96
+    -- FG2 requirement = 288
+    --
+    -- FG1 gets 3
+    -- FG2 gets 0
+    --------------------------------------------------------
+    ALLOCATION AS
+    (
+        SELECT
+
+            C.*,
+
+            ISNULL
+            (
+                SUM(C.GrossRequirement)
+                OVER
+                (
+                    PARTITION BY C.Child
+                    ORDER BY
+                        C.RootFather,
+                        C.ParentItem
+
+                    ROWS BETWEEN UNBOUNDED PRECEDING
+                             AND 1 PRECEDING
+                ),
+                0
+            ) AS CurrentLevelRequirementBefore
+
+        FROM CURRENT_REQ C
+    ),
+
+
+    --------------------------------------------------------
+    -- CALCULATE AVAILABLE STOCK
+    --------------------------------------------------------
+    CALC AS
+    (
+        SELECT
+
+            A.*,
+
+            CASE
+
+                WHEN
+                    A.Child_Stk
+                    - A.StockUsedBefore
+                    - A.CurrentLevelRequirementBefore > 0
+
+                THEN
+                    A.Child_Stk
+                    - A.StockUsedBefore
+                    - A.CurrentLevelRequirementBefore
+
+                ELSE 0
+
+            END AS AvailableStock
+
+
+        FROM ALLOCATION A
+    ),
+
+
+    --------------------------------------------------------
+    -- FINAL ALLOCATION
+    --------------------------------------------------------
+    FINAL_CALC AS
+    (
+        SELECT
+
+            C.*,
+
+            CASE
+
+                WHEN C.AvailableStock >= C.GrossRequirement
+                THEN C.GrossRequirement
+
+                WHEN C.AvailableStock > 0
+                THEN C.AvailableStock
+
+                ELSE 0
+
+            END AS AllocatedStockCalc
+
+        FROM CALC C
+    )
+
+
+    --------------------------------------------------------
+    -- INSERT RESULT
+    --------------------------------------------------------
+    INSERT INTO #Result
+    (
+        RootFather,
+        FatherName,
+
+        SO_Qty,
+        Min_Level,
+        FG_Stk,
+        FG_Requirement,
+
+        ParentItem,
+        ParentName,
+
+        Child,
+        ChildName,
+
+        BomType,
+
+        LEVELX,
+
+        BOMQty,
+
+        GrossRequirement,
+
+        Child_Stk,
+
+        AllocatedStock,
+
+        ActualShortage,
+
+        RemainingStock,
+
+        BOMPath
+    )
+    SELECT
+
+        F.RootFather,
+
+        F.FatherName,
+
+        FG.SO_Qty,
+
+        FG.Min_Level,
+
+        FG.FG_Stk,
+
+        FG.FG_Requirement,
+
+
+        ----------------------------------------------------
+        -- PARENT
+        ----------------------------------------------------
+        F.ParentItem,
+
+        F.ParentName,
+
+
+        ----------------------------------------------------
+        -- CHILD
+        ----------------------------------------------------
+        F.Child,
+
+        F.ChildName,
+
+
+        B.BomType,
+
+
+        ----------------------------------------------------
+        -- LEVEL
+        ----------------------------------------------------
+        F.LEVELX,
+
+
+        ----------------------------------------------------
+        -- BOM QTY
+        ----------------------------------------------------
+        F.BOMQty,
+
+
+        ----------------------------------------------------
+        -- REQUIREMENT
+        ----------------------------------------------------
+        F.GrossRequirement,
+
+
+        ----------------------------------------------------
+        -- CHILD STOCK
+        ----------------------------------------------------
+        F.Child_Stk,
+
+
+        ----------------------------------------------------
+        -- ALLOCATED STOCK
+        ----------------------------------------------------
+        F.AllocatedStockCalc,
+
+
+        ----------------------------------------------------
+        -- ACTUAL SHORTAGE
+        --
+        -- THIS IS WHAT GOES TO NEXT LEVEL
+        ----------------------------------------------------
+        CASE
+
+            WHEN
+                F.GrossRequirement
+                - F.AllocatedStockCalc > 0
+
+            THEN
+                F.GrossRequirement
+                - F.AllocatedStockCalc
+
+            ELSE 0
+
+        END,
+
+
+        ----------------------------------------------------
+        -- REMAINING STOCK
+        ----------------------------------------------------
+        CASE
+
+            WHEN
+                F.Child_Stk
+                -
+                F.StockUsedBefore
+                -
+                F.CurrentLevelRequirementBefore
+                -
+                F.AllocatedStockCalc > 0
+
+            THEN
+                F.Child_Stk
+                -
+                F.StockUsedBefore
+                -
+                F.CurrentLevelRequirementBefore
+                -
+                F.AllocatedStockCalc
+
+            ELSE 0
+
+        END,
+
+
+        F.BOMPath
+
+
+    FROM FINAL_CALC F
+
+    INNER JOIN #FGData FG
+
+        ON FG.Father COLLATE DATABASE_DEFAULT
+           =
+           F.RootFather COLLATE DATABASE_DEFAULT
+
+
+    INNER JOIN #BOM B
+
+        ON B.RootFather COLLATE DATABASE_DEFAULT
+           =
+           F.RootFather COLLATE DATABASE_DEFAULT
+
+        AND B.ParentItem COLLATE DATABASE_DEFAULT
+           =
+           F.ParentItem COLLATE DATABASE_DEFAULT
+
+        AND B.Child COLLATE DATABASE_DEFAULT
+           =
+           F.Child COLLATE DATABASE_DEFAULT
+
+        AND B.LEVELX = F.LEVELX;
+
+
+    --------------------------------------------------------
+    -- 10. NEXT LEVEL REQUIREMENT
+    --
+    -- VERY IMPORTANT:
+    --
+    -- CURRENT ACTUAL SHORTAGE
+    --          ×
+    -- NEXT LEVEL BOM QTY
+    --
+    -- NOT original FG requirement.
+    --------------------------------------------------------
+    INSERT INTO #Requirement
+    (
+        RootFather,
+        FatherName,
+
+        ParentItem,
+        ParentName,
+
+        Child,
+        ChildName,
+
+        LEVELX,
+
+        BOMQty,
+
+        GrossRequirement,
+
+        BOMPath
+    )
+    SELECT
+
+        R.RootFather,
+
+        R.FatherName,
+
+
+        ----------------------------------------------------
+        -- CURRENT CHILD BECOMES NEXT PARENT
+        ----------------------------------------------------
+        B.Child AS ParentItem,
+
+        B.ChildName AS ParentName,
+
+
+        ----------------------------------------------------
+        -- NEXT LEVEL CHILD
+        ----------------------------------------------------
+        B2.Child,
+
+        B2.ChildName,
+
+
+        ----------------------------------------------------
+        -- NEXT LEVEL
+        ----------------------------------------------------
+        B2.LEVELX,
+
+
+        ----------------------------------------------------
+        -- NEXT LEVEL BOM QTY
+        ----------------------------------------------------
+        B2.BOMQty,
+
+
+        ----------------------------------------------------
+        -- *** MAIN FORMULA ***
+        --
+        -- ACTUAL SHORTAGE × BOM QTY
+        ----------------------------------------------------
+        R.ActualShortage
+        *
+        B2.BOMQty,
+
+
+        ----------------------------------------------------
+        -- BOM PATH
+        ----------------------------------------------------
+        B2.BOMPath
+
+
+    FROM #Result R
+
+
+    --------------------------------------------------------
+    -- CURRENT BOM CHILD
+    --------------------------------------------------------
+    INNER JOIN #BOM B
+
+        ON B.RootFather COLLATE DATABASE_DEFAULT
+           =
+           R.RootFather COLLATE DATABASE_DEFAULT
+
+        AND B.ParentItem COLLATE DATABASE_DEFAULT
+           =
+           R.ParentItem COLLATE DATABASE_DEFAULT
+
+        AND B.Child COLLATE DATABASE_DEFAULT
+           =
+           R.Child COLLATE DATABASE_DEFAULT
+
+        AND B.LEVELX = R.LEVELX
+
+
+    --------------------------------------------------------
+    -- NEXT LEVEL BOM
+    --
+    -- CURRENT CHILD = NEXT PARENT
+    --------------------------------------------------------
+    INNER JOIN #BOM B2
+
+        ON B2.RootFather COLLATE DATABASE_DEFAULT
+           =
+           R.RootFather COLLATE DATABASE_DEFAULT
+
+        AND B2.ParentItem COLLATE DATABASE_DEFAULT
+           =
+           R.Child COLLATE DATABASE_DEFAULT
+
+        AND B2.LEVELX = R.LEVELX + 1
+
+
+    WHERE
+
+        R.LEVELX = @CurrentLevel
+
+        AND R.ActualShortage > 0;
+
+
+    --------------------------------------------------------
+    -- NEXT LEVEL
+    --------------------------------------------------------
+    SET @CurrentLevel = @CurrentLevel + 1;
+
+END;
+
+
+------------------------------------------------------------
+-- 11. FINAL OUTPUT
+------------------------------------------------------------
+SELECT
+
+    R.RootFather AS [Father],
+
+    R.FatherName,
+
+
+    --------------------------------------------------------
+    -- FG REQUIREMENT
+    --------------------------------------------------------
+    R.SO_Qty,
+
+    R.Min_Level,
+
+    R.FG_Stk,
+
+    R.FG_Requirement AS [FG_SO+MinReq],
+
+
+    --------------------------------------------------------
+    -- PARENT
+    --------------------------------------------------------
+    R.ParentItem AS [Parent],
+
+    R.ParentName,
+
+
+    --------------------------------------------------------
+    -- CHILD
+    --------------------------------------------------------
+    R.Child,
+
+    R.ChildName,
+
+    R.BomType,
+
+    R.LEVELX,
+
+    R.BOMQty AS [BOM Qty],
+
+
+    --------------------------------------------------------
+    -- REQUIREMENT
+    --------------------------------------------------------
+    R.GrossRequirement AS [Child Requirement],
+
+
+    --------------------------------------------------------
+    -- STOCK
+    --------------------------------------------------------
+    R.Child_Stk AS [Child Stock],
+
+
+    --------------------------------------------------------
+    -- STOCK ALLOCATED
+    --------------------------------------------------------
+    R.AllocatedStock AS [Allocated Stock],
+
+
+    --------------------------------------------------------
+    -- SHORTAGE
+    --------------------------------------------------------
+    R.ActualShortage AS [Child Shortage],
+
+
+    --------------------------------------------------------
+    -- ACTUAL = VALUE CARRIED TO NEXT LEVEL
+    --------------------------------------------------------
+    R.ActualShortage AS [Actual],
+
+
+    --------------------------------------------------------
+    -- REMAINING STOCK
+    --------------------------------------------------------
+    R.RemainingStock AS [Remaining Stock],
+
+
+    --------------------------------------------------------
+    -- STATUS
+    --------------------------------------------------------
+    CASE
+
+        WHEN R.ActualShortage = 0
+            THEN 'AVAILABLE'
+
+        WHEN R.AllocatedStock > 0
+            THEN 'PARTIAL'
+
+        ELSE 'SHORT'
+
+    END AS [Child Status],
+
+
+    --------------------------------------------------------
+    -- BOM PATH
+    --------------------------------------------------------
+    R.BOMPath
+
+
+FROM #Result R
+
+ORDER BY
+
+    R.RootFather,
+
+    R.LEVELX,
+
+    R.ParentItem,
+
+    R.Child;
+
+
+------------------------------------------------------------
+-- 12. CLEANUP
+------------------------------------------------------------
+DROP TABLE #Result;
+DROP TABLE #Requirement;
+DROP TABLE #BOM;
+DROP TABLE #Stock;
+DROP TABLE #FGData;
