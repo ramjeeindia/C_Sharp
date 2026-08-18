@@ -13,11 +13,8 @@ namespace SAPConn
         static void Main()
 
         {
-            //B1Connection connection = new B1Connection();  // 1st method      
-           // ConnectMethod2 obconn = new ConnectMethod2();  // method second run
-            B1Conn varconn = new B1Conn();  // anither method
-
-            //B1Conn connection = new B1Conn();
+            
+            B1Conn connection = new B1Conn();
             //DIConnection di = new DIConnection(connection.SBO_Application);
             //new UDT_UDO(di.oCompany);
 
